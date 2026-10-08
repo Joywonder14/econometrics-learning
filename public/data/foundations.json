@@ -1,0 +1,2493 @@
+{
+  "modules": [
+    {
+      "id": "m01",
+      "title": {
+        "zh": "概率论基础",
+        "en": "Fundamentals of probability"
+      },
+      "description": {
+        "zh": "先读懂变量、均值和不确定性，建立回归需要的语言。",
+        "en": "Understand variables, averages, and uncertainty before learning regression."
+      },
+      "stage": 0,
+      "prerequisites": []
+    },
+    {
+      "id": "m02",
+      "title": {
+        "zh": "抽样与统计推断",
+        "en": "Sampling and statistical inference"
+      },
+      "description": {
+        "zh": "从一份样本走向总体：估计、标准误、区间与检验。",
+        "en": "Move from a sample to a population through estimation, standard errors, intervals, and tests."
+      },
+      "stage": 0,
+      "prerequisites": [
+        "m01"
+      ]
+    },
+    {
+      "id": "m03",
+      "title": {
+        "zh": "一元线性回归",
+        "en": "Simple linear regression"
+      },
+      "description": {
+        "zh": "看懂第一条回归线，分清计算结果与统计假设。",
+        "en": "Understand your first regression line and distinguish calculation from statistical assumptions."
+      },
+      "stage": 1,
+      "prerequisites": [
+        "m02"
+      ]
+    },
+    {
+      "id": "m04",
+      "title": {
+        "zh": "多元线性回归",
+        "en": "Multiple linear regression"
+      },
+      "description": {
+        "zh": "理解保持其他因素不变、遗漏变量和估计精度。",
+        "en": "Understand holding other factors fixed, omitted variables, and estimation precision."
+      },
+      "stage": 1,
+      "prerequisites": [
+        "m03"
+      ]
+    },
+    {
+      "id": "m05",
+      "title": {
+        "zh": "线性回归的统计推断",
+        "en": "Statistical inference for linear regression"
+      },
+      "description": {
+        "zh": "用标准误、置信区间和联合检验评估估计的不确定性。",
+        "en": "Assess estimation uncertainty with standard errors, confidence intervals, and joint tests."
+      },
+      "stage": 1,
+      "prerequisites": [
+        "m04"
+      ]
+    },
+    {
+      "id": "m06",
+      "title": {
+        "zh": "回归函数形式与预测",
+        "en": "Regression functional form and prediction"
+      },
+      "description": {
+        "zh": "用对数、平方项、交互项和虚拟变量描述经济关系，理解预测的不确定性。",
+        "en": "Describe economic relationships with logs, quadratics, interactions, and indicators, then understand prediction uncertainty."
+      },
+      "stage": 1,
+      "prerequisites": [
+        "m05"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "m01-c01",
+      "module": "m01",
+      "title": {
+        "zh": "变量类型与数据结构",
+        "en": "Variable types and data structures"
+      },
+      "question": {
+        "zh": "数据表里的一行、一列，分别代表什么？",
+        "en": "What do a row and a column in a dataset represent?"
+      },
+      "intuition": {
+        "zh": "先认清“在观察谁、观察什么、何时观察”，再决定该用什么模型。",
+        "en": "Identify who is observed, what is measured, and when before choosing a model."
+      },
+      "explanation": {
+        "zh": [
+          "一个观测单位可以是个人、家庭、企业或国家；变量则是每个单位的工资、教育年限等特征。随机变量描述观察之前可能出现的数值，观测值是这次真正记录到的结果。把行业编成 1、2、3 只是标签，不能由此推断行业 3 是行业 1 的三倍。",
+          "截面数据是在某个时期观察多个单位；时间序列是按时间观察同一对象；混合截面把不同时期的截面样本合在一起；面板数据追踪同一批单位。面板的关键是能识别同一单位，而不是表中恰好有年份列。",
+          "连续变量可用连续区间近似，离散变量取可数值，二元变量只取 0 和 1。统计模型要尊重单位、编码和数据结构：每月失业率通常具有时间依赖，同一企业多年数据也不能机械地当成彼此独立。学习时先写一份简短的数据字典。"
+        ],
+        "en": [
+          "An observational unit may be a person, household, firm, or country; variables record its characteristics, such as earnings or schooling. A random variable describes possible numerical outcomes before observation; an observed value is the outcome actually recorded. Industry codes 1, 2, and 3 are labels: industry 3 is not three times industry 1.",
+          "Cross-sectional data observe multiple units in a period. A time series follows an aggregate or unit over time. Pooled cross sections combine samples from different periods. A panel follows the same units repeatedly. Identifying the same units is what makes a panel; simply having a year column is insufficient.",
+          "Continuous variables are modeled over a continuum, discrete variables have countable values, and binary variables take only 0 and 1. Models must respect units, coding, and data structure: monthly unemployment may be dependent over time, as may repeated observations of a firm. Start by writing a short data dictionary."
+        ]
+      },
+      "formula": "i = 1, …, n;  t = 1, …, T;  yᵢₜ = outcome for unit i at time t",
+      "symbols": {
+        "zh": "i 是单位编号；t 是时期；n 是单位数；T 是时期数；下标用于定位观察，不表示乘法。",
+        "en": "i indexes units; t indexes periods; n counts units and T counts periods. Subscripts locate observations; they do not indicate multiplication."
+      },
+      "example": {
+        "zh": "教学示例：2025 年抽取 300 家企业是一份截面；2026 年另抽 300 家后合并是混合截面；继续追踪原来的企业则可形成面板。企业编号应稳定，退出或缺失还需记录。",
+        "en": "Illustrative example: sampling 300 firms in 2025 gives a cross section. Combining it with a new sample in 2026 gives pooled cross sections. Following the original firms can form a panel. Stable identifiers and records of missing observations matter."
+      },
+      "pitfall": {
+        "zh": "“解释变量”这一名称不意味着因果原因；“独立变量”也不意味着它与其他解释变量在概率上独立。",
+        "en": "Calling a variable explanatory does not establish causality, and calling it independent does not imply statistical independence from other regressors."
+      },
+      "quiz": {
+        "question": {
+          "zh": "同一批家庭每年接受调查，最贴切的数据结构是什么？",
+          "en": "What structure best describes annual surveys of the same households?"
+        },
+        "options": [
+          {
+            "zh": "面板数据",
+            "en": "Panel data"
+          },
+          {
+            "zh": "只有截面数据",
+            "en": "Cross-sectional data only"
+          },
+          {
+            "zh": "完全独立的混合截面",
+            "en": "Necessarily independent pooled cross sections"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "同一家庭的稳定身份连接了不同时期的记录，这正是面板的特征。",
+          "en": "Persistent household identities connect observations across periods, which is the defining feature of a panel."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 1",
+          "section": "1.3 The Structure of Economic Data"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.1 Random Variables and Their Probability Distributions"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": []
+    },
+    {
+      "id": "m01-c02",
+      "module": "m01",
+      "title": {
+        "zh": "总体均值、样本均值与条件均值",
+        "en": "Population, sample, and conditional means"
+      },
+      "question": {
+        "zh": "“平均工资”为什么可能指三种不同的量？",
+        "en": "Why can “average earnings” refer to three different quantities?"
+      },
+      "intuition": {
+        "zh": "总体均值是目标，样本均值是手中的估计，条件均值是先限定人群再求平均。",
+        "en": "The population mean is a target, the sample mean is an estimate, and a conditional mean averages within a specified group."
+      },
+      "explanation": {
+        "zh": [
+          "总体均值 E(Y) 把所有可能的 Y 按概率加权；样本均值 ȳ 把实际观察到的 n 个数相加再除以 n。前者是总体分布的特征，后者会随抽到的人变化。期望是概率意义上的平均，不是最常见的值，也不必是任何人实际取得的值。",
+          "条件均值 E(Y | X=x) 先把信息限制为 X=x，再计算 Y 的平均。例如不同教育年限对应不同平均工资，因此条件均值通常是 x 的函数。回归的一个主要任务，就是用一个简洁函数近似或描述这个条件平均关系。",
+          "算平均之前要检查单位和权重。两个规模不同群体的均值不能直接各占一半，除非研究目标确实给两组相等权重。还要区分均值与中位数：少数极高收入会显著拉高均值，中位数则描述排序后的中间位置。"
+        ],
+        "en": [
+          "The population mean E(Y) weights all possible values by their probabilities. The sample mean ȳ averages n observed numbers. The former is a feature of a population distribution; the latter changes with the sample. An expectation is a probabilistic average, not necessarily the most common or even an attainable individual value.",
+          "The conditional mean E(Y | X=x) averages Y given the information X=x. Different education levels may have different average earnings, so this mean is generally a function of x. An important task of regression is to describe or approximate that conditional average relationship with a simple function.",
+          "Check units and weights before averaging. Two differently sized groups should not automatically receive equal weight unless the target explicitly requires that. Also distinguish the mean from the median: a few very high earnings can strongly raise the mean, whereas the median describes the middle of the ordered distribution."
+        ]
+      },
+      "formula": "ȳ = (1/n) Σᵢ yᵢ;  E(Y) = Σⱼ yⱼ P(Y=yⱼ);  m(x) = E(Y | X=x)",
+      "symbols": {
+        "zh": "Σ 表示把指定项目相加；E 表示期望；竖线 | 表示“给定”；m(x) 表示条件均值函数。期望求和公式适用于离散 Y；连续情形对密度积分，且需期望存在。",
+        "en": "Σ means sum the indicated terms; E denotes expectation; | means given; m(x) is the conditional mean function. The expectation sum applies to discrete Y; continuous variables use a density integral, and expectations must exist."
+      },
+      "example": {
+        "zh": "教学示例：A 组 80 人均值 50，B 组 20 人均值 100，则总体平均为 0.8×50+0.2×100=60，不能算成 75。组别已知时的均值分别是 50 和 100。",
+        "en": "Illustrative example: group A has 80 people with mean 50; group B has 20 with mean 100. The combined mean is 0.8×50+0.2×100=60, not 75. Conditional on group membership, the respective means are 50 and 100."
+      },
+      "pitfall": {
+        "zh": "两类人的平均工资不同，不等于让同一个人改变类别就会产生同样变化；群体组成可能不同。",
+        "en": "A difference in group means need not equal the change caused by moving the same person between groups; group composition may differ."
+      },
+      "quiz": {
+        "question": {
+          "zh": "总体均值与样本均值的核心区别是什么？",
+          "en": "What is the key difference between a population and a sample mean?"
+        },
+        "options": [
+          {
+            "zh": "总体均值一定是整数",
+            "en": "The population mean must be an integer"
+          },
+          {
+            "zh": "前者描述总体，后者依赖抽到的样本",
+            "en": "The former describes the population; the latter depends on the sample"
+          },
+          {
+            "zh": "两者永远数值相同",
+            "en": "Their numerical values are always identical"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "抽样误差使样本均值通常不等于总体均值，即使抽样方法合理。",
+          "en": "Sampling variation usually makes the sample mean differ from the population mean, even with a sound sampling design."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.3 Features of Probability Distributions"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.4 Features of Joint and Conditional Distributions"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m01-c01"
+      ]
+    },
+    {
+      "id": "m01-c03",
+      "module": "m01",
+      "title": {
+        "zh": "方差、协方差与相关系数",
+        "en": "Variance, covariance, and correlation"
+      },
+      "question": {
+        "zh": "均值相同的两组数据，还可能有多大差别？",
+        "en": "How different can two datasets with the same mean be?"
+      },
+      "intuition": {
+        "zh": "方差看“有多分散”，协方差看“是否一起动”，相关系数把共同变动去掉单位。",
+        "en": "Variance measures spread, covariance measures comovement, and correlation removes measurement units."
+      },
+      "explanation": {
+        "zh": [
+          "方差是偏离均值的平方的期望，标准差是方差的平方根。平方避免正负偏离互相抵消；标准差回到原变量的单位。若把工资从元改成百元，标准差除以 100，方差除以 10000；给每个人都加同一常数则不改变方差。",
+          "协方差衡量两个变量相对各自均值的偏离是否经常同号。相关系数用两个标准差的乘积把协方差标准化，在两个方差均为正且有限时落在 −1 到 1 之间。它是线性联系的指标，对称地对待 X 和 Y，不说明作用方向。",
+          "独立蕴含零协方差（相关矩存在时），反过来却不成立。非线性关系可能在相关系数里抵消。因此应把散点图、单位和变量含义一起看。总体方差与样本方差也须区分：常用的样本方差用 n−1 作分母，在独立同分布、有限方差且 n>1 时，是总体方差的无偏估计。"
+        ],
+        "en": [
+          "Variance is the expected squared deviation from the mean, and standard deviation is its square root. Squaring prevents positive and negative deviations from cancelling; the standard deviation returns to the original units. Expressing wages in hundreds of currency units divides the standard deviation by 100 and variance by 10000. Adding the same constant leaves variance unchanged.",
+          "Covariance measures whether deviations from the two means tend to have the same sign. Correlation divides covariance by the product of the standard deviations and lies between −1 and 1 when both variances are finite and positive. It measures linear association, treats X and Y symmetrically, and does not establish a direction of influence.",
+          "Independence implies zero covariance when the relevant moments exist, but the converse fails. Nonlinear association may cancel in a correlation coefficient. Examine a scatterplot, units, and substantive meaning together. Also distinguish population variance from sample variance: the usual sample variance uses n−1 in the denominator and is unbiased under independent, identically distributed sampling with finite variance and n>1."
+        ]
+      },
+      "formula": "Var(X)=E[(X−E(X))²];  SD(X)=√Var(X);  Corr(X,Y)=Cov(X,Y)/(SD(X)SD(Y))",
+      "symbols": {
+        "zh": "Var 是方差；SD 是标准差；Cov(X,Y)=E[(X−E(X))(Y−E(Y))]；Corr 是相关系数。",
+        "en": "Var is variance; SD is standard deviation; Cov(X,Y)=E[(X−E(X))(Y−E(Y))]; Corr is correlation."
+      },
+      "example": {
+        "zh": "教学示例：X 以相同概率取 −1、0、1，Y=X²。X 的均值为 0，XY 的均值也是 0，因此协方差为 0；但知道 X 就完全知道 Y，显然并不独立。",
+        "en": "Illustrative example: X takes −1, 0, and 1 with equal probabilities, and Y=X². Both E(X) and E(XY) equal zero, so covariance is zero. Yet knowing X determines Y exactly, so they are not independent."
+      },
+      "pitfall": {
+        "zh": "零相关不表示“没有任何关系”；高相关也不说明因果。常数变量的标准差为零，与它的相关系数没有定义。",
+        "en": "Zero correlation does not mean no relationship, and high correlation does not establish causality. Correlation with a constant variable is undefined."
+      },
+      "quiz": {
+        "question": {
+          "zh": "把 X 改写成 10X，且方差有限时，方差变成原来的多少倍？",
+          "en": "If X becomes 10X and variance is finite, how does its variance change?"
+        },
+        "options": [
+          {
+            "zh": "10 倍",
+            "en": "10 times"
+          },
+          {
+            "zh": "不变",
+            "en": "Unchanged"
+          },
+          {
+            "zh": "100 倍",
+            "en": "100 times"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "偏离均值也放大 10 倍，平方后放大 100 倍；标准差才放大 10 倍。",
+          "en": "Deviations become 10 times larger, so squared deviations become 100 times larger. Standard deviation increases tenfold."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.3 Features of Probability Distributions"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.4 Features of Joint and Conditional Distributions"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m01-c02"
+      ]
+    },
+    {
+      "id": "m01-c04",
+      "module": "m01",
+      "title": {
+        "zh": "概率分布与分布函数",
+        "en": "Probability distributions and distribution functions"
+      },
+      "question": {
+        "zh": "为什么仅有均值和标准差，还不够描述一个变量？",
+        "en": "Why are a mean and standard deviation not enough to describe a variable?"
+      },
+      "intuition": {
+        "zh": "分布是一张可能结果的地图：哪些值容易出现，尾部有多厚，概率如何累积。",
+        "en": "A distribution maps possible outcomes, their likelihoods, tail behavior, and accumulated probability."
+      },
+      "explanation": {
+        "zh": [
+          "离散变量用各个取值的概率描述；这些概率非负且总和为 1。连续变量用概率密度描述，区间概率是密度曲线下的面积，整条曲线下面积为 1。密度的高度不是单点概率，连续变量恰好等于某一个数的概率为 0。",
+          "累积分布函数 F(x)=P(X≤x) 对离散和连续变量都适用。伯努利分布描述 0/1 结果，正态分布用均值和方差描述钟形的连续分布。标准化 Z=(X−μ)/σ 只保证均值 0、方差 1；只有 X 本来正态时，Z 才是标准正态。",
+          "后面推断会遇到 t、χ² 和 F 分布，它们描述特定统计量在假设下的变动，并不是要求工资等原始数据都服从这些分布。t 分布在自由度小时尾部比标准正态厚，自由度增加时接近标准正态；因此小样本临界值通常更大。"
+        ],
+        "en": [
+          "Discrete distributions assign nonnegative probabilities summing to one to possible outcomes. A continuous distribution is described by a density; interval probabilities are areas under it, with total area one. Density height is not a point probability. A continuous variable equals any one particular value with probability zero.",
+          "The cumulative distribution function F(x)=P(X≤x) applies to both discrete and continuous variables. A Bernoulli distribution describes binary outcomes; a normal distribution is a bell-shaped continuous distribution characterized by its mean and variance. Standardizing Z=(X−μ)/σ gives mean zero and variance one, but makes Z standard normal only if X is normal.",
+          "Inference later uses t, χ², and F distributions for particular statistics under stated assumptions; raw earnings data need not follow those distributions. With few degrees of freedom, the t distribution has heavier tails than the standard normal. It approaches the standard normal as degrees of freedom increase, explaining larger small-sample critical values."
+        ]
+      },
+      "formula": "F(x)=P(X≤x);  P(a<X≤b)=F(b)−F(a);  Z=(X−μ)/σ",
+      "symbols": {
+        "zh": "P 表示概率；F 是累积分布函数；μ 是总体均值；σ>0 是总体标准差；a、b 是区间端点。",
+        "en": "P denotes probability; F is the cumulative distribution function; μ is the population mean; σ>0 is its standard deviation; a and b bound an interval."
+      },
+      "example": {
+        "zh": "教学示例：D=1 表示参加培训，P(D=1)=0.3，则 E(D)=0.3、Var(D)=0.3×0.7=0.21。虽然期望是 0.3，任何个人的 D 仍只能是 0 或 1。",
+        "en": "Illustrative example: D=1 denotes training participation and P(D=1)=0.3. Then E(D)=0.3 and Var(D)=0.3×0.7=0.21. Although the expectation is 0.3, every individual observation remains either 0 or 1."
+      },
+      "pitfall": {
+        "zh": "“数据多了就正态”不正确。适当条件下接近正态的是标准化的样本均值等统计量，而不是原始数据本身。",
+        "en": "“More data become normal” is incorrect. Under suitable conditions, standardized statistics such as sample means approach normality, not the raw observations themselves."
+      },
+      "quiz": {
+        "question": {
+          "zh": "把一个偏态变量转为 Z 分数，是否必然变成正态？",
+          "en": "Does converting a skewed variable into z-scores necessarily make it normal?"
+        },
+        "options": [
+          {
+            "zh": "不会，标准化没有改变基本分布形状",
+            "en": "No; standardization does not change its basic distributional shape"
+          },
+          {
+            "zh": "会，因为均值变成了 0",
+            "en": "Yes, because the mean becomes zero"
+          },
+          {
+            "zh": "只要标准差为 1 就一定正态",
+            "en": "Any variable with standard deviation one is normal"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "平移与缩放不是正态化；分布形状仍然保留。",
+          "en": "Shifting and rescaling are not transformations to normality; the original shape remains."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.1 Random Variables and Their Probability Distributions"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.5 The Normal and Related Distributions"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m01-c03"
+      ]
+    },
+    {
+      "id": "m01-c05",
+      "module": "m01",
+      "title": {
+        "zh": "条件期望与迭代期望定律",
+        "en": "Conditional expectation and iterated expectations"
+      },
+      "question": {
+        "zh": "怎样把“在每一组里成立”变成“在总体里成立”？",
+        "en": "How can a within-group statement imply a population statement?"
+      },
+      "intuition": {
+        "zh": "先在组内求平均，再按各组所占比例求平均，就回到总体平均。",
+        "en": "Average within groups, then average across groups using their population weights."
+      },
+      "explanation": {
+        "zh": [
+          "条件概率是在给定信息后重新分配概率；当 P(B)>0 时，P(A|B)=P(A∩B)/P(B)。条件期望也一样，只是把重新分配后的概率用于求平均。条件是已知信息，不等于我们人为改变了某个变量，因此观察条件与因果干预要分开。",
+          "期望具有线性：E(aX+bY+c)=aE(X)+bE(Y)+c，无需 X 与 Y 独立。已知 X 时，X 的任何函数都可当作常数提出条件期望。迭代期望 E[E(Y|X)]=E(Y) 则连接了条件均值与总体均值，要求相关期望存在。",
+          "回归中 E(u|X)=0 比 E(u)=0 强：它要求任何 X 水平下遗漏因素的平均值都为零。由迭代期望可推出 E(u)=0，也可在适当矩条件下推出 E(Xu)=0。独立且零均值足以保证零条件均值，但零条件均值不要求完全独立。"
+        ],
+        "en": [
+          "Conditional probability reallocates probability after information is given: P(A|B)=P(A∩B)/P(B) when P(B)>0. A conditional expectation averages using those conditional probabilities. Conditioning uses information; it does not itself manipulate a variable, so observational conditioning must be distinguished from causal intervention.",
+          "Expectation is linear: E(aX+bY+c)=aE(X)+bE(Y)+c, without requiring independence. Once X is given, any function of X can be treated as a constant inside the conditional expectation. Iterated expectations, E[E(Y|X)]=E(Y), connect conditional and unconditional means when the relevant expectations exist.",
+          "In regression, E(u|X)=0 is stronger than E(u)=0: the mean of omitted factors must be zero at every X level. Iterated expectations imply E(u)=0 and, under suitable moment conditions, E(Xu)=0. Independence plus zero mean is sufficient for zero conditional mean, but full independence is not necessary."
+        ]
+      },
+      "formula": "E[E(Y|X)]=E(Y);  E[Xu|X]=X E(u|X);  E(u|X)=0 ⇒ E(u)=0 and E(Xu)=0",
+      "symbols": {
+        "zh": "u 是回归里未被解释部分；⇒ 表示推出；期望运算均以所需矩存在为前提。",
+        "en": "u is the unexplained component in regression; ⇒ means implies. All expectation operations require the relevant moments to exist."
+      },
+      "example": {
+        "zh": "教学示例：若 E(Y|X)=10+2X，且 E(X)=3，那么 E(Y)=10+2×3=16。反之，只知道 E(Y)=16，无法推出条件均值一定是一条直线。",
+        "en": "Illustrative example: if E(Y|X)=10+2X and E(X)=3, then E(Y)=16. Knowing only E(Y)=16 cannot establish that the conditional mean is linear."
+      },
+      "pitfall": {
+        "zh": "E(XY)=E(X)E(Y) 并非一般恒等式；独立是一种充分条件。把“无条件平均为零”误当“每组平均为零”会掩盖内生性。",
+        "en": "E(XY)=E(X)E(Y) is not a general identity; independence is one sufficient condition. Confusing zero overall mean with zero mean in every group can conceal endogeneity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "哪条假设更强？",
+          "en": "Which assumption is stronger?"
+        },
+        "options": [
+          {
+            "zh": "二者完全等价",
+            "en": "They are equivalent"
+          },
+          {
+            "zh": "E(u|X)=0",
+            "en": "E(u|X)=0"
+          },
+          {
+            "zh": "E(u)=0",
+            "en": "E(u)=0"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "零条件均值通过迭代期望推出零总体均值，反向一般不成立。",
+          "en": "Zero conditional mean implies zero unconditional mean through iterated expectations, but the reverse generally fails."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.2 Joint Distributions, Conditional Distributions, and Independence"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix B",
+          "section": "B.4 Features of Joint and Conditional Distributions"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m01-c02",
+        "m01-c03",
+        "m01-c04"
+      ]
+    },
+    {
+      "id": "m02-c01",
+      "module": "m02",
+      "title": {
+        "zh": "总体、样本与目标参数",
+        "en": "Population, sample, and estimand"
+      },
+      "question": {
+        "zh": "做一项研究前，究竟要估计“谁的什么”？",
+        "en": "Whose quantity are you trying to estimate?"
+      },
+      "intuition": {
+        "zh": "先把目标说清楚，再问现有样本能否回答它。",
+        "en": "Define the target before asking whether the available sample can answer it."
+      },
+      "explanation": {
+        "zh": [
+          "总体是研究希望描述的单位及其分布；样本是实际拿到的一部分观察。目标参数（estimand）是想了解的总体量，例如某地区全体就业者的平均小时工资。估计方法是从样本得到答案的规则，估计值则是这次算出的具体数。",
+          "教材的随机抽样通常指观测向量独立同分布：每个单位来自相同总体，单位之间的抽取信息互不依赖。这个假设便于证明均值和回归的性质，却不是所有真实数据的默认事实。方便抽样、自愿答题、同校学生和时间序列都需要额外考虑选择或相关性。",
+          "样本大小与样本代表性是不同问题。扩大同一种有偏选择的样本，可能只会把错误总体的均值估计得更精确。定义目标时应写明人群、地区、时间、结果变量和权重；若研究因果效应，还需定义处理与比较状态。"
+        ],
+        "en": [
+          "A population comprises the units and distribution a study seeks to describe; a sample contains the observations available. An estimand is the target population quantity, such as average hourly earnings among employed people in a region. An estimator is the rule used to infer it from a sample, while an estimate is the realized numerical answer.",
+          "The textbook random-sampling framework typically assumes independent and identically distributed observation vectors: units come from the same population and are independent across draws. This supports proofs for means and regression, but is not an automatic fact about real data. Convenience samples, voluntary responses, students within schools, and time series require additional attention to selection or dependence.",
+          "Sample size and representativeness are distinct. Enlarging a systematically selected sample can simply estimate the wrong population more precisely. State the target people, geography, period, outcome, and weighting. For a causal effect, define the treatment and comparison states as well."
+        ]
+      },
+      "formula": "θ = target population quantity;  θ̂ = g(Y₁,…,Yₙ)",
+      "symbols": {
+        "zh": "θ 是未知总体参数；θ̂ 是估计量；g 是计算规则；帽子表示由样本估计。",
+        "en": "θ is the unknown population parameter; θ̂ is an estimator; g is its calculation rule. A hat marks a sample-based estimate."
+      },
+      "example": {
+        "zh": "教学示例：只调查某求职网站的活跃用户，可以描述该群体，却不能仅靠样本很多就代表全市劳动者。若目标是全市平均工资，应检查未使用该网站的人是否系统不同。",
+        "en": "Illustrative example: surveying active users of one job website may describe those users. A large sample alone does not represent all workers in a city. For citywide earnings, examine how nonusers may systematically differ."
+      },
+      "pitfall": {
+        "zh": "随机抽样解决“如何观察人”，随机分配处理解决“谁接受处理”；二者用途不同，不能互相替代。",
+        "en": "Random sampling concerns whom we observe; random treatment assignment concerns who receives treatment. They serve different purposes and are not interchangeable."
+      },
+      "quiz": {
+        "question": {
+          "zh": "大量自愿填写问卷的样本，自动保证总体代表性吗？",
+          "en": "Does a large voluntary-response sample automatically ensure representativeness?"
+        },
+        "options": [
+          {
+            "zh": "保证，因为样本越大越随机",
+            "en": "Yes; larger samples are more random by definition"
+          },
+          {
+            "zh": "保证，只要用回归",
+            "en": "Yes, provided regression is used"
+          },
+          {
+            "zh": "不保证，参加者可能存在系统选择",
+            "en": "No; respondents may be systematically selected"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "样本量减少某些随机误差，不能自动消除选择偏差。",
+          "en": "Sample size reduces certain random errors but does not automatically remove selection bias."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.1 Populations, Parameters, and Random Sampling"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m01-c01",
+        "m01-c02"
+      ]
+    },
+    {
+      "id": "m02-c02",
+      "module": "m02",
+      "title": {
+        "zh": "估计量与抽样分布",
+        "en": "Estimators and sampling distributions"
+      },
+      "question": {
+        "zh": "同一个公式，为什么换一批人就会得到另一个答案？",
+        "en": "Why does the same formula give different answers for different samples?"
+      },
+      "intuition": {
+        "zh": "想象不断重抽样、每次计算一个均值：这些均值本身也有一个分布。",
+        "en": "Imagine repeatedly drawing samples and calculating a mean: those means have a distribution of their own."
+      },
+      "explanation": {
+        "zh": [
+          "抽样分布描述在同一总体、同一样本量和同一抽样机制下，估计量跨样本如何变化。它不是这份样本里个人工资的分布。若随机抽样得到独立同分布、均值为 μ 且方差 σ² 有限的 Y，样本均值的期望为 μ，方差为 σ²/n，所以其抽样标准差为 σ/√n。",
+          "无偏指重复抽样的平均估计恰好等于目标，不是每次估计都正确。标准误是估计量抽样标准差的估计；均值的常用标准误为 s/√n，其中 s 是样本标准差。标准差描述人的差异，标准误描述均值估计的不确定性。",
+          "比较估计方法时既要看偏差，也要看方差。均方误差等于方差加偏差平方；把所有结果都报成零虽无随机波动，却可能严重偏离目标。独立性失败时，均值方差还包含观测之间的协方差，不能照搬 σ²/n。"
+        ],
+        "en": [
+          "A sampling distribution describes how an estimator varies across repeated samples from the same population, of the same size, under the same sampling scheme. It is not the distribution of individual earnings in one dataset. For independent, identically distributed Y with mean μ and finite variance σ², the sample mean has expectation μ and variance σ²/n, so its sampling standard deviation is σ/√n.",
+          "Unbiasedness means the average estimate over repeated sampling equals the target; it does not mean every estimate is correct. A standard error estimates an estimator’s sampling standard deviation. The usual standard error for a mean is s/√n, where s is the sample standard deviation. Standard deviation measures differences among people; standard error measures uncertainty about the estimated mean.",
+          "Compare both bias and variance when evaluating estimators. Mean squared error equals variance plus squared bias. Always reporting zero has no sampling variation but can badly miss the target. When independence fails, the mean’s variance also includes covariances across observations, so σ²/n cannot be applied mechanically."
+        ]
+      },
+      "formula": "E(Ȳ)=μ;  Var(Ȳ)=σ²/n;  SE(Ȳ)=s/√n;  MSE(θ̂)=Var(θ̂)+Bias(θ̂)²",
+      "symbols": {
+        "zh": "Ȳ 表示重复抽样时会变化的样本均值；s 估计总体标准差 σ；Bias(θ̂)=E(θ̂)−θ。",
+        "en": "Ȳ is the sample mean viewed as random across samples; s estimates the population standard deviation σ; Bias(θ̂)=E(θ̂)−θ."
+      },
+      "example": {
+        "zh": "教学示例：100 个独立观察的样本标准差为 20，则均值标准误为 2。若保持相似分布，样本扩大到 400，标准误约为 1；人数增加四倍，精度才以标准误减半体现。",
+        "en": "Illustrative example: with 100 independent observations and sample standard deviation 20, the mean’s standard error is 2. With a similar distribution and 400 observations it is about 1: quadrupling sample size roughly halves the standard error."
+      },
+      "pitfall": {
+        "zh": "不能把“标准误小”读成“个体之间差异小”，也不能把“无偏”读成“这一份结果没有误差”。",
+        "en": "A small standard error does not imply small differences among individuals. Unbiasedness does not imply that one realized estimate has no error."
+      },
+      "quiz": {
+        "question": {
+          "zh": "若数据独立、总体方差不变，样本量增加四倍，均值标准差如何变化？",
+          "en": "For independent data with unchanged population variance, what happens to the mean’s standard deviation when sample size quadruples?"
+        },
+        "options": [
+          {
+            "zh": "变为原来的一半",
+            "en": "It halves"
+          },
+          {
+            "zh": "变为原来的四分之一",
+            "en": "It becomes one quarter"
+          },
+          {
+            "zh": "保持不变",
+            "en": "It is unchanged"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "抽样标准差与 1/√n 成比例，而不是与 1/n 成比例。",
+          "en": "Sampling standard deviation is proportional to 1/√n, not 1/n."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.2 Finite Sample Properties of Estimators"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m02-c01",
+        "m01-c03"
+      ]
+    },
+    {
+      "id": "m02-c03",
+      "module": "m02",
+      "title": {
+        "zh": "大数定律与中心极限定理",
+        "en": "Law of large numbers and central limit theorem"
+      },
+      "question": {
+        "zh": "样本变大究竟带来了什么保证？",
+        "en": "What does increasing sample size actually guarantee?"
+      },
+      "intuition": {
+        "zh": "大数定律回答“靠近哪里”，中心极限定理回答“围绕那里怎样波动”。",
+        "en": "The law of large numbers tells us where an average goes; the central limit theorem tells us how it fluctuates around that limit."
+      },
+      "explanation": {
+        "zh": [
+          "独立同分布且具有有限绝对一阶矩时，大数定律保证样本均值依概率趋于总体均值：当样本量趋于无穷时，偏离目标超过任意固定正距离的概率趋于零，但不要求这一概率逐个样本量单调下降。这不要求每新增一个观察值，估计都更接近真值，也不意味着有限样本完全没有误差。",
+          "在独立同分布、有限且正的方差等经典条件下，中心极限定理说明 √n(Ȳ−μ)/σ 的分布趋近标准正态。因此，即便个体工资偏态，足够大样本的均值也可能用正态近似进行推断。近似质量取决于尾部和偏态，不存在“超过 30 就必然安全”的统一门槛。",
+          "一致性与无偏性不同：前者讨论 n 不断变大，后者讨论给定 n 的重复抽样平均。一个估计量可以有小样本偏差却一致。反过来，只使用第一个观察值估计均值可以无偏，却没有随着 n 增大而集中，因此通常不一致。"
+        ],
+        "en": [
+          "For independent, identically distributed observations with a finite absolute first moment, the law of large numbers gives convergence of the sample mean in probability to the population mean. As sample size tends to infinity, the probability of exceeding any fixed positive error tolerance tends to zero; it need not decrease monotonically at every sample size. It does not guarantee that each additional observation improves the estimate or that a finite sample has zero error.",
+          "Under the classical conditions of independent, identically distributed observations and finite positive variance, the central limit theorem makes √n(Ȳ−μ)/σ approach a standard normal distribution. Thus a mean of skewed earnings may permit approximate normal inference with enough observations. Accuracy depends on tails and skewness; no universal rule makes every sample above 30 sufficient.",
+          "Consistency and unbiasedness differ: consistency concerns increasing n, while unbiasedness concerns repeated sampling at a fixed n. An estimator may have finite-sample bias yet be consistent. Conversely, using only the first observation can be unbiased for the mean but generally is not consistent, because it does not become more concentrated as n grows."
+        ]
+      },
+      "formula": "Ȳ →p μ;  √n(Ȳ−μ)/σ →d N(0,1)",
+      "symbols": {
+        "zh": "→p 表示依概率收敛；→d 表示依分布收敛；N(0,1) 表示标准正态分布；√n 是样本量平方根。",
+        "en": "→p denotes convergence in probability; →d denotes convergence in distribution; N(0,1) is standard normal; √n is the square root of sample size."
+      },
+      "example": {
+        "zh": "教学示例：收入极高者很少但金额很大时，均值可能需要很大样本才能近似正态。增加样本有帮助；若样本始终只来自高收入社区，它仍不会自动收敛到全市居民的平均收入。",
+        "en": "Illustrative example: rare but very high incomes can require large samples before a mean is well approximated by a normal distribution. More observations help, but repeatedly sampling only affluent neighborhoods does not make the estimate converge to the citywide mean."
+      },
+      "pitfall": {
+        "zh": "大样本可以减少抽样波动，不能修复错误目标、选择偏差或遗漏变量导致的系统偏离。",
+        "en": "Large samples can reduce sampling noise; they do not repair a wrong target, selection bias, or systematic error from omitted variables."
+      },
+      "quiz": {
+        "question": {
+          "zh": "中心极限定理主要描述下列哪一个对象？",
+          "en": "Which object is the central limit theorem primarily about here?"
+        },
+        "options": [
+          {
+            "zh": "任何有偏估计都会变无偏",
+            "en": "Every biased estimator becoming unbiased"
+          },
+          {
+            "zh": "标准化样本均值的分布",
+            "en": "The distribution of the standardized sample mean"
+          },
+          {
+            "zh": "每个个体观察值都会变成正态",
+            "en": "Every individual observation becoming normal"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "它是关于统计量抽样分布的极限定理，并不改变原始总体。",
+          "en": "It is a limiting result about a statistic’s sampling distribution, not a change to the original population."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.3 Asymptotic or Large Sample Properties of Estimators"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m02-c02",
+        "m01-c04"
+      ]
+    },
+    {
+      "id": "m02-c04",
+      "module": "m02",
+      "title": {
+        "zh": "置信区间与覆盖率",
+        "en": "Confidence intervals and coverage"
+      },
+      "question": {
+        "zh": "“95% 置信”里的 95%，是关于什么的概率？",
+        "en": "What probability does “95% confidence” refer to?"
+      },
+      "intuition": {
+        "zh": "95% 描述区间制作方法长期的覆盖率；不是某个个体落入区间的概率。",
+        "en": "95% describes a procedure’s long-run coverage, not the probability that an individual falls inside it."
+      },
+      "explanation": {
+        "zh": [
+          "点估计只给一个数，置信区间把估计的不确定性也展示出来。通常用“估计值 ± 临界值×标准误”构造。频率学派把总体参数看作固定的未知量，随机的是我们抽到的样本以及由样本算出的区间。",
+          "如果在同样条件下反复抽样并每次构造区间，一个有效的 95% 置信区间构造方法，在长期重复抽样中会使约 95% 的区间覆盖真参数。拿到某一个区间后，它要么覆盖真值，要么没有；不能把频率学派含义直接改成“固定参数有 95% 概率位于这一区间”。",
+          "从正态总体独立同分布抽样且方差未知时，均值的精确区间使用 n−1 自由度的 t 临界值；大样本满足相应条件时可用约 1.96 的正态临界值。更高置信水平通常使区间更宽，更多独立信息通常使区间更窄；抽样设计错误不会被区间公式自动纠正。"
+        ],
+        "en": [
+          "A point estimate gives one number; a confidence interval displays estimation uncertainty as well. A common form is estimate ± critical value × standard error. In frequentist inference, the population parameter is fixed but unknown, while the sample and the interval constructed from it are random.",
+          "If we repeatedly sample under the same conditions and construct intervals, a 95% procedure covers the true parameter in about 95% of repetitions in the long run. A particular realized interval either covers the parameter or does not. That frequentist statement is not automatically a 95% probability assigned to a fixed parameter inside this realized interval.",
+          "For an independent, identically distributed sample from a normal population with unknown variance, an exact interval for the mean uses a t critical value with n−1 degrees of freedom. Suitable large-sample conditions allow the approximate normal critical value 1.96. Higher confidence generally widens intervals; more independent information generally narrows them. The formula does not automatically fix an invalid sampling design."
+        ]
+      },
+      "formula": "CI = estimate ± critical value × SE;  approximate 95% CI: ȳ ± 1.96·s/√n",
+      "symbols": {
+        "zh": "CI 为置信区间；SE 为标准误；1.96 是标准正态双侧 95% 区间临界值，属于大样本近似用法。",
+        "en": "CI denotes confidence interval; SE denotes standard error; 1.96 is the standard-normal critical value for a two-sided 95% interval, used here as a large-sample approximation."
+      },
+      "example": {
+        "zh": "教学示例：平均通勤时间估计为 40 分钟，标准误为 2 分钟，则近似 95% 区间为 [36.08,43.92]。它估计的是总体平均通勤时间，并不声称 95% 的人都在这个范围内。",
+        "en": "Illustrative example: estimated mean commuting time is 40 minutes with standard error 2. The approximate 95% interval is [36.08,43.92]. It concerns the population mean, not a claim that 95% of individuals commute within that range."
+      },
+      "pitfall": {
+        "zh": "置信区间表达特定模型和抽样假设下的不确定性，不会自动涵盖测量错误、模型选错或所有研究者选择带来的不确定性。",
+        "en": "A confidence interval represents uncertainty under particular modeling and sampling assumptions. It does not automatically include measurement error, misspecification, or all researcher choices."
+      },
+      "quiz": {
+        "question": {
+          "zh": "把置信水平从 95% 提高到 99%，其他条件不变，区间通常怎样变化？",
+          "en": "Holding everything else fixed, what usually happens when confidence rises from 95% to 99%?"
+        },
+        "options": [
+          {
+            "zh": "更窄",
+            "en": "It narrows"
+          },
+          {
+            "zh": "必须不变",
+            "en": "It must stay unchanged"
+          },
+          {
+            "zh": "更宽",
+            "en": "It widens"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "为了在重复抽样中覆盖更多情况，需要更大的临界值。",
+          "en": "Covering more repeated-sampling outcomes requires a larger critical value."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.5 Interval Estimation and Confidence Intervals"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m02-c02",
+        "m02-c03"
+      ]
+    },
+    {
+      "id": "m02-c05",
+      "module": "m02",
+      "title": {
+        "zh": "假设检验与 p 值",
+        "en": "Hypothesis tests and p-values"
+      },
+      "question": {
+        "zh": "p 值很小，究竟反对了什么？",
+        "en": "What does a small p-value provide evidence against?"
+      },
+      "intuition": {
+        "zh": "先假设某个总体说法成立，再看当前数据在这个世界里是否过于反常。",
+        "en": "Start with a population claim, then ask how unusual the observed evidence would be if that claim were true."
+      },
+      "explanation": {
+        "zh": [
+          "原假设 H₀ 是待检验的总体限制，备择假设 H₁ 是对立方向。先确定研究问题、单侧或双侧备择以及显著性水平 α，再计算检验统计量。第一类错误是 H₀ 真的时候却拒绝它；第二类错误是假设是假的却没有拒绝，检验功效是后一种情形下正确拒绝的概率。",
+          "p 值是：假设 H₀ 及推断模型成立，得到像当前检验统计量一样或更极端结果的概率。小 p 值说明数据与 H₀ 的相容性较差，不是 H₀ 为真的概率，也不是结论出错的概率。未拒绝只是证据不足，并不证明没有效应。",
+          "检验结论同时取决于效应大小和精度。样本很大时，微小差异也可能显著；样本很小时，重要差异也可能不显著。同一参数的双侧 5% 检验与同一方法构造的 95% 区间对应：原假设值在区间外时拒绝；反复挑选显著结果会破坏原先的误报率解释。"
+        ],
+        "en": [
+          "The null hypothesis H₀ is a population restriction, and H₁ states the alternative. Choose the question, one- or two-sided alternative, and significance level α before computing the statistic. A Type I error rejects a true null; a Type II error fails to reject a false null. Power is the probability of correctly rejecting under a specified alternative.",
+          "A p-value is the probability, assuming H₀ and the inferential model, of a statistic at least as extreme as the observed one. A small value signals poor compatibility with H₀. It is not the probability that H₀ is true or that the conclusion is wrong. Failure to reject indicates insufficient evidence, not proof of no effect.",
+          "Test results depend on both effect size and precision. Huge samples may make tiny differences significant, while small samples may fail to detect important differences. A two-sided 5% test corresponds to a 95% interval constructed by the same method: reject when the null value lies outside. Repeatedly selecting significant results undermines the original false-positive interpretation."
+        ]
+      },
+      "formula": "H₀: θ=θ₀;  test statistic=(θ̂−θ₀)/SE(θ̂);  reject if p≤α",
+      "symbols": {
+        "zh": "H₀ 为原假设；H₁ 为备择；θ₀ 是假设值；α 是事先设定的显著性水平。",
+        "en": "H₀ is the null, H₁ the alternative, θ₀ the hypothesized value, and α a prespecified significance level."
+      },
+      "example": {
+        "zh": "教学示例：双侧检验得到 p=0.03。在 5% 水平拒绝 H₀，在 1% 水平不拒绝。不能由此说 H₀ 有 3% 概率为真；同样也不应事后改成单侧检验只为得到更小 p 值。",
+        "en": "Illustrative example: a two-sided test produces p=0.03. Reject at 5%, but not at 1%. This does not imply a 3% probability that H₀ is true. Switching to a one-sided test after seeing the result simply to lower the p-value is inappropriate."
+      },
+      "pitfall": {
+        "zh": "不要把 0.049 和 0.051 当成截然相反的科学世界。结合置信区间、研究设计和实际效应解释证据。",
+        "en": "Do not treat 0.049 and 0.051 as radically different scientific worlds. Interpret evidence using confidence intervals, study design, and substantive effect size."
+      },
+      "quiz": {
+        "question": {
+          "zh": "p=0.20 最恰当的解释是哪一个？",
+          "en": "Which is the best interpretation of p=0.20?"
+        },
+        "options": [
+          {
+            "zh": "在原假设和模型成立时，如此或更极端结果的概率为 20%",
+            "en": "Under the null and model, results at least this extreme have probability 20%"
+          },
+          {
+            "zh": "原假设有 20% 概率为真",
+            "en": "The null has a 20% probability of being true"
+          },
+          {
+            "zh": "效应有 80% 概率存在",
+            "en": "There is an 80% probability that an effect exists"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "p 值以原假设成立为条件，不是反过来计算原假设的概率。",
+          "en": "A p-value conditions on the null; it does not reverse that conditioning to compute the probability of the null."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.6 Hypothesis Testing"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m02-c04"
+      ]
+    },
+    {
+      "id": "m03-c01",
+      "module": "m03",
+      "title": {
+        "zh": "一元回归模型与误差项",
+        "en": "Simple regression models and error terms"
+      },
+      "question": {
+        "zh": "一条直线如何表达现实中并不整齐的经济关系？",
+        "en": "How can a line represent a messy economic relationship?"
+      },
+      "intuition": {
+        "zh": "让直线描述系统部分，再用误差项容纳个体差异与未观测因素。",
+        "en": "Use a line for the systematic component and an error term for individual differences and unobserved factors."
+      },
+      "explanation": {
+        "zh": [
+          "一元总体模型 y=β₀+β₁x+u 把结果拆成与 x 相关的线性部分和误差 u。β₀ 是截距，β₁ 是斜率，u 包含没有明确写进模型的因素。模型在参数 β 上线性；x 本身可以是教育年限，也可以是某个原始变量的对数。",
+          "若 E(u|x)=0，给定 x 的总体平均结果就等于 β₀+β₁x。误差可以对每个人不为零，甚至很大；要求的是在每个 x 水平上平均为零。若此条件不成立，方程形式仍可写出来，但直线不一定是正确的条件均值。",
+          "描述关联、预测结果、估计因果效应是不同目标。工资与教育的正斜率先说明平均关联；要解释为教育的因果作用，需要排除能力、家庭背景等未观测因素与教育的系统联系，并明确研究设计。回归软件只能计算，不能替我们证明这些假设。"
+        ],
+        "en": [
+          "The simple population model y=β₀+β₁x+u separates an outcome into a linear component in x and an error u. β₀ is the intercept, β₁ the slope, and u contains factors not explicitly included. The model is linear in its parameters; x may be schooling or a transformation such as the log of an underlying variable.",
+          "If E(u|x)=0, the population mean outcome conditional on x equals β₀+β₁x. Individual errors may be nonzero and large; the requirement concerns their average at each x level. If that condition fails, the equation can still be written, but the line need not be the correct conditional mean.",
+          "Description, prediction, and causal estimation are different goals. A positive earnings–schooling slope first describes an average association. A causal interpretation additionally requires a defensible design that rules out systematic links between schooling and unobserved determinants such as ability or family background. Software computes coefficients; it cannot establish those assumptions."
+        ]
+      },
+      "formula": "y=β₀+β₁x+u;  E(y|x)=β₀+β₁x if E(u|x)=0",
+      "symbols": {
+        "zh": "y 为结果变量；x 为解释变量；β₀、β₁ 是总体参数；u 是总体误差项，通常不可直接观察。",
+        "en": "y is the outcome, x the explanatory variable, β₀ and β₁ population parameters, and u the generally unobserved population error."
+      },
+      "example": {
+        "zh": "教学示例：假设条件平均考试分数为 50+3×学习小时。学习 4 小时者的平均分为 62，但某位学生得 70 分并不推翻模型；他的误差是 8 分。",
+        "en": "Illustrative example: suppose mean test scores conditional on study hours equal 50+3×hours. Students studying four hours average 62, but one student scoring 70 does not refute the model; their error is 8 points."
+      },
+      "pitfall": {
+        "zh": "误差项不是“录入错误”的同义词；它也包括真实而未观测的决定因素。总体误差 u 与估计后的残差 û 不是同一个量。",
+        "en": "An error term is not synonymous with data-entry mistakes: it includes real unobserved determinants. The population error u differs from the fitted residual û."
+      },
+      "quiz": {
+        "question": {
+          "zh": "E(u|x)=0 要求什么？",
+          "en": "What does E(u|x)=0 require?"
+        },
+        "options": [
+          {
+            "zh": "每个 x 水平下误差的平均值为零",
+            "en": "Errors average to zero at every x level"
+          },
+          {
+            "zh": "每一个人的误差都是零",
+            "en": "Every individual error equals zero"
+          },
+          {
+            "zh": "所有变量都服从正态分布",
+            "en": "All variables follow normal distributions"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "零条件均值是组内平均限制，不是完美拟合或正态性要求。",
+          "en": "Zero conditional mean restricts within-group averages; it requires neither perfect fit nor normality."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "2",
+          "section": "2.1 Definition of the Simple Regression Model"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m01-c05",
+        "m02-c01"
+      ]
+    },
+    {
+      "id": "m03-c02",
+      "module": "m03",
+      "title": {
+        "zh": "普通最小二乘估计及其推导",
+        "en": "Ordinary least squares estimation and derivation"
+      },
+      "question": {
+        "zh": "回归软件怎样从散点里选出这一条直线？",
+        "en": "How does regression software choose one line through a scatterplot?"
+      },
+      "intuition": {
+        "zh": "选择截距与斜率，让所有竖直预测误差的平方加总最小。",
+        "en": "Choose an intercept and slope that minimize the sum of squared vertical prediction errors."
+      },
+      "explanation": {
+        "zh": [
+          "普通最小二乘法（OLS）对每个候选截距 b₀、斜率 b₁，计算 yᵢ−b₀−b₁xᵢ，再把这些差平方求和。平方让正负偏离不能抵消，也让较大偏离受到更大惩罚。这里最小化的是竖直距离平方，并不是点到直线的垂直几何距离。",
+          "对 b₀ 和 b₁ 求导并令导数为零，得到两个正规方程：残差之和为零、x 乘残差之和为零。第一条给出 b̂₀=ȳ−b̂₁x̄；代入第二条，得到斜率为去均值后的交叉乘积之和除以 x 的离差平方和。无需先假设误差正态就能完成计算。",
+          "只要 x 有样本变动，分母就为正，含截距的一元 OLS 解唯一。若每人的 x 都相同，就无法区分截距与斜率。OLS 的计算定义与它是否无偏、能否解释因果，是不同层次的问题；后者依赖抽样与总体假设。"
+        ],
+        "en": [
+          "Ordinary least squares computes yᵢ−b₀−b₁xᵢ for each candidate intercept and slope, then sums the squared differences. Squaring prevents cancellation and penalizes large deviations more strongly. It minimizes squared vertical distances, not squared perpendicular geometric distances to the line.",
+          "Differentiating with respect to b₀ and b₁ and setting derivatives to zero gives the normal equations: residuals sum to zero and x-weighted residuals sum to zero. The first gives b̂₀=ȳ−b̂₁x̄. Substitution into the second yields the slope as the sum of demeaned cross-products divided by the sum of squared demeaned x values. Normal errors are not needed for this calculation.",
+          "If x varies in the sample, the denominator is positive and the intercept-and-slope solution is unique. If every x is identical, intercept and slope cannot be separated. The computational definition of OLS is distinct from unbiasedness and causality, which require sampling and population assumptions."
+        ]
+      },
+      "formula": "min Σᵢ(yᵢ−b₀−b₁xᵢ)²;  b̂₁=Σᵢ(xᵢ−x̄)(yᵢ−ȳ)/Σᵢ(xᵢ−x̄)²;  b̂₀=ȳ−b̂₁x̄",
+      "symbols": {
+        "zh": "b₀、b₁ 是待尝试的系数；b̂ 是使目标最小的估计；x̄、ȳ 是样本均值；Σᵢ 遍历所有观察。",
+        "en": "b₀ and b₁ are candidate coefficients, b̂ denotes minimizing estimates, x̄ and ȳ are sample means, and Σᵢ sums over observations."
+      },
+      "example": {
+        "zh": "教学示例：三个点为 (1,2)、(2,3)、(3,7)，x̄=2、ȳ=4。分子为 5，分母为 2，故斜率 2.5、截距 −1，预测值为 1.5、4、6.5，残差为 0.5、−1、0.5。",
+        "en": "Illustrative example: observations (1,2), (2,3), and (3,7) have x̄=2 and ȳ=4. The numerator is 5 and denominator 2, giving slope 2.5 and intercept −1. Fitted values are 1.5, 4, and 6.5; residuals are 0.5, −1, and 0.5."
+      },
+      "pitfall": {
+        "zh": "大异常值可能对平方损失有很大影响。不能为了获得更好看的系数，事后任意删除异常观察。",
+        "en": "Extreme observations can strongly influence squared loss. Do not selectively delete them merely to obtain more attractive coefficients."
+      },
+      "quiz": {
+        "question": {
+          "zh": "所有 x 都相同时，含截距的一元 OLS 斜率为什么无法唯一估计？",
+          "en": "Why is the simple OLS slope unidentified when all x values are the same?"
+        },
+        "options": [
+          {
+            "zh": "y 必须等于零",
+            "en": "y must equal zero"
+          },
+          {
+            "zh": "必须改用更大的显著性水平",
+            "en": "A larger significance level is required"
+          },
+          {
+            "zh": "x 的离差平方和为零",
+            "en": "The sum of squared demeaned x values is zero"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "数据没有 x 变化，无法知道沿 x 方向变化时 y 如何变化。",
+          "en": "With no x variation, the data cannot reveal how y changes along the x dimension."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "2",
+          "section": "2.2 Deriving the Ordinary Least Squares Estimates"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m03-c01",
+        "m01-c03"
+      ]
+    },
+    {
+      "id": "m03-c03",
+      "module": "m03",
+      "title": {
+        "zh": "拟合值、残差与 R²",
+        "en": "Fitted values, residuals, and R²"
+      },
+      "question": {
+        "zh": "一条拟合线解释了多少样本差异？",
+        "en": "How much sample variation does a fitted line account for?"
+      },
+      "intuition": {
+        "zh": "把每个观察拆成预测部分和剩余部分，再比较剩余波动有多大。",
+        "en": "Separate each observation into its fitted and residual components, then assess the remaining variation."
+      },
+      "explanation": {
+        "zh": [
+          "拟合值 ŷᵢ 是把样本 xᵢ 代入估计方程后的预测；残差 ûᵢ=yᵢ−ŷᵢ 可以从数据算出。总体误差 uᵢ 需要知道真实总体参数，通常不能直接观察。含截距的 OLS 使残差样本均值为零，且与样本中的解释变量正交，这是最小化导致的代数结果。",
+          "总离差平方和 TSS 衡量 y 围绕样本均值的波动；残差平方和 RSS 衡量拟合后未解释的波动。当有截距且 TSS>0 时，R²=1−RSS/TSS，落在 0 与 1 之间。教材有时把残差平方和缩写为 SSR；阅读时必须先看定义，不能只认缩写。",
+          "R² 是这份样本、这个结果变量尺度上的拟合指标，不是因果可信度。在同一组观测、同一因变量且保留原有解释变量时，增加解释变量不会提高最小 RSS，因此不会降低样本 R²；它并不能独自选模型。无截距回归、常数结果变量、换成 log(y) 等情形都需要重新检查 R² 的定义和可比性。"
+        ],
+        "en": [
+          "The fitted value ŷᵢ evaluates the estimated equation at xᵢ; the residual ûᵢ=yᵢ−ŷᵢ is computable from data. The population error uᵢ generally requires unknown true parameters. OLS with an intercept makes sample residuals average zero and be orthogonal to the regressors. Those are algebraic consequences of minimization.",
+          "The total sum of squares TSS measures variation around the sample mean; the residual sum of squares RSS measures unexplained fitted variation. With an intercept and TSS>0, R²=1−RSS/TSS lies between zero and one. Some texts, including this textbook, abbreviate the residual sum of squares as SSR. Always check definitions instead of relying on initials.",
+          "R² measures fit in this sample on this outcome scale, not causal credibility. Using the same observations and outcome and retaining all original regressors, adding regressors cannot increase minimized RSS and therefore cannot lower sample R²; it cannot select a model by itself. Regressions without intercepts, constant outcomes, and transformations such as log(y) require checking the definition and comparability of R²."
+        ]
+      },
+      "formula": "ŷᵢ=b̂₀+b̂₁xᵢ;  ûᵢ=yᵢ−ŷᵢ;  R²=1−Σᵢûᵢ²/Σᵢ(yᵢ−ȳ)²",
+      "symbols": {
+        "zh": "ŷ 表示拟合值；û 表示残差；TSS=Σ(yᵢ−ȳ)²；本站用 RSS=Σûᵢ² 表示残差平方和。",
+        "en": "ŷ denotes fitted values, û residuals, TSS=Σ(yᵢ−ȳ)², and this site uses RSS=Σûᵢ² for the residual sum of squares."
+      },
+      "example": {
+        "zh": "教学示例：沿用三个点 (1,2)、(2,3)、(3,7)，TSS=14，RSS=1.5，所以 R²≈0.893。这表示约 89.3% 的样本离差平方和被该线拟合，并不表示 89.3% 的个体被准确预测。",
+        "en": "Illustrative example: for (1,2), (2,3), and (3,7), TSS=14 and RSS=1.5, giving R²≈0.893. The line accounts for about 89.3% of sample squared variation, not 89.3% of individuals being predicted exactly."
+      },
+      "pitfall": {
+        "zh": "残差与 x 样本不相关不能证明总体误差与 x 无关；这是 OLS 强制满足的条件，不是外生性检验。",
+        "en": "Sample residual orthogonality does not establish population error exogeneity; it is imposed by OLS, not a test of exogeneity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "回归得到 R²=0.9，可以直接断定什么？",
+          "en": "What can an R² of 0.9 establish directly?"
+        },
+        "options": [
+          {
+            "zh": "90% 的预测完全准确",
+            "en": "90% of predictions are exact"
+          },
+          {
+            "zh": "在适用定义下，样本拟合解释了 90% 的总离差平方和",
+            "en": "Under the relevant definition, fitted values account for 90% of sample total squared variation"
+          },
+          {
+            "zh": "x 对 y 一定有因果作用",
+            "en": "x necessarily causes y"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "R² 描述样本拟合比例，不提供因果识别或个体预测正确率。",
+          "en": "R² describes sample fit, not causal identification or an individual prediction success rate."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "2",
+          "section": "2.3 Properties of OLS on Any Sample of Data"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m03-c02"
+      ]
+    },
+    {
+      "id": "m03-c04",
+      "module": "m03",
+      "title": {
+        "zh": "回归系数解释与计量单位",
+        "en": "Regression coefficient interpretation and measurement units"
+      },
+      "question": {
+        "zh": "斜率 0.5 是“增加 0.5 元”，还是“增加 50%”？",
+        "en": "Does a slope of 0.5 mean half a currency unit or a 50% increase?"
+      },
+      "intuition": {
+        "zh": "先看变量如何定义，再读系数；单位和函数形式共同决定含义。",
+        "en": "Read the variable definitions first: units and functional form determine a coefficient’s meaning."
+      },
+      "explanation": {
+        "zh": [
+          "在水平对水平模型 ŷ=b̂₀+b̂₁x 中，x 增加一单位对应拟合 y 改变 b̂₁ 个 y 单位。若 x 增加 Δx，拟合差异就是 b̂₁Δx。它描述回归线上的差异；能否说成“引起”，还需因果识别假设。",
+          "截距是 x=0 时的预测。若零点远离数据范围，例如在成年样本里预测零岁者收入，截距可能只起定位直线的作用。改变计量单位会改变系数数值，却不会改变同一经济关系：把收入从元改为千元，截距与斜率都除以 1000。",
+          "百分比变化与百分点变化要分清。某率从 10% 变到 12%，增加了 2 个百分点，相对增加 20%。如果因变量把百分率编码成 0 到 100，系数以百分点计；若编码成 0 到 1，变化 0.02 才是 2 个百分点。对数模型的百分比解释将在后续卡片展开。"
+        ],
+        "en": [
+          "In a level–level model ŷ=b̂₀+b̂₁x, a one-unit increase in x corresponds to a fitted change of b̂₁ units of y. For a change Δx, the fitted difference is b̂₁Δx. This is a difference along the fitted regression line; saying it causes the change requires causal identification assumptions.",
+          "The intercept predicts y at x=0. When zero lies far outside the data, such as age zero in an adult earnings sample, it may primarily position the line. Rescaling units changes coefficient numbers without changing the underlying fitted relationship: measuring earnings in thousands divides both intercept and slope by 1000.",
+          "Distinguish percent changes from percentage-point changes. A rate rising from 10% to 12% increases by 2 percentage points, or 20% relative to its starting value. If the outcome is coded from 0 to 100, its changes are in percentage points. If coded from 0 to 1, a change of 0.02 means 2 percentage points. Log-model percentage interpretations follow later."
+        ]
+      },
+      "formula": "Δŷ=b̂₁Δx;  y*=y/1000 ⇒ b̂₁*=b̂₁/1000;  percent change=100(new−old)/old",
+      "symbols": {
+        "zh": "Δ 表示变化；星号 * 表示重新定义单位后的变量或系数；百分比变化要求基准值不为零。",
+        "en": "Δ denotes a change; * marks rescaled variables or coefficients. A percentage change requires a nonzero baseline."
+      },
+      "example": {
+        "zh": "教学示例：小时工资以元计，教育以年计，斜率为 1.8，则多 2 年教育对应拟合小时工资高 3.6 元。若改用月记录教育，斜率为 1.8/12=0.15，而不是 21.6。",
+        "en": "Illustrative example: hourly earnings are in currency units and schooling in years. A slope of 1.8 means two additional years correspond to 3.6 higher fitted hourly earnings. Recording schooling in months changes the slope to 1.8/12=0.15, not 21.6."
+      },
+      "pitfall": {
+        "zh": "系数的数字大小不能脱离单位直接比较。x 的单位放大或缩小后，系数会反向缩放。",
+        "en": "Coefficient magnitudes cannot be compared without units. Rescaling the numerical values of x rescales its coefficient inversely."
+      },
+      "quiz": {
+        "question": {
+          "zh": "失业率从 5% 变为 6%，正确表述是？",
+          "en": "Which statement correctly describes unemployment rising from 5% to 6%?"
+        },
+        "options": [
+          {
+            "zh": "增加 1 个百分点，相对增加 20%",
+            "en": "Up 1 percentage point and 20% in relative terms"
+          },
+          {
+            "zh": "增加 1%，增加 20 个百分点",
+            "en": "Up 1% and 20 percentage points"
+          },
+          {
+            "zh": "下降 1 个百分点",
+            "en": "Down 1 percentage point"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "百分点差是 6−5=1；相对变化为 (6−5)/5=20%。",
+          "en": "The percentage-point difference is 6−5=1; the relative change is (6−5)/5=20%."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "2",
+          "section": "2.4 Units of Measurement and Functional Form"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix A",
+          "section": "A.3 Proportions and Percentages"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m03-c02"
+      ]
+    },
+    {
+      "id": "m03-c05",
+      "module": "m03",
+      "title": {
+        "zh": "OLS 无偏性的条件",
+        "en": "Conditions for OLS unbiasedness"
+      },
+      "question": {
+        "zh": "最小化残差平方，为什么还不够保证估计准确？",
+        "en": "Why does minimizing squared residuals not ensure an unbiased estimate?"
+      },
+      "intuition": {
+        "zh": "回归线会吸收任何与 x 一起变化的因素；无偏性需要这些遗漏因素没有系统方向。",
+        "en": "A fitted line absorbs factors that move with x; unbiasedness requires omitted influences not to move systematically with it."
+      },
+      "explanation": {
+        "zh": [
+          "教材一元模型的无偏性条件包括：总体模型对参数线性；随机抽样；样本 x 有变动；E(u|x)=0。给定样本 x 后，斜率估计可拆为真斜率加上“x 的偏离与误差共同变动”这一项。零条件均值使这项在重复抽样意义上平均为零。",
+          "无偏性不需要同方差或正态性。同方差 Var(u|x)=σ² 用于简洁的方差公式，正态性用于某些有限样本精确推断。如果高教育者有更高平均未观测能力，而能力也提高工资，误差在不同教育水平的平均值可能不同，零条件均值就缺乏依据。",
+          "在同方差等条件下，给定 x 的斜率方差为 σ²/Σ(xᵢ−x̄)²。噪声越大，估计越不精确；x 的有效变动越大，估计越精确。为了扩大 x 范围而混合不可比群体，却可能损害零条件均值，因此不能只追求分母大。"
+        ],
+        "en": [
+          "The textbook conditions for simple-regression unbiasedness are a population model linear in parameters, random sampling, sample variation in x, and E(u|x)=0. Conditional on the sampled x values, the estimated slope equals the true slope plus a term reflecting comovement between demeaned x and errors. Zero conditional mean makes this extra term average zero over repeated sampling.",
+          "Neither homoskedasticity nor normality is needed for unbiasedness. Homoskedasticity, Var(u|x)=σ², supports a simple variance formula; normality supports certain exact finite-sample inference results. If more educated people have greater average unobserved ability and ability also raises earnings, error means may vary with education, undermining zero conditional mean.",
+          "Under homoskedasticity and the other conditions, conditional slope variance is σ²/Σ(xᵢ−x̄)². More noise reduces precision; greater informative x variation improves it. However, enlarging the x range by combining incomparable groups may undermine zero conditional mean, so a large denominator is not the sole objective."
+        ]
+      },
+      "formula": "b̂₁=β₁+Σᵢ(xᵢ−x̄)uᵢ/Σᵢ(xᵢ−x̄)²;  E(b̂₁|X)=β₁ under zero conditional mean",
+      "symbols": {
+        "zh": "X 表示样本所有解释变量的取值；β₁ 是真斜率；σ² 是同方差假设下的条件误差方差。",
+        "en": "X denotes all sampled explanatory-variable values; β₁ is the true slope; σ² is the conditional error variance under homoskedasticity."
+      },
+      "example": {
+        "zh": "教学示例：研究培训与工资时，主动报名者可能更有动力。若动力进入误差且与培训正相关，回归可能把动力带来的工资差异计入培训系数。即使样本很大，这一问题也不会自行消失。",
+        "en": "Illustrative example: workers who volunteer for training may be more motivated. If motivation enters the error and is positively associated with training, regression can attribute some motivation-related earnings differences to training. A large sample alone does not solve this problem."
+      },
+      "pitfall": {
+        "zh": "“残差均值为零”是含截距 OLS 的样本恒等式；“误差条件均值为零”是总体识别假设，二者不能互换。",
+        "en": "“Residuals average zero” is a sample identity for OLS with an intercept. “Errors have zero conditional mean” is a population assumption. They are not interchangeable."
+      },
+      "quiz": {
+        "question": {
+          "zh": "OLS 无偏性的标准条件中，哪项并非必需？",
+          "en": "Which is not necessary for standard OLS unbiasedness?"
+        },
+        "options": [
+          {
+            "zh": "零条件均值",
+            "en": "Zero conditional mean"
+          },
+          {
+            "zh": "解释变量有样本变动",
+            "en": "Sample variation in the regressor"
+          },
+          {
+            "zh": "误差正态分布",
+            "en": "Normally distributed errors"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "正态性用于某些精确推断结果，不是 OLS 无偏性所需条件。",
+          "en": "Normality supports certain exact inference results; it is not required for OLS unbiasedness."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "2",
+          "section": "2.5 Expected Values and Variances of the OLS Estimators"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m03-c01",
+        "m03-c02",
+        "m02-c02"
+      ]
+    },
+    {
+      "id": "m04-c01",
+      "module": "m04",
+      "title": {
+        "zh": "多元回归与偏效应",
+        "en": "Multiple regression and partial effects"
+      },
+      "question": {
+        "zh": "同时放进教育与经验，教育系数比较了什么？",
+        "en": "With both schooling and experience included, what does the schooling coefficient compare?"
+      },
+      "intuition": {
+        "zh": "多元回归把不同变量的共同变动拆开，描述其他列固定时一列变化对应的拟合差异。",
+        "en": "Multiple regression separates comovement and describes fitted differences as one regressor changes while the others are held fixed."
+      },
+      "explanation": {
+        "zh": [
+          "总体模型 y=β₀+β₁x₁+…+βₖxₖ+u 同时纳入多个解释变量。若条件均值为线性且 E(u|x₁,…,xₖ)=0，βⱼ 表示其他解释变量固定时 xⱼ 增加一单位的条件均值变化。OLS 在样本中联合选择所有系数，而不是分别做几次一元回归后把答案拼起来。",
+          "“固定”是模型中的比较，并不要求数据真的包含每一种完全相同的对照组合。因此要检查变量的支持范围，避免依靠远距离外推。控制变量可减少某些混杂，却不能自动排除未观察因素；是否有因果含义，还要解释控制的选择依据、时间顺序与识别假设。"
+        ],
+        "en": [
+          "The population model y=β₀+β₁x₁+…+βₖxₖ+u includes several regressors. With a linear conditional mean and E(u|x₁,…,xₖ)=0, βⱼ gives the conditional-mean change for a unit increase in xⱼ holding other regressors fixed. OLS estimates all coefficients jointly rather than combining separate simple regressions.",
+          "Holding fixed defines a model comparison; the data need not contain an exact matched pair for every combination. Check support to avoid distant extrapolation. Controls may address some confounding but cannot automatically rule out unobserved factors. Causal interpretation additionally requires justified controls, timing, and identification assumptions."
+        ]
+      },
+      "formula": "E(y|X)=β₀+Σⱼ₌₁ᵏβⱼxⱼ;  Δŷ=β̂ⱼΔxⱼ  (other regressors fixed)",
+      "symbols": {
+        "zh": "X 表示全部解释变量；j 指某一解释变量；此边际解释针对简单加总、没有相关交互或非线性项的规格。",
+        "en": "X contains all regressors; j indexes one of them. This marginal interpretation applies to an additive specification without relevant interactions or nonlinear terms."
+      },
+      "example": {
+        "zh": "教学示例：拟合工资为 5+1.2×教育+0.3×经验。经验固定时，多两年教育对应工资高 2.4 个单位；教育与经验都增加两年，则拟合差为 3。",
+        "en": "Illustration: fitted earnings equal 5+1.2×schooling+0.3×experience. Two more schooling years at fixed experience imply 2.4 higher earnings units; increasing both by two gives 3."
+      },
+      "pitfall": {
+        "zh": "控制得越多不一定越好：处理后的中介或不恰当选择变量可能改变问题甚至引入偏误。",
+        "en": "More controls are not always better: post-treatment mediators or inappropriate selection variables can change the question or introduce bias."
+      },
+      "quiz": {
+        "question": {
+          "zh": "在上述模型中，教育增加 1 年而经验固定，拟合工资变化多少？",
+          "en": "In the example, what is the fitted earnings change for one more schooling year at fixed experience?"
+        },
+        "options": [
+          {
+            "zh": "1.2",
+            "en": "1.2"
+          },
+          {
+            "zh": "1.5",
+            "en": "1.5"
+          },
+          {
+            "zh": "0.3",
+            "en": "0.3"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "只改变教育，因此使用教育系数；1.5 对应教育与经验都增加一年。",
+          "en": "Only schooling changes, so use its coefficient; 1.5 applies when both rise by one."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "3",
+          "section": "3.1 Motivation for Multiple Regression"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "3",
+          "section": "3.2 Mechanics and Interpretation of Ordinary Least Squares"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m03-c05"
+      ]
+    },
+    {
+      "id": "m04-c02",
+      "module": "m04",
+      "title": {
+        "zh": "Frisch–Waugh–Lovell 定理与残差化",
+        "en": "The Frisch–Waugh–Lovell theorem and partialling out"
+      },
+      "question": {
+        "zh": "多元回归究竟怎样利用“独立于其他变量的变化”？",
+        "en": "How does multiple regression use variation left after accounting for other regressors?"
+      },
+      "intuition": {
+        "zh": "先剔除其他解释变量能线性预测的部分，再比较剩下的 x 与剩下的 y。",
+        "en": "Remove the parts linearly predicted by other regressors, then compare the remaining x and y."
+      },
+      "explanation": {
+        "zh": [
+          "要得到 x₁ 的多元 OLS 系数，先把 x₁ 对截距及其他解释变量回归，取残差 r₁；再把 y 对相同变量回归，取残差 rᵧ。将 rᵧ 对 r₁ 做无截距回归，斜率与完整多元回归中 x₁ 的系数完全相同。这是样本代数恒等式，不需要正态、同方差或因果假设。",
+          "剩余变化 r₁ 是不能被这些控制线性解释的部分，并不等于随机分配出来的变化。若 x₁ 完全由其他列预测，r₁ 全为零，系数便无法单独识别。手动分步适合理解系数，但直接使用末步软件默认自由度可能给错标准误；正式推断应依据完整模型及适当协方差估计。"
+        ],
+        "en": [
+          "To recover the multiple-OLS coefficient on x₁, regress x₁ on the intercept and other regressors to obtain residual r₁. Regress y on the same controls to obtain rᵧ. Regressing rᵧ on r₁ without an intercept gives exactly the full-regression slope on x₁. This is a sample algebraic identity requiring neither normality, homoskedasticity, nor causal assumptions.",
+          "The residual r₁ is variation not linearly explained by these controls; it is not necessarily randomized variation. If other columns perfectly predict x₁, all r₁ values are zero and its coefficient cannot be separately identified. Manual stages clarify the coefficient, but the last regression’s default degrees of freedom can give incorrect standard errors. Use full-model inference and an appropriate covariance estimator."
+        ]
+      },
+      "formula": "β̂₁ = Σᵢr₁ᵢrᵧᵢ / Σᵢr₁ᵢ²",
+      "symbols": {
+        "zh": "r₁ 是 x₁ 对其余解释变量及截距回归的残差；rᵧ 是 y 对相同控制回归的残差；分母必须大于零。",
+        "en": "r₁ and rᵧ are residuals from regressing x₁ and y on the same remaining controls and intercept. The denominator must be positive."
+      },
+      "example": {
+        "zh": "教学示例：残差化后 r₁=(−1,0,1)，rᵧ=(−2,0,2)，则交叉乘积和为 4、平方和为 2，斜率为 2。完整模型的对应系数也是 2。",
+        "en": "Illustration: residuals r₁=(−1,0,1) and rᵧ=(−2,0,2) give cross-products summing to 4 and squared r₁ values summing to 2, so both partial and full-model slopes equal 2."
+      },
+      "pitfall": {
+        "zh": "残差化只移除了指定的线性预测部分，并没有证明剩余 x 与未观测误差无关。",
+        "en": "Residualization removes specified linear prediction components; it does not prove independence from unobserved errors."
+      },
+      "quiz": {
+        "question": {
+          "zh": "FWL 系数恒等式本身是否需要外生性？",
+          "en": "Does the FWL coefficient identity itself require exogeneity?"
+        },
+        "options": [
+          {
+            "zh": "需要，否则不能计算残差",
+            "en": "Yes; otherwise residuals cannot be computed"
+          },
+          {
+            "zh": "必须要求误差正态",
+            "en": "Normal errors are required"
+          },
+          {
+            "zh": "不需要，它是满秩 OLS 的代数性质",
+            "en": "No; it is an algebraic property of full-rank OLS"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "估计值的代数分解与无偏性、因果解释的条件不同。",
+          "en": "An algebraic decomposition is distinct from assumptions for unbiasedness or causality."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "3",
+          "section": "3.2 Mechanics and Interpretation of Ordinary Least Squares"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m04-c01"
+      ]
+    },
+    {
+      "id": "m04-c03",
+      "module": "m04",
+      "title": {
+        "zh": "遗漏变量偏误及其方向",
+        "en": "Omitted-variable bias and its direction"
+      },
+      "question": {
+        "zh": "遗漏能力后，教育系数为什么可能偏高，也可能偏低？",
+        "en": "Why can omitting ability raise or lower an estimated schooling coefficient?"
+      },
+      "intuition": {
+        "zh": "遗漏因素既要影响结果，又要与已纳入变量相关，才会沿着该变量进入短回归斜率。",
+        "en": "An omitted factor must affect the outcome and correlate with the included regressor to enter its short-regression slope."
+      },
+      "explanation": {
+        "zh": [
+          "设真实线性条件均值含 x 与 z，误差在给定二者后均值为零。若只回归 y 对 x，z 的结果作用与 z、x 的共同变动会被吸收到 x 的斜率中。在相关矩存在、Var(x)>0 及适当抽样条件下，短回归的总体斜率等于 β₁+β₂δ₁，其中 δ₁ 是 z 对 x 的总体回归斜率。",
+          "偏误方向由两项的乘积决定，而不是只看遗漏变量是否“重要”。若能力提高工资且与教育正相关，教育斜率可能上偏；若相关方向相反则可能下偏。这个简洁公式针对一个遗漏变量的简单情形，多个控制存在时应考虑条件关系。增加样本只提高精度，不能消除系统性遗漏偏误。"
+        ],
+        "en": [
+          "Suppose the true linear conditional mean includes x and z, with zero conditional error mean given both. Regressing y only on x absorbs z’s outcome effect combined with its comovement with x. With relevant finite moments, Var(x)>0, and appropriate sampling, the short population slope is β₁+β₂δ₁, where δ₁ is the population slope of z on x.",
+          "The bias direction depends on the product, not merely whether the omitted variable is important. Ability that raises earnings and positively correlates with schooling can bias the schooling slope upward; opposite correlation can reverse the direction. This simple formula concerns a single omitted variable; with additional controls, conditional relationships matter. More data improve precision but do not remove systematic omission bias."
+        ]
+      },
+      "formula": "y=β₀+β₁x+β₂z+u;  δ₁=Cov(x,z)/Var(x);  plim β̃₁=β₁+β₂δ₁",
+      "symbols": {
+        "zh": "β̃₁ 为省略 z 后的样本斜率；plim 是大样本概率极限；β₂δ₁ 是对应总体斜率差。",
+        "en": "β̃₁ is the sample slope omitting z; plim denotes its probability limit. β₂δ₁ is the corresponding population slope difference."
+      },
+      "example": {
+        "zh": "教学示例：真实 β₁=1，能力作用 β₂=2，能力对教育的斜率 δ₁=0.5，短回归趋向 2。若 δ₁=−0.5，则趋向 0，即使真实 β₁ 仍为正。",
+        "en": "Illustration: β₁=1, β₂=2, and δ₁=0.5 imply a short slope approaching 2. If δ₁=−0.5, it approaches zero despite a positive true β₁."
+      },
+      "pitfall": {
+        "zh": "相关性为零可使此简单偏误项消失，但不表示模型中的其他外生性问题也都解决了。",
+        "en": "Zero correlation removes this simple bias term but does not establish that every other exogeneity problem is solved."
+      },
+      "quiz": {
+        "question": {
+          "zh": "β₂<0 且 δ₁>0 时，这个遗漏偏误方向如何？",
+          "en": "If β₂<0 and δ₁>0, what is the direction of this omission bias?"
+        },
+        "options": [
+          {
+            "zh": "必定为零",
+            "en": "Necessarily zero"
+          },
+          {
+            "zh": "负向",
+            "en": "Negative"
+          },
+          {
+            "zh": "正向",
+            "en": "Positive"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "负数乘正数为负，因此短回归总体斜率低于 β₁。",
+          "en": "A negative times a positive is negative, so the short population slope lies below β₁."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "3",
+          "section": "3.3 The Expected Value of the OLS Estimators"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m04-c01",
+        "m04-c02"
+      ]
+    },
+    {
+      "id": "m04-c04",
+      "module": "m04",
+      "title": {
+        "zh": "多重共线性与估计精度",
+        "en": "Multicollinearity and estimation precision"
+      },
+      "question": {
+        "zh": "两个解释变量很相似，会让 OLS 自动有偏吗？",
+        "en": "Do similar regressors automatically make OLS biased?"
+      },
+      "intuition": {
+        "zh": "变量总是一起变化，就难以分清各自贡献；难分清通常表现为不精确，而非自动产生偏误。",
+        "en": "When regressors move together, their separate contributions are harder to distinguish, usually causing imprecision rather than automatic bias."
+      },
+      "explanation": {
+        "zh": [
+          "完全共线性指某一列可由其余列精确线性表示，此时系数无法唯一估计，例如同时放入年龄与两倍年龄。高度但不完全共线则仍可计算 OLS；只要零条件均值等假设成立，无偏性不因此消失，但个别系数可能有较大标准误，并对样本变化敏感。",
+          "在经典同方差条件下，系数方差取决于误差方差、该变量总变异，以及不能被其他解释变量解释的比例 1−Rⱼ²。Rⱼ² 来自把第 j 个解释变量对其他解释变量回归。不要仅为降低共线性而删除理论上必要的混杂控制：这可能用更小标准误换来遗漏偏误。"
+        ],
+        "en": [
+          "Perfect collinearity occurs when one column is an exact linear combination of others, as when age and twice age are both included; coefficients then cannot be uniquely estimated. High but imperfect collinearity still permits OLS. With zero conditional mean and the other assumptions, unbiasedness remains, though individual coefficients may have large standard errors and be sensitive to sample changes.",
+          "Under classical homoskedastic assumptions, coefficient variance depends on error variance, the regressor’s total variation, and the fraction 1−Rⱼ² unexplained by other regressors. Rⱼ² comes from regressing regressor j on the others. Do not delete substantively necessary confounding controls merely to reduce collinearity; that can trade smaller standard errors for omitted-variable bias."
+        ]
+      },
+      "formula": "Var(β̂ⱼ|X)=σ²/[SSTⱼ(1−Rⱼ²)];  VIFⱼ=1/(1−Rⱼ²)",
+      "symbols": {
+        "zh": "SSTⱼ=Σᵢ(xᵢⱼ−x̄ⱼ)²；Rⱼ² 是辅助回归拟合度；VIF 为方差膨胀因子。公式要求相应经典条件。",
+        "en": "SSTⱼ is the sum of squared deviations of regressor j; Rⱼ² is the auxiliary regression fit; VIF is the variance inflation factor. The formula requires the relevant classical assumptions."
+      },
+      "example": {
+        "zh": "教学示例：Rⱼ²=0.9 时 VIF=10。在相同误差方差和 SSTⱼ 下，相比 Rⱼ²=0 的基准，系数方差为 10 倍，标准误约为 √10=3.16 倍。",
+        "en": "Illustration: Rⱼ²=0.9 gives VIF=10. Holding error variance and SSTⱼ fixed, coefficient variance is ten times the Rⱼ²=0 benchmark; its standard error is about √10=3.16 times as large."
+      },
+      "pitfall": {
+        "zh": "两个变量的简单相关系数不高，也可能存在多个变量之间的线性依赖；单一 VIF 阈值不是删变量的自动规则。",
+        "en": "Low pairwise correlations do not rule out dependence involving several regressors. A single VIF cutoff is not an automatic deletion rule."
+      },
+      "quiz": {
+        "question": {
+          "zh": "在其余条件相同时，VIF=4 表示标准误变成基准的多少倍？",
+          "en": "Holding other conditions fixed, VIF=4 multiplies the standard error by what factor?"
+        },
+        "options": [
+          {
+            "zh": "2 倍",
+            "en": "2"
+          },
+          {
+            "zh": "4 倍",
+            "en": "4"
+          },
+          {
+            "zh": "16 倍",
+            "en": "16"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "VIF 放大的是方差；标准误是方差平方根，所以是 √4=2。",
+          "en": "VIF multiplies variance; standard error is its square root, giving √4=2."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "3",
+          "section": "3.4 The Variance of the OLS Estimators"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m04-c02",
+        "m03-c05"
+      ]
+    },
+    {
+      "id": "m04-c05",
+      "module": "m04",
+      "title": {
+        "zh": "高斯—马尔可夫定理",
+        "en": "The Gauss–Markov theorem"
+      },
+      "question": {
+        "zh": "“OLS 最优”究竟在哪些条件、哪些估计量之间成立？",
+        "en": "Under which conditions and among which estimators is OLS optimal?"
+      },
+      "intuition": {
+        "zh": "最优总有比较范围：在相同假设下，OLS 在一类无偏估计量中方差最小。",
+        "en": "Optimality has a comparison class: under stated assumptions, OLS has the smallest variance within a particular class of unbiased estimators."
+      },
+      "explanation": {
+        "zh": [
+          "在线性参数模型、随机抽样、无完全共线性、零条件均值及同方差条件下，OLS 是最佳线性无偏估计量，简称 BLUE。“线性”指估计量对样本因变量 y 线性，权重可取决于 X；“最佳”指在同类无偏线性估计量中条件方差最小，不是每次样本都离真值最近。",
+          "定理不需要误差正态。异方差会使这里的效率保证失效，但若其他条件仍成立，OLS 可以依然无偏；标准误也需相应调整。零条件均值失效则是另一类问题，不能靠同方差或稳健标准误补救。定理也不把比较扩展到所有允许偏误的估计量，更不单独赋予系数因果含义。"
+        ],
+        "en": [
+          "Under a model linear in parameters, random sampling, no perfect collinearity, zero conditional mean, and homoskedasticity, OLS is the best linear unbiased estimator, or BLUE. Linear means linear in the sample outcomes y, with weights allowed to depend on X. Best means minimum conditional variance among linear unbiased estimators, not closest to the truth in every sample.",
+          "Normal errors are not required. Heteroskedasticity removes this efficiency guarantee while OLS can remain unbiased if the other conditions hold; standard errors also require adjustment. Failure of zero conditional mean is a different problem that homoskedasticity or robust standard errors cannot fix. The theorem does not compare OLS with every biased estimator or independently confer causal meaning."
+        ]
+      },
+      "formula": "β̂=(X′X)⁻¹X′y;  Var(β̂|X)=σ²(X′X)⁻¹",
+      "symbols": {
+        "zh": "X 包含截距且满列秩；条件误差协方差为 σ²I；BLUE 的比较限于同一模型下对 y 线性的无偏估计量。",
+        "en": "X includes an intercept and has full column rank; conditional error covariance is σ²I. BLUE compares estimators linear in y and unbiased under the same model."
+      },
+      "example": {
+        "zh": "教学示例：两个线性无偏估计量都以同一真值为中心，OLS 的条件方差为 4，另一个为 9。定理说明 OLS 的重复抽样波动更小，但某次样本中另一个仍可能更接近真值。",
+        "en": "Illustration: two linear unbiased estimators have the same true center, with conditional variances 4 for OLS and 9 for the other. OLS varies less across samples, although the other estimator may be closer in one particular sample."
+      },
+      "pitfall": {
+        "zh": "不要把“最小残差平方和”与“最小估计方差”混为一谈：前者是计算定义，后者需要定理的总体与抽样条件。",
+        "en": "Do not confuse minimum residual sum of squares with minimum estimator variance: the former defines computation; the latter requires population and sampling assumptions."
+      },
+      "quiz": {
+        "question": {
+          "zh": "高斯—马尔可夫定理是否要求误差正态？",
+          "en": "Does the Gauss–Markov theorem require normally distributed errors?"
+        },
+        "options": [
+          {
+            "zh": "要求所有变量都正态",
+            "en": "It requires every variable to be normal"
+          },
+          {
+            "zh": "只要样本小就必须要求",
+            "en": "It requires normality whenever the sample is small"
+          },
+          {
+            "zh": "不要求",
+            "en": "No"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "同方差等条件支持 BLUE 结论；正态性用于另外一些有限样本推断结果。",
+          "en": "Homoskedasticity and the other conditions support BLUE; normality is used for other finite-sample inference results."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "3",
+          "section": "3.5 Efficiency of OLS: The Gauss-Markov Theorem"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m04-c03",
+        "m04-c04"
+      ]
+    },
+    {
+      "id": "m05-c01",
+      "module": "m05",
+      "title": {
+        "zh": "标准误与单个系数的 t 检验",
+        "en": "Standard errors and a single-coefficient t test"
+      },
+      "question": {
+        "zh": "系数离零很远，怎样判断它是否只是抽样波动？",
+        "en": "How can we tell whether a coefficient far from zero reflects sampling noise?"
+      },
+      "intuition": {
+        "zh": "用标准误作为尺子，衡量估计值离假设值有多少个“抽样标准差”。",
+        "en": "Use the standard error as a ruler: how many sampling standard deviations separate the estimate from the hypothesized value?"
+      },
+      "explanation": {
+        "zh": [
+          "系数的标准误估计它在重复抽样中的标准差。它既不是个体结果的标准差，也不是误差项的标准差。含 k 个斜率和一个截距时，经典同方差误差方差估计为 RSS/(n−k−1)；系数标准误还取决于各解释变量的变动和共同关系。",
+          "检验 H₀:βⱼ=a 时，用估计与 a 的距离除以标准误。在线性模型、随机抽样、无完全共线性、零条件均值、同方差和条件正态误差这些经典条件下，原假设成立时统计量精确服从 n−k−1 自由度的 t 分布。双侧检验关注正负两个方向。",
+          "若有异方差或观测相关，软件默认的经典标准误可能不适用，需要与数据结构相符的稳健方法。更换标准误一般不会改变 OLS 系数，却可能改变区间和检验；稳健标准误也不能修复内生性造成的系数偏差。"
+        ],
+        "en": [
+          "A coefficient’s standard error estimates its standard deviation across repeated samples. It is neither the standard deviation of individual outcomes nor that of the regression error. With k slopes and an intercept, the classical homoskedastic error-variance estimator is RSS/(n−k−1); coefficient standard errors also depend on regressor variation and relationships.",
+          "To test H₀:βⱼ=a, divide the estimate’s distance from a by its standard error. Under the classical linear-model conditions—random sampling, no perfect collinearity, zero conditional mean, homoskedasticity, and conditionally normal errors—the statistic under the null has an exact t distribution with n−k−1 degrees of freedom. A two-sided test considers both directions.",
+          "With heteroskedasticity or dependent observations, default classical standard errors may be inappropriate; use a variance estimator suited to the data structure. Changing standard errors generally leaves OLS coefficients unchanged but can alter intervals and tests. Robust standard errors do not repair coefficient bias caused by endogeneity."
+        ]
+      },
+      "formula": "σ̂²=RSS/(n−k−1);  t=(β̂ⱼ−a)/SE(β̂ⱼ);  df=n−k−1",
+      "symbols": {
+        "zh": "RSS 为残差平方和；k 不包括截距；a 是原假设值；df 为自由度；SE 为标准误。",
+        "en": "RSS is the residual sum of squares; k excludes the intercept; a is the null value; df is degrees of freedom; SE is standard error."
+      },
+      "example": {
+        "zh": "教学示例：β̂=0.60、SE=0.20。检验 β=0 时 t=3；检验 β=0.50 时 t=0.5。同一估计对不同原假设提供不同证据，不能只看软件默认检验零的星号。",
+        "en": "Illustrative example: β̂=0.60 and SE=0.20 give t=3 for β=0, but t=0.5 for β=0.50. The same estimate provides different evidence against different nulls; default significance stars only address the tested value."
+      },
+      "pitfall": {
+        "zh": "“|t|>2”只是大自由度下双侧 5% 检验的粗略规则；小样本、单侧检验或其他显著性水平应使用对应临界值。",
+        "en": "“|t|>2” is only a rough rule for two-sided 5% tests with many degrees of freedom. Other cases require the appropriate critical value."
+      },
+      "quiz": {
+        "question": {
+          "zh": "β̂=0.8、SE=0.2，检验 β=0.4 的 t 值是多少？",
+          "en": "With β̂=0.8 and SE=0.2, what is t for testing β=0.4?"
+        },
+        "options": [
+          {
+            "zh": "2",
+            "en": "2"
+          },
+          {
+            "zh": "4",
+            "en": "4"
+          },
+          {
+            "zh": "0.4",
+            "en": "0.4"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "先减去原假设值，再除以标准误：(0.8−0.4)/0.2=2。",
+          "en": "Subtract the null value before dividing by the standard error: (0.8−0.4)/0.2=2."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.1 Sampling Distributions of the OLS Estimators"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.2 Testing Hypotheses about a Single Population Parameter: The t Test"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m04-c05",
+        "m02-c05"
+      ]
+    },
+    {
+      "id": "m05-c02",
+      "module": "m05",
+      "title": {
+        "zh": "参数置信区间与线性组合推断",
+        "en": "Parameter confidence intervals and linear-combination inference"
+      },
+      "question": {
+        "zh": "如何同时报告效应大小与估计精度？",
+        "en": "How can we report effect size and precision together?"
+      },
+      "intuition": {
+        "zh": "把一个点变成一段与数据相容的参数范围，并说明它依赖的推断假设。",
+        "en": "Replace a point estimate with a range compatible with the data under the stated inferential assumptions."
+      },
+      "explanation": {
+        "zh": [
+          "系数的双侧置信区间通常为估计值加减“临界值×标准误”。经典正态同方差模型用 t 临界值；满足大样本条件时可用正态近似。区间的置信水平描述重复抽样的覆盖率，不是某个人的结果落在区间中的比例。",
+          "如果研究问题是 β₁−β₂ 或 β₁+2β₂，就应直接对这个线性组合做推断。估计系数之间通常相关，因此组合的方差要包含协方差项；不能直接相减标准误，也不能仅凭两个系数各自是否显著，判断它们彼此是否不同。",
+          "在同一模型、标准误方法和双侧检验下，95% 区间与 5% 检验相对应。原假设值落在区间内，表示该检验未拒绝它；这不等于认定所有区间内数值同样可信，更不表示区间外的值绝无可能。"
+        ],
+        "en": [
+          "A two-sided coefficient interval usually equals the estimate plus or minus a critical value times its standard error. The classical normal homoskedastic model uses a t critical value; suitable large-sample conditions allow a normal approximation. Confidence describes repeated-sampling coverage, not the fraction of individual outcomes inside the interval.",
+          "If the question concerns β₁−β₂ or β₁+2β₂, conduct inference on that combination directly. Coefficient estimates are generally correlated, so its variance includes covariance terms. Do not subtract standard errors or infer a difference between coefficients from their separate significance levels.",
+          "For the same model, standard-error method, and two-sided test, a 95% interval corresponds to a 5% test. A null value inside the interval is not rejected by that test. This does not make all values inside equally plausible or values outside impossible."
+        ]
+      },
+      "formula": "CIⱼ=β̂ⱼ±t*·SE(β̂ⱼ);  Var(β̂₁−β̂₂)=Var(β̂₁)+Var(β̂₂)−2Cov(β̂₁,β̂₂)",
+      "symbols": {
+        "zh": "t* 是对应自由度的临界值；Cov 表示两个估计量的协方差；组合标准误为其估计方差的平方根。",
+        "en": "t* is the critical value for the relevant degrees of freedom; Cov is covariance between estimators; a combination’s standard error is the square root of its estimated variance."
+      },
+      "example": {
+        "zh": "教学示例：估计培训效应为 0.8，标准误为 0.3；大样本近似 95% 区间为 0.8±1.96×0.3，即 [0.212,1.388]。解释还须交代效应的单位和培训识别假设。",
+        "en": "Illustrative example: an estimated training effect of 0.8 with standard error 0.3 has approximate large-sample 95% interval 0.8±1.96×0.3=[0.212,1.388]. Interpretation still requires units and the assumptions identifying the training effect."
+      },
+      "pitfall": {
+        "zh": "“A 显著、B 不显著”不等于“A 与 B 的效应显著不同”；应检验 βA−βB=0。",
+        "en": "“A is significant and B is not” does not establish a significant difference between them; test βA−βB=0."
+      },
+      "quiz": {
+        "question": {
+          "zh": "比较两个系数是否相等，最直接的方法是什么？",
+          "en": "What is the most direct way to compare whether two coefficients are equal?"
+        },
+        "options": [
+          {
+            "zh": "把两个标准误相减",
+            "en": "Subtract their standard errors"
+          },
+          {
+            "zh": "检验它们之差，并使用包含协方差的标准误",
+            "en": "Test their difference using a standard error that includes covariance"
+          },
+          {
+            "zh": "只比较两个 p 值谁更小",
+            "en": "Only compare which p-value is smaller"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "检验的对象应与研究问题一致；相关估计量的差的方差包含协方差。",
+          "en": "The tested parameter should match the question, and the variance of correlated estimates’ difference includes their covariance."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.3 Confidence Intervals"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.4 Testing Hypotheses about a Single Linear Combination of the Parameters"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m05-c01",
+        "m02-c04"
+      ]
+    },
+    {
+      "id": "m05-c03",
+      "module": "m05",
+      "title": {
+        "zh": "联合限制与 F 检验",
+        "en": "Joint restrictions and the F test"
+      },
+      "question": {
+        "zh": "多个变量各自不显著，是否意味着它们一起也没用？",
+        "en": "If several variables are individually insignificant, are they jointly uninformative?"
+      },
+      "intuition": {
+        "zh": "同时施加一组限制，看看模型拟合损失相对剩余噪声有多大。",
+        "en": "Impose the restrictions together and compare the resulting fit loss with the remaining noise."
+      },
+      "explanation": {
+        "zh": [
+          "联合原假设一次约束多个总体参数，例如 H₀:β₂=β₃=0。非受限模型保留全部待检验变量，受限模型施加原假设。备择是至少有一条限制不成立；它不要求所有待检验系数都非零。分别看几个 t 检验不能代替联合检验。",
+          "经典 F 统计量用“每条限制带来的残差平方和增加”除以非受限模型的误差方差估计。两模型必须嵌套、使用相同观察和相同因变量。经典正态同方差等条件下，它在原假设成立时服从 F(q,n−k−1) 分布；k 是非受限模型斜率数。",
+          "相关解释变量的单独系数可能估计不精确，但它们整体仍含有重要信息，因此联合显著与个别不显著可以同时出现。若只有一条线性限制，使用相同经典方差估计时 F=t²。异方差下应使用稳健联合 Wald/F 方法，而不是机械套用 RSS 比值。"
+        ],
+        "en": [
+          "A joint null restricts several population parameters, such as H₀:β₂=β₃=0. The unrestricted model retains all tested variables; the restricted model imposes the null. The alternative is that at least one restriction fails, not that every tested coefficient is nonzero. Separate t tests cannot replace the joint test.",
+          "The classical F statistic divides the increase in RSS per restriction by the unrestricted model’s estimated error variance. Models must be nested and use identical observations and the same outcome. Under the classical normal homoskedastic conditions, its null distribution is F(q,n−k−1), where k counts unrestricted slopes.",
+          "Correlated regressors can have imprecise individual coefficients while remaining jointly informative. Joint significance can therefore coexist with insignificant individual tests. For one linear restriction, F=t² when using the same classical variance estimator. Under heteroskedasticity, use an appropriate robust joint Wald/F test rather than mechanically applying the RSS ratio."
+        ]
+      },
+      "formula": "F=[(RSSᵣ−RSSᵤ)/q]/[RSSᵤ/(n−k−1)]",
+      "symbols": {
+        "zh": "r 为受限模型；u 为非受限模型；q 是独立限制数；n 为共同样本量；k 不包括截距。",
+        "en": "r denotes restricted and u unrestricted; q counts independent restrictions; n is the common sample size; k excludes the intercept."
+      },
+      "example": {
+        "zh": "教学示例：n=103、非受限模型有 2 个斜率，检验两者都为零。若 RSSᵣ=120、RSSᵤ=100，则 F=[20/2]/[100/100]=10，对照 F(2,100) 分布判断。",
+        "en": "Illustrative example: n=103, the unrestricted model has two slopes, and both are tested as zero. With RSSᵣ=120 and RSSᵤ=100, F=[20/2]/[100/100]=10, evaluated against F(2,100)."
+      },
+      "pitfall": {
+        "zh": "因缺失值而导致两次回归样本不同，RSS 变化就混合了模型与样本变化，不能用于这条公式。",
+        "en": "If missing values change the sample between regressions, the RSS difference mixes model and sample changes and cannot be used in this formula."
+      },
+      "quiz": {
+        "question": {
+          "zh": "拒绝 H₀:β₂=β₃=0，能推出什么？",
+          "en": "What follows from rejecting H₀:β₂=β₃=0?"
+        },
+        "options": [
+          {
+            "zh": "两个系数必定各自显著",
+            "en": "Both coefficients must be individually significant"
+          },
+          {
+            "zh": "两个系数必定都为正",
+            "en": "Both coefficients must be positive"
+          },
+          {
+            "zh": "数据反对两项限制同时成立",
+            "en": "The data provide evidence against both restrictions holding together"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "联合备择只要求至少一条限制不成立，不决定每个系数的符号或单独显著性。",
+          "en": "The joint alternative requires only that at least one restriction fails; it determines neither each sign nor each individual significance result."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.5 Testing Multiple Linear Restrictions: The F Test"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m05-c01",
+        "m05-c02"
+      ]
+    },
+    {
+      "id": "m05-c04",
+      "module": "m05",
+      "title": {
+        "zh": "统计显著性与经济显著性",
+        "en": "Statistical and economic significance"
+      },
+      "question": {
+        "zh": "一个显著的结果，是否一定值得采取行动？",
+        "en": "Does a statistically significant result necessarily matter in practice?"
+      },
+      "intuition": {
+        "zh": "统计显著性比较估计与假设值的差异及其抽样不确定性；实际重要性问差异是否足够大且有意义。",
+        "en": "Statistical significance concerns evidence relative to uncertainty; practical importance concerns the size and meaning of the difference."
+      },
+      "explanation": {
+        "zh": [
+          "检验零效应时，t 统计量把估计效应除以标准误，因此相同大小的效应在不同精度下可能有不同显著性。样本极大时，极小的差异也可能有很小 p 值。实际重要性则需要结合单位、基准水平、成本和研究背景判断，不能由星号代替。",
+          "不显著的结果也要看区间。若区间很宽，同时包含零和很大的正负效应，证据只是缺乏精度；若区间很窄且只允许很小效应，则提供了更有用的限制。要正式支持“效应足够小”，通常需要预先定义实际重要的界限并采用相应等效性思路，而非简单未拒绝零。",
+          "报告结果时同时提供系数、单位、标准误或置信区间、样本量、控制变量和标准误类型。因果可信度还取决于识别设计；很精确的有偏估计仍可能误导。多个检验和事后选择也影响证据强度，应透明交代。"
+        ],
+        "en": [
+          "When testing a zero effect, the t statistic scales the estimated effect by its standard error, so the same effect can have different significance with different precision. Huge samples can give tiny p-values for tiny differences. Practical importance depends on units, baseline levels, costs, and context; significance stars cannot determine it.",
+          "Inspect intervals for insignificant results too. A wide interval containing zero and large effects indicates imprecision. A narrow interval permitting only small effects imposes a more useful constraint. Formal evidence that an effect is sufficiently small generally requires prespecified substantive bounds and an appropriate equivalence framework, not merely failure to reject zero.",
+          "Report coefficients, units, standard errors or intervals, sample size, controls, and the standard-error method. Causal credibility additionally depends on identification: a precise but biased estimate can mislead. Multiple testing and selecting results after inspection affect evidential strength and should be disclosed."
+        ]
+      },
+      "formula": "t=(estimated effect−null value)/SE;  relevance depends on effect size, uncertainty, units, and context",
+      "symbols": {
+        "zh": "SE 衡量估计精度；效应大小应保留经济单位或明确百分比含义；“显著”需注明检验水平。",
+        "en": "SE measures estimation precision. State effect sizes in substantive units or clearly defined percentages, and specify the testing level for significance."
+      },
+      "example": {
+        "zh": "教学示例：政策使每月收入估计提高 0.2 元、SE=0.01，可能高度显著却几乎无实际收益；另一估计提高 200 元、SE=150，则区间很宽，不能据此宣称政策无效。",
+        "en": "Illustrative example: an estimated monthly income gain of 0.2 currency units with SE=0.01 may be highly significant but practically negligible. An estimate of 200 with SE=150 has a wide interval; it does not establish no policy effect."
+      },
+      "pitfall": {
+        "zh": "不要把 p 值排序当成政策价值排序，也不要将未拒绝零写成“证明效应为零”。",
+        "en": "Do not rank policy value by p-values or report failure to reject zero as proof of zero effect."
+      },
+      "quiz": {
+        "question": {
+          "zh": "哪种报告最有助于理解研究结果？",
+          "en": "Which report best helps readers understand a result?"
+        },
+        "options": [
+          {
+            "zh": "效应大小、单位、区间和研究设计一起报告",
+            "en": "Report effect size, units, interval, and study design together"
+          },
+          {
+            "zh": "只报告是否有星号",
+            "en": "Report only significance stars"
+          },
+          {
+            "zh": "只报告最小 p 值",
+            "en": "Report only the smallest p-value"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "大小、精度与识别依据回答不同问题，需要结合解释。",
+          "en": "Magnitude, precision, and identification address distinct questions and should be interpreted together."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.2 Testing Hypotheses about a Single Population Parameter: The t Test"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 4",
+          "section": "4.6 Reporting Regression Results"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m05-c02",
+        "m02-c05"
+      ]
+    },
+    {
+      "id": "m05-c05",
+      "module": "m05",
+      "title": {
+        "zh": "OLS 渐近推断及其条件",
+        "en": "OLS asymptotic inference and its conditions"
+      },
+      "question": {
+        "zh": "误差不正态时，回归检验还能使用吗？",
+        "en": "Can regression inference work when errors are not normal?"
+      },
+      "intuition": {
+        "zh": "正态近似可以来自估计量的抽样分布，但必须先满足一致性和相应极限定理的条件。",
+        "en": "A normal approximation can emerge for an estimator’s sampling distribution, provided consistency and the relevant limit-theorem conditions hold."
+      },
+      "explanation": {
+        "zh": [
+          "经典有限样本 t、F 结论常依赖条件正态误差；大样本推断不必要求每个误差正态。固定参数维度、外生性、足够矩条件、非退化解释变量变动以及适当独立性等条件下，OLS 可一致且渐近正态；据此构造近似区间和检验。",
+          "一致性说明估计趋向目标；渐近正态性说明放大后的估计误差如何分布。二者不能被“样本很大”四个字替代。若解释变量与误差相关，一元 OLS 的概率极限会包含 Cov(x,u)/Var(x)；更多数据可能让估计更精确地集中在错误目标附近。",
+          "标准误也必须一致估计实际抽样方差。同方差公式不能因为 n 很大就自动抵抗异方差；聚类或时间相关需要匹配的处理。渐近近似的质量还受尾部、杠杆点和有效独立信息量影响，没有适合所有问题的统一样本量门槛。"
+        ],
+        "en": [
+          "Classical finite-sample t and F results often rely on conditionally normal errors. Large-sample inference need not require each error to be normal. With fixed parameter dimension, exogeneity, sufficient moment conditions, nondegenerate regressor variation, and suitable independence conditions, OLS can be consistent and asymptotically normal, enabling approximate tests and intervals.",
+          "Consistency says the estimate approaches its target; asymptotic normality describes the distribution of its rescaled error. Neither follows merely from calling a sample large. If x and u are correlated, simple OLS has a probability limit containing Cov(x,u)/Var(x). More data may concentrate estimates more precisely around the wrong target.",
+          "Standard errors must consistently estimate the actual sampling variance too. A large n does not automatically make the homoskedastic formula robust to heteroskedasticity. Clustering and time dependence require appropriate treatment. Tails, leverage, and the effective amount of independent information affect approximation quality; no universal sample-size cutoff works for every problem."
+        ]
+      },
+      "formula": "√n(β̂ⱼ−βⱼ) →d N(0,Vⱼ);  simple OLS: plim β̂₁=β₁+Cov(x,u)/Var(x)",
+      "symbols": {
+        "zh": "→d 为依分布收敛；plim 为概率极限；Vⱼ 是极限方差；第二式要求相关矩存在且 Var(x)>0。",
+        "en": "→d denotes convergence in distribution; plim a probability limit; Vⱼ is limiting variance. The second formula requires suitable moments and Var(x)>0."
+      },
+      "example": {
+        "zh": "教学示例：若能力遗漏导致教育与误差正相关，把样本从 500 扩大到 50000 可能缩小标准误，却不会消除这项内生性。解决目标偏离需要更可信的控制或识别设计。",
+        "en": "Illustrative example: if omitted ability makes education positively related to the error, expanding a sample from 500 to 50000 may shrink standard errors without removing endogeneity. Correcting the target requires defensible controls or identification."
+      },
+      "pitfall": {
+        "zh": "“渐近”表示一系列样本量增大的近似结论，不代表当前数据已满足条件，也不保证机械使用 1.96 足够准确。",
+        "en": "Asymptotic results concern a sequence of growing samples; they neither verify current assumptions nor guarantee that mechanically using 1.96 is accurate enough."
+      },
+      "quiz": {
+        "question": {
+          "zh": "大样本一定能消除哪一项？",
+          "en": "Which problem does a large sample necessarily eliminate?"
+        },
+        "options": [
+          {
+            "zh": "聚类相关对标准误的影响",
+            "en": "The effect of clustering on standard errors"
+          },
+          {
+            "zh": "以上保证都没有；需检查抽样和模型条件",
+            "en": "None of these is guaranteed; sampling and model conditions matter"
+          },
+          {
+            "zh": "遗漏变量偏差",
+            "en": "Omitted-variable bias"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "更多观察不能代替外生性或正确的方差估计。",
+          "en": "More observations cannot substitute for exogeneity or correct variance estimation."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 5",
+          "section": "5.1 Consistency"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 5",
+          "section": "5.2 Asymptotic Normality and Large Sample Inference"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m05-c01",
+        "m02-c03"
+      ]
+    },
+    {
+      "id": "m06-c01",
+      "module": "m06",
+      "title": {
+        "zh": "对数模型与百分比解释",
+        "en": "Log models and percentage interpretations"
+      },
+      "question": {
+        "zh": "什么时候系数是单位变化，什么时候是百分比或弹性？",
+        "en": "When does a coefficient describe units, percentages, or elasticity?"
+      },
+      "intuition": {
+        "zh": "对数把乘法变化转为加法差异；解释前先看究竟哪一侧取了对数。",
+        "en": "Logs turn multiplicative changes into additive differences; first identify which side of the model is logged."
+      },
+      "explanation": {
+        "zh": [
+          "自然对数 ln 满足 ln(ab)=ln(a)+ln(b)。小幅变化时，Δln(y) 近似 y 的比例变化。水平对数模型 y=β₀+β₁ln(x)+u 中，x 增加约 1% 对应 y 改变约 β₁/100 个单位；这不是 y 增加 β₁%。",
+          "对数水平模型 ln(y)=β₀+β₁x+u 中，x 增加 Δx，使系统部分的对数变化为 β₁Δx；指数还原后精确比例变化为 exp(β₁Δx)−1。对数对数模型中，β₁ 是指数还原后的系统部分对 x 的弹性，即 x 小幅增加 1% 时 y 约变化 β₁%。",
+          "在 E(u|x)=0 下，对数结果模型描述 E[ln(y)|x]。把上述比例关系解释为 E(y|x) 的比例关系，还需要重转换因子不随比较的 x 改变等条件，后面的预测卡片会说明。对数要求变量为正；把零值一律加 1 会改变模型与解释，不能当作无害操作。"
+        ],
+        "en": [
+          "The natural log satisfies ln(ab)=ln(a)+ln(b). For small changes, Δln(y) approximates the proportional change in y. In a level–log model y=β₀+β₁ln(x)+u, a roughly 1% increase in x corresponds to about β₁/100 units of y, not a β₁% increase in y.",
+          "In a log–level model ln(y)=β₀+β₁x+u, changing x by Δx changes the systematic log component by β₁Δx. Exponentiating gives exact proportional change exp(β₁Δx)−1. In a log–log model, β₁ is the exponentiated systematic component’s elasticity with respect to x: a small 1% rise in x corresponds to approximately β₁% change in y.",
+          "Under E(u|x)=0, a logged-outcome model describes E[ln(y)|x]. Interpreting its proportional relationships as ratios of E(y|x) additionally requires conditions such as a retransformation factor unchanged across the compared x values; the prediction card explains this. Logs require positive values. Adding one to zeros changes both the model and its interpretation."
+        ]
+      },
+      "formula": "ln(y)=β₀+β₁x+u:  exact geometric-mean % change=100[exp(β₁Δx)−1];  ln(y)=β₀+β₁ln(x)+u: geometric-mean elasticity=β₁",
+      "symbols": {
+        "zh": "ln 为自然对数，exp 是其逆运算；弹性为比例变化之比；拟合几何均值为 exp(拟合的 ln(y))。",
+        "en": "ln is the natural log and exp its inverse; elasticity is a ratio of proportional changes; the fitted geometric mean is exp(the fitted log outcome)."
+      },
+      "example": {
+        "zh": "教学示例：对数工资对教育年限的系数为 0.08。多一年教育对应拟合几何工资约高 8%，精确为 100(e⁰·⁰⁸−1)≈8.33%；能否解释因果仍取决于识别。",
+        "en": "Illustrative example: a log-earnings coefficient of 0.08 on schooling corresponds to approximately 8% higher fitted geometric earnings for one extra year; exactly, 100(e⁰·⁰⁸−1)≈8.33%. A causal interpretation still requires identification."
+      },
+      "pitfall": {
+        "zh": "不能直接比较 y 模型与 ln(y) 模型的原始 R²；它们解释的是不同尺度的波动。",
+        "en": "Do not directly compare raw R² values from y and ln(y) regressions: they measure variation on different outcome scales."
+      },
+      "quiz": {
+        "question": {
+          "zh": "y=α+20ln(x)+u 时，x 小幅增加 1%，拟合 y 约改变多少？",
+          "en": "In y=α+20ln(x)+u, how much does fitted y change for a small 1% increase in x?"
+        },
+        "options": [
+          {
+            "zh": "20%",
+            "en": "20%"
+          },
+          {
+            "zh": "20 个 y 单位",
+            "en": "20 units of y"
+          },
+          {
+            "zh": "0.2 个 y 单位",
+            "en": "0.2 units of y"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "Δln(x)≈0.01，因此 Δŷ≈20×0.01=0.2。",
+          "en": "Δln(x)≈0.01, so Δŷ≈20×0.01=0.2."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 2",
+          "section": "2.4 Units of Measurement and Functional Form"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 6",
+          "section": "6.2 More on Functional Form"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m03-c04",
+        "m05-c02"
+      ]
+    },
+    {
+      "id": "m06-c02",
+      "module": "m06",
+      "title": {
+        "zh": "二次函数模型与边际效应",
+        "en": "Quadratic models and marginal effects"
+      },
+      "question": {
+        "zh": "工作经验的作用为什么可能先大后小？",
+        "en": "Why might the effect of experience diminish as experience grows?"
+      },
+      "intuition": {
+        "zh": "加入 x²，让回归线弯曲；模型仍然可以对系数保持线性。",
+        "en": "Add x² to allow curvature while keeping the model linear in its coefficients."
+      },
+      "explanation": {
+        "zh": [
+          "模型 y=β₀+β₁x+β₂x²+u 对 x 非线性，却对 β 线性，因此可用多元 OLS。β₁ 不是任何 x 水平都适用的斜率；改变 x 时 x² 必然跟着变，不能声称在保持 x² 不变时让 x 增加。",
+          "局部边际效应是导数 β₁+2β₂x。β₂<0 表示曲线向下弯，边际效应随 x 增加而降低；这并不意味着观测范围内的边际效应处处为负。若 β₂≠0，转折点为 −β₁/(2β₂)，但只有落在相关数据范围内才适合解释。",
+          "对有限变化，直接代入前后 x 求预测差最稳妥；导数乘以 Δx 只是小变化近似。边际效应本身也是估计系数的线性组合，应使用包含协方差的标准误；判断 x 是否整体相关，可联合检验线性项和平方项。"
+        ],
+        "en": [
+          "The model y=β₀+β₁x+β₂x²+u is nonlinear in x but linear in β, so multiple OLS applies. β₁ is not the slope at every x value. When x changes, x² must change too; one cannot interpret a change in x while holding x² fixed.",
+          "The local marginal effect is the derivative β₁+2β₂x. A negative β₂ makes the curve concave and its slope decrease with x, but does not imply a negative slope throughout the observed range. If β₂≠0, the turning point is −β₁/(2β₂); interpret it only where substantively relevant and supported by data.",
+          "For a finite change, compute predictions at the before and after x values. Multiplying a derivative by Δx is only a small-change approximation. The marginal effect is itself a linear combination of estimated coefficients, so its standard error must include covariance. A joint test of the linear and squared terms assesses their overall contribution."
+        ]
+      },
+      "formula": "∂ŷ/∂x=β̂₁+2β̂₂x;  Δŷ=β̂₁Δx+β̂₂[2xΔx+(Δx)²];  x*=−β̂₁/(2β̂₂)",
+      "symbols": {
+        "zh": "∂ŷ/∂x 为局部斜率；Δx 是有限变化；x* 为估计转折点，需 β̂₂≠0。",
+        "en": "∂ŷ/∂x is the local slope; Δx is a finite change; x* is the estimated turning point, requiring β̂₂≠0."
+      },
+      "example": {
+        "zh": "教学示例：ŷ=20+2x−0.05x²。x=10 时斜率为 1；从 10 增到 11 的精确预测变化为 0.95。转折点是 20，但若样本只覆盖 0 到 12，不能把 20 当成已被充分证实的峰值。",
+        "en": "Illustrative example: ŷ=20+2x−0.05x² has slope 1 at x=10. The exact change from 10 to 11 is 0.95. Its turning point is 20, but data covering only 0 to 12 provide little direct support for that estimated peak."
+      },
+      "pitfall": {
+        "zh": "平方项系数为负不等于 x 的边际效应处处为负；要结合一次项与实际 x 值计算。",
+        "en": "A negative squared-term coefficient does not imply a negative marginal effect everywhere; combine it with the linear term and the relevant x value."
+      },
+      "quiz": {
+        "question": {
+          "zh": "ŷ=5+4x−0.1x² 在 x=10 时的局部斜率是多少？",
+          "en": "What is the local slope of ŷ=5+4x−0.1x² at x=10?"
+        },
+        "options": [
+          {
+            "zh": "2",
+            "en": "2"
+          },
+          {
+            "zh": "4",
+            "en": "4"
+          },
+          {
+            "zh": "−0.1",
+            "en": "−0.1"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "斜率为 4−0.2x，代入 x=10 得到 2。",
+          "en": "The slope is 4−0.2x, which equals 2 at x=10."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 6",
+          "section": "6.2 More on Functional Form"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m06-c01",
+        "m05-c02"
+      ]
+    },
+    {
+      "id": "m06-c03",
+      "module": "m06",
+      "title": {
+        "zh": "交互项与条件边际效应",
+        "en": "Interaction terms and conditional marginal effects"
+      },
+      "question": {
+        "zh": "培训的作用会不会因工作经验不同而不同？",
+        "en": "Can the association with training differ by work experience?"
+      },
+      "intuition": {
+        "zh": "交互项不是再加一种人，而是允许同一变化在不同条件下产生不同预测差异。",
+        "en": "An interaction allows the same change to have different fitted consequences at different values of another variable."
+      },
+      "explanation": {
+        "zh": [
+          "在 y=β₀+β₁x+β₂z+β₃xz+u 中，x 的边际效应是 β₁+β₃z，z 的边际效应是 β₂+β₃x。β₃ 表示 z 每增加一单位，x 的斜率改变多少。它不单独等于 x 的全部效应；解释需要代入有意义的 z。",
+          "β₁ 是 z=0 时的 x 斜率，β₂ 是 x=0 时的 z 斜率。如果零点缺乏实际意义，可把 z 减去一个有意义的参照值；保留完整低阶项时，这会改变系数的参照解释，却不改变拟合值。通常应包含 x、z 及 xz，除非有明确理由限制主项。",
+          "报告交互结果时，可选几个有数据支持的 z 值，展示对应效应与置信区间。计算区间需把 β̂₁ 与 β̂₃ 的协方差纳入。显著的交互项说明模型中的斜率有差异，不能独自证明因果效应异质性；因果解释仍取决于识别条件。"
+        ],
+        "en": [
+          "In y=β₀+β₁x+β₂z+β₃xz+u, the marginal effect of x is β₁+β₃z, and that of z is β₂+β₃x. β₃ measures how much the x slope changes per unit increase in z. It is not the entire x effect; interpretation requires a meaningful value of z.",
+          "β₁ is the x slope at z=0, and β₂ the z slope at x=0. If zero lacks meaning, center z around a useful reference. With all lower-order terms retained, centering changes reference interpretations without changing fitted values. Generally include x, z, and xz unless a clear reason justifies restricting main terms.",
+          "Report effects and confidence intervals at several z values supported by the data. Intervals must account for covariance between β̂₁ and β̂₃. A significant interaction indicates different fitted slopes; it does not itself establish heterogeneous causal effects. Causal interpretation still depends on identification."
+        ]
+      },
+      "formula": "ŷ=β̂₀+β̂₁x+β̂₂z+β̂₃xz;  ∂ŷ/∂x=β̂₁+β̂₃z;  slope difference=β̂₃(z₂−z₁)",
+      "symbols": {
+        "zh": "xz 是两个变量相乘；主项指 x 和 z；z₁、z₂ 是比较斜率时选定的两个 z 水平。",
+        "en": "xz is the product of two variables; x and z are main terms; z₁ and z₂ are the two z levels at which slopes are compared."
+      },
+      "example": {
+        "zh": "教学示例：ŷ=10+2x+3z+0.5xz。z=0 时 x 的斜率为 2，z=4 时为 4。不能只读系数 2 就说 x 对所有人的预测变化都相同。",
+        "en": "Illustrative example: in ŷ=10+2x+3z+0.5xz, the x slope is 2 at z=0 and 4 at z=4. Reading only the coefficient 2 would miss this variation."
+      },
+      "pitfall": {
+        "zh": "改变 x 却保持乘积 xz 不变，不是这里的“保持其他因素不变”；固定的是原始变量 z，乘积随 x 联动。",
+        "en": "Changing x while holding xz fixed is not the relevant ceteris paribus comparison. Hold the underlying z fixed and let the product move with x."
+      },
+      "quiz": {
+        "question": {
+          "zh": "交互模型里 β₁ 通常表示什么？",
+          "en": "What does β₁ generally represent in this interaction model?"
+        },
+        "options": [
+          {
+            "zh": "x 与 z 的相关系数",
+            "en": "The correlation between x and z"
+          },
+          {
+            "zh": "z=0 时 x 的斜率",
+            "en": "The slope of x when z=0"
+          },
+          {
+            "zh": "所有 z 水平下相同的 x 效应",
+            "en": "The same x effect at every z value"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "整体斜率是 β₁+β₃z；只有 z=0 时才简化为 β₁。",
+          "en": "The full slope is β₁+β₃z; it equals β₁ at z=0."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 6",
+          "section": "6.2 More on Functional Form"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 7",
+          "section": "7.4 Interactions Involving Dummy Variables"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m06-c02",
+        "m05-c02"
+      ]
+    },
+    {
+      "id": "m06-c04",
+      "module": "m06",
+      "title": {
+        "zh": "虚拟变量与参照组",
+        "en": "Indicator variables and reference groups"
+      },
+      "question": {
+        "zh": "性别、地区或行业这样的类别，如何放进回归？",
+        "en": "How can categories such as region or industry enter a regression?"
+      },
+      "intuition": {
+        "zh": "用 0/1 记录是否属于某一类，系数描述相对参照组的预测差异。",
+        "en": "Use 0/1 indicators for category membership; coefficients describe fitted differences from a reference group."
+      },
+      "explanation": {
+        "zh": [
+          "二元变量 D 取 0 或 1。在 y=β₀+δD+β₁x+u 中，固定 x 后，D=1 与 D=0 的预测差异为 δ；不含其他变量时，OLS 的 δ̂ 就是两组样本均值之差。加入控制变量后，差异是经模型调整的比较，不自动成为因果效应。",
+          "互斥且穷尽的 G 个类别，含截距时通常放入 G−1 个指示变量，遗漏的一类作参照。如果把全部 G 个指示变量和截距都放入，它们之和恒等于 1，产生完全共线性，即虚拟变量陷阱。换参照组会改变系数表述，却不改变同一模型的预测。",
+          "把行业写成 1、2、3 后直接当连续变量，会强加顺序与等间距限制，通常没有根据。若不同组不仅截距不同、斜率也不同，应加入 D×x 交互项。对数结果中的虚拟变量系数，应按 exp(δ)−1 做精确的系统比例变化解释，并检查重转换条件。"
+        ],
+        "en": [
+          "A binary indicator D takes values 0 or 1. In y=β₀+δD+β₁x+u, δ is the fitted difference between D=1 and D=0 at fixed x. Without other regressors, the OLS estimate is the difference in sample group means. With controls it is a model-adjusted comparison, not automatically a causal effect.",
+          "For G mutually exclusive and exhaustive categories, typically include G−1 indicators with an intercept and use the omitted category as reference. Including all G indicators plus an intercept creates perfect collinearity because the indicators sum to one: the dummy-variable trap. Changing the reference group alters coefficient descriptions, not the model’s fitted values.",
+          "Treating industry codes 1, 2, and 3 as a continuous regressor imposes an ordering and equal spacing that usually lack justification. Add D×x if slopes differ across groups as well as intercepts. For a logged outcome, exp(δ)−1 gives the exact systematic proportional difference, subject to the relevant retransformation conditions."
+        ]
+      },
+      "formula": "Dg=1 if category g, otherwise 0;  ŷ=β̂₀+δ̂B·DB+δ̂C·DC;  Σg Dg=1",
+      "symbols": {
+        "zh": "Dg 是 g 类的指示变量；A 为示例参照组；δB、δC 分别表示相对 A 的差异。",
+        "en": "Dg indicates category g; A is the illustrative reference group; δB and δC describe differences relative to A."
+      },
+      "example": {
+        "zh": "教学示例：三个地区 A、B、C，估计 ŷ=10+2DB−DC。A 的预测是 10，B 是 12，C 是 9；B 与 C 的差为 3。改用 C 作参照后，可写成 ŷ=9+DA+3DB。",
+        "en": "Illustrative example: with regions A, B, and C, ŷ=10+2DB−DC predicts 10, 12, and 9, respectively. B differs from C by 3. Using C as reference gives the equivalent equation ŷ=9+DA+3DB."
+      },
+      "pitfall": {
+        "zh": "遗漏参照组不等于该组被删除；它仍在样本中，其水平由截距和其他适用项表示。",
+        "en": "Omitting a reference indicator does not remove that group from the sample; its fitted level is represented by the intercept and other applicable terms."
+      },
+      "quiz": {
+        "question": {
+          "zh": "含截距并有四个互斥且穷尽类别时，通常加入几个类别指示变量？",
+          "en": "With an intercept and four mutually exclusive, exhaustive categories, how many category indicators are usually included?"
+        },
+        "options": [
+          {
+            "zh": "4 个",
+            "en": "4"
+          },
+          {
+            "zh": "必须 1 个",
+            "en": "Exactly 1"
+          },
+          {
+            "zh": "3 个",
+            "en": "3"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "留一类作为参照，使截距与类别指标不发生完全共线性。",
+          "en": "Leaving one reference category prevents perfect collinearity between the intercept and category indicators."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 7",
+          "section": "7.1 Describing Qualitative Information"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 7",
+          "section": "7.2 A Single Dummy Independent Variable"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 7",
+          "section": "7.3 Using Dummy Variables for Multiple Categories"
+        }
+      ],
+      "minutes": 9,
+      "prerequisites": [
+        "m06-c03",
+        "m04-c04"
+      ]
+    },
+    {
+      "id": "m06-c05",
+      "module": "m06",
+      "title": {
+        "zh": "均值预测、个体预测与对数还原",
+        "en": "Mean prediction, individual prediction, and retransformation"
+      },
+      "question": {
+        "zh": "预测“这类人的平均值”与预测“下一个人”，为什么不同？",
+        "en": "Why does predicting a group mean differ from predicting the next individual?"
+      },
+      "intuition": {
+        "zh": "个体预测还要面对新个体自身的随机差异，所以比均值预测多一层不确定性。",
+        "en": "Individual prediction includes the new individual’s own unexplained variation, adding uncertainty beyond estimation of the mean."
+      },
+      "explanation": {
+        "zh": [
+          "将指定 x₀ 代入回归方程得到 ŷ₀，是条件均值的估计，前提是均值模型适当。其置信区间反映系数估计的不确定性。新个体结果为均值加上新误差，因此预测区间还包含这个误差的波动；它通常比同位置的均值置信区间更宽。",
+          "在经典同方差正态模型且新误差与估计样本独立时，个体预测标准误为 √[SE(ŷ₀)²+σ̂²]，配合 t 临界值构造区间。异方差时新增误差方差随 x₀ 变化；仅使用稳健系数标准误，不会自动得到有效的个体预测区间。远离数据范围的外推还面临模型形状错误。",
+          "若拟合的是 ln(y)=m(x)+u，直接 exp(m̂(x)) 一般不是 E(y|x) 的估计。正确关系为 E(y|x)=exp(m(x))E[exp(u)|x]；条件正态且同方差时，后一个因子为 exp(σ²/2)。非正态可考虑残差指数平均的涂抹修正，但统一因子需额外条件，不能无条件用于异方差。"
+        ],
+        "en": [
+          "Substituting x₀ into the fitted equation gives ŷ₀, an estimate of the conditional mean if the mean model is appropriate. Its confidence interval reflects coefficient-estimation uncertainty. A new individual outcome adds a new error, so its prediction interval must include this variation and is generally wider than the mean interval at the same x₀.",
+          "In the classical homoskedastic normal model, with a new error independent of the estimation sample, the individual prediction standard error is √[SE(ŷ₀)²+σ̂²], used with a t critical value. Under heteroskedasticity, the new-error variance depends on x₀; robust coefficient standard errors alone do not deliver a valid individual prediction interval. Extrapolation also risks an incorrect model shape.",
+          "If ln(y)=m(x)+u is fitted, simply exponentiating m̂(x) generally does not estimate E(y|x). The correct relation is E(y|x)=exp(m(x))E[exp(u)|x]. With conditionally normal, homoskedastic errors, the factor is exp(σ²/2). A residual-based smearing correction can handle some nonnormal settings, but a common factor requires additional conditions and is not automatically valid under heteroskedasticity."
+        ]
+      },
+      "formula": "mean CI: ŷ₀±t*SE(ŷ₀);  individual PI: ŷ₀±t*√[SE(ŷ₀)²+σ̂²];  E(y|x)=exp(m(x))E[exp(u)|x]",
+      "symbols": {
+        "zh": "CI 为均值置信区间；PI 为个体预测区间；σ̂² 是误差方差估计；m(x)=E[ln(y)|x]。",
+        "en": "CI is a confidence interval for the mean; PI is an individual prediction interval; σ̂² estimates error variance; m(x)=E[ln(y)|x]."
+      },
+      "example": {
+        "zh": "教学示例：ŷ₀=50、均值标准误为 2、σ̂=10。用约 1.96 的临界值，均值区间约为 [46.08,53.92]，个体区间约为 [30.01,69.99]；两者回答不同问题。",
+        "en": "Illustrative example: ŷ₀=50, mean standard error 2, and σ̂=10. Using the approximate critical value 1.96 gives a mean interval [46.08,53.92] and an individual interval about [30.01,69.99]. They answer different questions."
+      },
+      "pitfall": {
+        "zh": "样本内高 R² 不保证样本外预测准确；也不要把对数预测直接指数还原后称作已正确估计的算术平均。",
+        "en": "A high in-sample R² does not guarantee accurate out-of-sample prediction, and exponentiating a log prediction does not automatically estimate the arithmetic mean correctly."
+      },
+      "quiz": {
+        "question": {
+          "zh": "为什么新个体预测区间通常更宽？",
+          "en": "Why is the prediction interval for a new individual generally wider?"
+        },
+        "options": [
+          {
+            "zh": "它同时包含均值估计误差和新个体误差",
+            "en": "It includes mean-estimation uncertainty and the new individual error"
+          },
+          {
+            "zh": "因为均值区间不使用数据",
+            "en": "Because the mean interval does not use data"
+          },
+          {
+            "zh": "因为预测一定有偏",
+            "en": "Because predictions are necessarily biased"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "即使条件均值已知，新个体仍可能偏离均值，这部分变动也要计入。",
+          "en": "Even with a known conditional mean, a new individual may deviate from it; that variation must also be included."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Chapter 6",
+          "section": "6.4 Prediction and Residual Analysis"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m06-c01",
+        "m06-c02",
+        "m06-c03",
+        "m06-c04",
+        "m05-c02"
+      ]
+    }
+  ]
+}

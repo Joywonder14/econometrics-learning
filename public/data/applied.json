@@ -1,0 +1,2468 @@
+{
+  "modules": [
+    {
+      "id": "m07",
+      "title": {
+        "zh": "回归诊断与数据问题",
+        "en": "Regression diagnostics and data issues"
+      },
+      "description": {
+        "zh": "分清模型均值、误差方差与数据质量问题，理解每种修正能解决什么。",
+        "en": "Distinguish problems in conditional means, error variances, and data quality, and understand the scope of each remedy."
+      },
+      "stage": 2,
+      "prerequisites": [
+        "m06"
+      ]
+    },
+    {
+      "id": "m08",
+      "title": {
+        "zh": "时间序列回归基础",
+        "en": "Foundations of time-series regression"
+      },
+      "description": {
+        "zh": "把时间顺序带回分析：滞后、依赖、趋势与动态关系。",
+        "en": "Bring time ordering into analysis: lags, dependence, trends, and dynamic relationships."
+      },
+      "stage": 2,
+      "prerequisites": [
+        "m06"
+      ]
+    },
+    {
+      "id": "m09",
+      "title": {
+        "zh": "时间序列高级专题",
+        "en": "Advanced time-series topics"
+      },
+      "description": {
+        "zh": "认识单位根、协整、长期效应与预测，明确推断的适用边界。",
+        "en": "Understand unit roots, cointegration, long-run effects, and forecasting, including the limits of inference."
+      },
+      "stage": 2,
+      "prerequisites": [
+        "m08"
+      ]
+    },
+    {
+      "id": "m10",
+      "title": {
+        "zh": "面板数据模型",
+        "en": "Panel-data models"
+      },
+      "description": {
+        "zh": "跟踪同一对象，利用个体内部变化处理不随时间变化的混杂因素。",
+        "en": "Follow the same units and use within-unit variation to address time-invariant confounding."
+      },
+      "stage": 2,
+      "prerequisites": [
+        "m06"
+      ]
+    },
+    {
+      "id": "m11",
+      "title": {
+        "zh": "有限因变量与联立方程模型",
+        "en": "Limited dependent variable and simultaneous-equation models"
+      },
+      "description": {
+        "zh": "学习二元、受限、计数结果和联立关系，按问题选择模型。",
+        "en": "Choose models for binary, limited, and count outcomes and simultaneous relationships."
+      },
+      "stage": 2,
+      "prerequisites": [
+        "m06"
+      ]
+    },
+    {
+      "id": "m12",
+      "title": {
+        "zh": "实证研究方法与报告",
+        "en": "Empirical research methods and reporting"
+      },
+      "description": {
+        "zh": "从清晰问题出发，把数据、识别、估计、稳健性和写作串成可复核的研究。",
+        "en": "Connect a clear question to data, identification, estimation, robustness, and a reviewable empirical report."
+      },
+      "stage": 4,
+      "prerequisites": [
+        "m07",
+        "m10"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "m07-c01",
+      "module": "m07",
+      "title": {
+        "zh": "异方差与稳健标准误",
+        "en": "Heteroskedasticity and robust standard errors"
+      },
+      "question": {
+        "zh": "误差波动随收入增加，OLS 系数就一定错了吗？",
+        "en": "If error variability rises with income, must the OLS coefficients be wrong?"
+      },
+      "intuition": {
+        "zh": "条件均值描述中心，条件方差描述散布；散布变宽不等于中心线偏了。",
+        "en": "The conditional mean describes the center and the conditional variance describes the spread. A wider spread does not necessarily move the center."
+      },
+      "explanation": {
+        "zh": [
+          "异方差是指 Var(u|X) 随解释变量变化。在随机抽样、无完全共线性和零条件均值等条件下，它本身不会让 OLS 系数有偏或不一致，却会破坏常规同方差标准误的依据，OLS 也不再由高斯—马尔可夫定理保证最有效。错误的标准误会影响置信区间和显著性判断。",
+          "异方差稳健标准误用各观测残差的信息估计系数的不确定性，通常保留原 OLS 系数。它依赖足够样本量和相应正则条件；小样本或高杠杆点下仍应谨慎。先看残差图，并可用 Breusch–Pagan 或 White 类检验辅助诊断，但不必把“先显著检验出异方差”作为使用稳健推断的前提。"
+        ],
+        "en": [
+          "Heteroskedasticity means that Var(u|X) changes with the regressors. Under random sampling, no perfect collinearity, and a zero conditional mean, it does not by itself make OLS biased or inconsistent. It does invalidate the usual homoskedastic standard errors, and the Gauss–Markov theorem no longer guarantees OLS efficiency. Incorrect standard errors affect confidence intervals and significance decisions.",
+          "Heteroskedasticity-robust standard errors use observation-specific residual information to estimate coefficient uncertainty while ordinarily leaving the OLS estimates unchanged. They require adequate sample size and suitable regularity conditions; small samples and high leverage still require care. Residual plots and Breusch–Pagan or White-type tests can aid diagnosis, but a significant heteroskedasticity test need not be a prerequisite for robust inference."
+        ]
+      },
+      "formula": "Var(uᵢ | Xᵢ) = σᵢ²;  Var̂HC(β̂) = (X′X)⁻¹[Σᵢ xᵢxᵢ′ûᵢ²](X′X)⁻¹",
+      "symbols": {
+        "zh": "σᵢ² 是第 i 个观测的条件误差方差；xᵢ 包含常数项；HC 式为基础形式，软件可有有限样本修正。",
+        "en": "σᵢ² is observation i’s conditional error variance; xᵢ includes the intercept. HC shows the basic formula; software may apply finite-sample adjustments."
+      },
+      "example": {
+        "zh": "家庭收入越高，食品支出的家庭差异可能越大。回归中改用稳健标准误后，收入系数可以完全相同，置信区间却改变。",
+        "en": "Households with higher income may have more variable food expenditure. Switching to robust standard errors can leave the income coefficient identical while changing its confidence interval."
+      },
+      "pitfall": {
+        "zh": "稳健标准误不修复遗漏变量偏误、反向因果或函数形式错误；普通 HC 标准误也不处理组内或时间相关。",
+        "en": "Robust standard errors do not fix omitted-variable bias, reverse causality, or a misspecified conditional mean. Ordinary HC standard errors also do not address within-group or serial correlation."
+      },
+      "quiz": {
+        "question": {
+          "zh": "在同一 OLS 回归中只把标准误改为 HC，通常会改变什么？",
+          "en": "What usually changes when only OLS standard errors are replaced by HC standard errors?"
+        },
+        "options": [
+          {
+            "zh": "标准误和推断，系数不变",
+            "en": "Standard errors and inference, with coefficients unchanged"
+          },
+          {
+            "zh": "所有系数都自动无偏",
+            "en": "All coefficients automatically become unbiased"
+          },
+          {
+            "zh": "因果识别假设被验证",
+            "en": "Causal identification assumptions are verified"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "HC 调整的是协方差估计，不会重新识别或重新估计 OLS 条件均值。",
+          "en": "HC adjusts the covariance estimate; it does not reidentify or reestimate the OLS conditional mean."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "8",
+          "section": "8.1 Consequences of Heteroskedasticity for OLS"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "8",
+          "section": "8.2 Heteroskedasticity-Robust Inference after OLS Estimation"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": []
+    },
+    {
+      "id": "m07-c02",
+      "module": "m07",
+      "title": {
+        "zh": "加权最小二乘估计",
+        "en": "Weighted least squares estimation"
+      },
+      "question": {
+        "zh": "什么时候应该给不同观测不同权重？",
+        "en": "When should observations receive different weights?"
+      },
+      "intuition": {
+        "zh": "更嘈杂的观测包含的精度较低，合适的权重可以让估计更精确。",
+        "en": "Noisier observations provide less precision, so appropriate weights can improve estimation precision."
+      },
+      "explanation": {
+        "zh": [
+          "若已知 Var(uᵢ|Xᵢ)=σ²hᵢ 且 hᵢ>0，就把因变量及每个解释变量（包括常数项）除以 √hᵢ，再做 OLS。这等价于最小化按 1/hᵢ 加权的残差平方和。正确的方差模型与外生性条件使变换后的误差同方差，可以提高效率。",
+          "实践中 hᵢ 往往未知，可从初步回归残差估计，再做可行广义最小二乘。权重设错时，“效率更高”不再有保证；只要条件均值正确、权重满足适当条件，估计仍可能一致，但推断应使用适合该加权回归的稳健标准误。调查抽样权重回答的是总体代表性问题，不能与精度权重机械混用。",
+          "报告 WLS 时应交代权重来自理论、分组方差还是残差估计，并与同一样本上的 OLS 结果比较；两者差距很大也可能提示条件均值规格值得检查。"
+        ],
+        "en": [
+          "If Var(uᵢ|Xᵢ)=σ²hᵢ with hᵢ>0 is known, divide the outcome and every regressor, including the intercept, by √hᵢ and run OLS. This is equivalent to minimizing squared residuals weighted by 1/hᵢ. A correct variance model together with exogeneity makes the transformed errors homoskedastic and can improve efficiency.",
+          "In practice hᵢ is often unknown and can be estimated from preliminary residuals, giving feasible generalized least squares. Incorrect weights remove the efficiency guarantee. With a correct conditional mean and suitable conditions on the weights, estimates may remain consistent, but inference should use robust standard errors appropriate for the weighted regression. Survey sampling weights concern population representation and should not be mechanically confused with precision weights.",
+          "When reporting WLS, explain whether weights come from theory, group variances, or estimated residuals and compare against OLS on the same sample. Large differences may also motivate checking the conditional-mean specification."
+        ]
+      },
+      "formula": "β̂WLS = argminβ Σᵢ (yᵢ − xᵢ′β)² / hᵢ",
+      "symbols": {
+        "zh": "hᵢ 是条件方差的相对大小；1/hᵢ 是目标函数中的权重；β 是待估计系数。",
+        "en": "hᵢ is relative conditional variance; 1/hᵢ is the objective-function weight; β is the coefficient vector."
+      },
+      "example": {
+        "zh": "若 B 组误差方差是 A 组的四倍，正确精度权重给 B 组每条观测的权重为 A 组的四分之一；变换时除数则是两倍。",
+        "en": "If group B has four times the error variance of group A, its observations receive one-quarter the precision weight; the transformation divisor is twice as large."
+      },
+      "pitfall": {
+        "zh": "权重用方差的倒数，而变量变换用标准差的倒数；不要漏掉常数项的变换。",
+        "en": "Objective weights use inverse variance, while transformed variables use inverse standard deviation. Do not forget to transform the intercept."
+      },
+      "quiz": {
+        "question": {
+          "zh": "某观测误差方差是另一观测的 9 倍，正确相对精度权重是多少？",
+          "en": "An observation has nine times another’s error variance. What is its relative precision weight?"
+        },
+        "options": [
+          {
+            "zh": "1/3",
+            "en": "1/3"
+          },
+          {
+            "zh": "9",
+            "en": "9"
+          },
+          {
+            "zh": "1/9",
+            "en": "1/9"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "WLS 残差平方项乘以方差的倒数；1/3 是变量变换因子。",
+          "en": "WLS weights squared residuals by inverse variance; 1/3 is the variable transformation factor."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "8",
+          "section": "8.4 Weighted Least Squares Estimation"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c01"
+      ]
+    },
+    {
+      "id": "m07-c03",
+      "module": "m07",
+      "title": {
+        "zh": "函数形式与模型诊断",
+        "en": "Functional form and model diagnosis"
+      },
+      "question": {
+        "zh": "一条直线不够时，应该怎样改进模型？",
+        "en": "How can a model improve when one straight line is insufficient?"
+      },
+      "intuition": {
+        "zh": "先问经济关系可能如何弯曲或因群体而异，再让图形和检验提供证据。",
+        "en": "First ask how the economic relationship might curve or differ across groups, then use plots and tests as evidence."
+      },
+      "explanation": {
+        "zh": [
+          "函数形式错误指条件均值没有被模型恰当地表达，例如遗漏必要的平方项、对数变换或交互项。此时回归仍会给出一条最佳线性拟合，但不能自动把其系数解释为正确的结构效应。画散点、分组均值与残差图，结合理论检查边际效应是否应随水平或群体变化。",
+          "RESET 的典型做法是在原回归中加入拟合值的幂并检验这些项是否联合为零。拒绝原假设提示原条件均值有问题，却不能告诉你唯一正确的模型；未拒绝也不证明模型正确。比较规格时保持研究对象和估计目标明确，避免根据显著性反复试模型后仍按单次检验解释结果。"
+        ],
+        "en": [
+          "Functional-form misspecification means that the model does not adequately express the conditional mean—for example, by omitting necessary squared terms, log transformations, or interactions. Regression still produces a best linear fit, but its coefficients are not automatically the correct structural effects. Use scatterplots, grouped means, and residual plots together with theory to assess whether marginal effects should vary with levels or groups.",
+          "A typical RESET test augments the regression with powers of fitted values and tests whether their coefficients are jointly zero. Rejection indicates a problem with the original conditional mean but does not identify a unique correct model; nonrejection does not establish correctness. Keep the population and estimand clear across specifications, and avoid repeatedly searching for significance while interpreting results as if only one test had been run."
+        ]
+      },
+      "formula": "E(y | x) = β₀ + β₁x + β₂x²;  ∂E(y | x)/∂x = β₁ + 2β₂x",
+      "symbols": {
+        "zh": "β₂ 描述弯曲程度；边际效应需在具体 x 水平计算。",
+        "en": "β₂ describes curvature; the marginal effect must be evaluated at a specified x value."
+      },
+      "example": {
+        "zh": "工作经验对工资的影响可能递减：经验平方项为负时，每多一年经验的拟合增量随经验增加而下降；应检查转折点是否落在样本支持范围内。",
+        "en": "The effect of experience on wages may diminish: a negative squared-experience coefficient makes the fitted increment decline with experience. Check whether the turning point lies within the supported data range."
+      },
+      "pitfall": {
+        "zh": "更高 R² 不等于更可信的因果关系；加入很多项也不能替代遗漏混杂因素的识别讨论。",
+        "en": "A higher R² does not imply a more credible causal relationship, and adding many terms does not replace an identification argument about omitted confounders."
+      },
+      "quiz": {
+        "question": {
+          "zh": "RESET 拒绝原假设后最合理的结论是什么？",
+          "en": "What is the most reasonable conclusion after RESET rejects?"
+        },
+        "options": [
+          {
+            "zh": "不存在内生性",
+            "en": "There is no endogeneity"
+          },
+          {
+            "zh": "原条件均值规格值得重新检查",
+            "en": "The original conditional-mean specification deserves reassessment"
+          },
+          {
+            "zh": "必须使用三次多项式",
+            "en": "A cubic polynomial must be used"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "RESET 是诊断信号，不是唯一模型选择规则，也不是外生性证明。",
+          "en": "RESET is a diagnostic signal, not a unique model-selection rule or proof of exogeneity."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.1 Functional Form Misspecification"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c01"
+      ]
+    },
+    {
+      "id": "m07-c04",
+      "module": "m07",
+      "title": {
+        "zh": "测量误差、缺失与样本选择",
+        "en": "Measurement error, missingness, and selection"
+      },
+      "question": {
+        "zh": "记录不准或只观察到部分人，会怎样影响结论？",
+        "en": "How do inaccurate records or observing only some people affect conclusions?"
+      },
+      "intuition": {
+        "zh": "数据误差进入哪里、谁更容易被观察到，决定它只是增加噪声，还是系统性改变关系。",
+        "en": "Where measurement error enters and who is more likely to be observed determine whether it merely adds noise or systematically changes the relationship."
+      },
+      "explanation": {
+        "zh": [
+          "先假定真实模型 y=β₀+β₁x*+u 中 Cov(x*,u)=0，真实 x* 有变异且变量有有限二阶矩。经典测量误差写作 x=x*+v，并要求 E(v)=0、Cov(v,x*)=Cov(v,u)=0。在这个单解释变量模型中，OLS 斜率的概率极限被压向零；多元回归的偏误则不总能概括为“全部缩小”。因变量中的独立、均值为零测量误差通常增加噪声而不改变斜率一致性，但与解释变量相关的误差会造成偏误。",
+          "处理缺失值不能只看缺失比例。完整案例回归能否保留目标条件均值，取决于被观察到的机制：若入样只依赖已控制的 X，且样本中 E(u|X,入样)=0，斜率估计仍可能有效；若入样取决于未观测的 u，则可能发生选择偏误。应记录缺失规则，比较可观察特征，说明分析总体与原目标总体是否一致。"
+        ],
+        "en": [
+          "Start from the true model y=β₀+β₁x*+u with Cov(x*,u)=0, variation in x*, and finite second moments. Classical measurement error writes x=x*+v and assumes E(v)=0 and Cov(v,x*)=Cov(v,u)=0. In this single-regressor model, the probability limit of the OLS slope is attenuated toward zero; in multiple regression, bias cannot generally be summarized as every coefficient shrinking. Independent, mean-zero outcome measurement error usually adds noise without changing slope consistency, but error correlated with regressors can cause bias.",
+          "Missingness cannot be assessed by its percentage alone. Whether complete-case regression preserves the target conditional mean depends on the observation mechanism. If selection depends only on controlled X and E(u|X,selected)=0 holds, slope estimation can remain valid. Selection depending on unobserved u can create selection bias. Document missingness rules, compare observable characteristics, and explain whether the analyzed population matches the target population."
+        ]
+      },
+      "formula": "plim β̂₁ = β₁ Var(x*) / [Var(x*) + Var(v)]  (simple classical model)",
+      "symbols": {
+        "zh": "x* 是真实解释变量；v 是经典测量误差；衰减公式同时要求真实变量外生 Cov(x*,u)=0，不能用来消除原本存在的混杂。",
+        "en": "x* is the true regressor and v is classical measurement error. The attenuation formula also requires Cov(x*,u)=0; it does not remove confounding already present in the true model."
+      },
+      "example": {
+        "zh": "自报受教育年限若有经典误差，简单工资回归可能低估斜率；仅观察就业者工资则另涉及就业选择，不能把两种问题视为同一原因。",
+        "en": "Classical error in reported schooling can attenuate a simple wage slope. Observing wages only for employed people introduces a separate employment-selection issue; the two problems should not be conflated."
+      },
+      "pitfall": {
+        "zh": "删除缺失行、把缺失值填成 0 或增加样本量都不会自动消除选择偏误。",
+        "en": "Deleting incomplete rows, replacing missing values with zero, or increasing sample size does not automatically eliminate selection bias."
+      },
+      "quiz": {
+        "question": {
+          "zh": "“解释变量测量误差一定让所有系数向零偏”是否正确？",
+          "en": "Is it true that regressor measurement error always biases every coefficient toward zero?"
+        },
+        "options": [
+          {
+            "zh": "不正确，经典单解释变量结论不能普遍推广",
+            "en": "No; the classical single-regressor result is not universal"
+          },
+          {
+            "zh": "正确，任何多元模型都如此",
+            "en": "Yes, in every multiple-regression model"
+          },
+          {
+            "zh": "正确，只要样本足够大",
+            "en": "Yes, provided the sample is large"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "多元、非经典测量误差的偏误方向取决于变量间关系。",
+          "en": "Bias directions in multiple-regression and nonclassical-error settings depend on relationships among the variables."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.4 Properties of OLS under Measurement Error"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.5 Missing Data, Nonrandom Samples, and Outlying Observations"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": []
+    },
+    {
+      "id": "m07-c05",
+      "module": "m07",
+      "title": {
+        "zh": "异常值、杠杆点与影响力",
+        "en": "Outliers, leverage, and influence"
+      },
+      "question": {
+        "zh": "一个极端观测是否应该被删除？",
+        "en": "Should an extreme observation be deleted?"
+      },
+      "intuition": {
+        "zh": "“数值很大”“横坐标很特别”“删掉后结果变化大”是三件不同的事。",
+        "en": "A large value, an unusual regressor position, and a large effect on the fitted model are three different things."
+      },
+      "explanation": {
+        "zh": [
+          "异常残差表示观测结果偏离拟合值较远；高杠杆表示其解释变量组合远离样本中心；影响力则关注它对系数或拟合结果的实际作用。一个高杠杆点若沿着其他数据的关系延长线分布，不一定有很大残差；高杠杆与大残差结合时往往尤其值得检查。",
+          "先核对录入、单位、重复记录和研究对象范围。确认错误可按可复核规则修正；真实但特殊的个体不能仅因影响显著性就删除。可以报告含与不含该观测的敏感性比较，并解释总体范围。稳健标准误针对误差方差，而非系数对异常点的敏感性；最小绝对偏差等估计也有自身的目标和适用条件。"
+        ],
+        "en": [
+          "An outlying residual indicates an outcome far from its fitted value; high leverage means an unusual combination of regressors; influence concerns the observation’s actual impact on coefficients or fitted results. A high-leverage point lying along the continuation of the main relationship need not have a large residual. High leverage combined with a large residual especially merits investigation.",
+          "First check transcription, units, duplicate records, and the population definition. Confirmed errors can be corrected using reviewable rules; genuine unusual units should not be deleted merely because they affect significance. Report sensitivity analyses with and without influential observations and explain population scope. Robust standard errors address error variance, not the sensitivity of coefficients to unusual observations; alternatives such as least absolute deviations have their own estimands and conditions."
+        ]
+      },
+      "formula": "ûᵢ = yᵢ − ŷᵢ;  hᵢᵢ = xᵢ′(X′X)⁻¹xᵢ",
+      "symbols": {
+        "zh": "ûᵢ 是残差；hᵢᵢ 是杠杆值；影响力需进一步比较该观测对估计的作用。",
+        "en": "ûᵢ is a residual; hᵢᵢ is leverage. Influence additionally concerns the observation’s effect on estimates."
+      },
+      "example": {
+        "zh": "城市房价样本中出现一套豪宅，先查价格是否错误多了一位零。若价格真实，比较保留它、合理对数变换及限定普通住宅总体的结果，并解释各自问题不同。",
+        "en": "When a mansion appears in a housing sample, first check for an extra zero in its price. If genuine, compare retaining it, a justified log specification, and restricting the target population to ordinary homes, explaining that these answer different questions."
+      },
+      "pitfall": {
+        "zh": "“删除后 p<0.05”不是删除依据；事后筛选可能把真实不确定性隐藏起来。",
+        "en": "“Deleting it makes p<0.05” is not a deletion criterion; post hoc filtering can conceal real uncertainty."
+      },
+      "quiz": {
+        "question": {
+          "zh": "发现高杠杆观测的首要行动是什么？",
+          "en": "What should come first after finding a high-leverage observation?"
+        },
+        "options": [
+          {
+            "zh": "立即删除所有极端值",
+            "en": "Immediately delete all extreme values"
+          },
+          {
+            "zh": "只改成稳健标准误就结束",
+            "en": "Only switch to robust standard errors"
+          },
+          {
+            "zh": "核对数据与研究范围，再做透明敏感性分析",
+            "en": "Check the data and population scope, then conduct transparent sensitivity analysis"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "高杠杆是诊断信号，不是错误或应删除的证明。",
+          "en": "High leverage is a diagnostic signal, not proof of error or grounds for automatic deletion."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.5 Missing Data, Nonrandom Samples, and Outlying Observations"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.6 Least Absolute Deviations Estimation"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c03"
+      ]
+    },
+    {
+      "id": "m08-c01",
+      "module": "m08",
+      "title": {
+        "zh": "时间序列的滞后与差分",
+        "en": "Lags and differences in time series"
+      },
+      "question": {
+        "zh": "为什么时间序列不能当作打乱顺序的横截面？",
+        "en": "Why can a time series not be treated as shuffled cross-sectional data?"
+      },
+      "intuition": {
+        "zh": "今天可能承接昨天的状态；时间顺序决定信息何时可用、冲击何时发生作用。",
+        "en": "Today can inherit yesterday’s state. Time ordering determines when information becomes available and when shocks take effect."
+      },
+      "explanation": {
+        "zh": [
+          "时间序列对同一经济对象按时间记录，例如月度通胀或季度 GDP。相邻观测常有关联，所以随机抽取一行的横截面直觉不能直接套用。先确认频率、日期唯一性、缺口和公布时点；不规则日期中，“上一行”不一定是“上一期”，把二者混淆会制造错误的滞后变量。",
+          "滞后 xₜ₋₁ 是上一期水平；一阶差分 Δxₜ 是本期减上期；正值变量的对数差分近似增长率。滞后用于表达延迟影响或预测信息，差分用于研究变化，有时也能去掉特定非平稳成分，但它们会改变模型含义并损失开头的观测。不能为了显著性而随意改变频率或时间对齐。",
+          "练习时先手算三期水平、差分与增长率，再对照软件生成的变量，尤其检查第一期缺失和日期间隔。"
+        ],
+        "en": [
+          "Time series record an economic object over time, such as monthly inflation or quarterly GDP. Neighboring observations are often related, so intuitions from independently sampled cross-sectional rows do not transfer directly. Verify frequency, unique dates, gaps, and release times. With irregular dates, the previous row need not represent the previous period; confusing them creates incorrect lags.",
+          "A lag xₜ₋₁ is the preceding period’s level; the first difference Δxₜ is the current minus the previous value; a log difference approximates the growth rate for positive variables. Lags represent delayed effects or forecasting information, while differencing studies changes and can sometimes remove particular nonstationary components. These operations change interpretation and lose initial observations. Frequency and time alignment should not be altered merely to obtain significance.",
+          "As an exercise, manually compute levels, differences, and growth rates for three periods, then compare with software-generated variables, especially the missing first difference and date spacing."
+        ]
+      },
+      "formula": "Δxₜ = xₜ − xₜ₋₁;  gₜ ≈ 100[ln(xₜ) − ln(xₜ₋₁)]",
+      "symbols": {
+        "zh": "t 是按既定频率排列的时期；Δ 是一阶差分；gₜ 是百分比增长率的近似。",
+        "en": "t indexes periods at a defined frequency; Δ is a first difference; gₜ approximates a percentage growth rate."
+      },
+      "example": {
+        "zh": "月销售额从 100 增至 110，差分为 10，实际增长率为 10%，对数差分乘 100 约为 9.53；三者不能用同一个单位解释。",
+        "en": "Monthly sales rising from 100 to 110 give a difference of 10, an exact growth rate of 10%, and 100 times the log difference of about 9.53. These quantities have different units."
+      },
+      "pitfall": {
+        "zh": "若 2 月缺失，3 月的上一行是 1 月，但它不是 3 月的一阶月度滞后。",
+        "en": "If February is missing, the row before March is January, but it is not March’s first monthly lag."
+      },
+      "quiz": {
+        "question": {
+          "zh": "季度数据里 xₜ₋₄ 表示什么？",
+          "en": "In quarterly data, what does xₜ₋₄ mean?"
+        },
+        "options": [
+          {
+            "zh": "一年前的水平",
+            "en": "The level one year earlier"
+          },
+          {
+            "zh": "四年前的水平",
+            "en": "The level four years earlier"
+          },
+          {
+            "zh": "四季度累计增长率",
+            "en": "The cumulative four-quarter growth rate"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "下标差表示四个观测时期；季度数据的四期是一年。",
+          "en": "The index difference is four observation periods, which is one year for quarterly data."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "10",
+          "section": "10.1 The Nature of Time Series Data"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "10",
+          "section": "10.2 Examples of Time Series Regression Models"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": []
+    },
+    {
+      "id": "m08-c02",
+      "module": "m08",
+      "title": {
+        "zh": "平稳性与弱依赖",
+        "en": "Stationarity and weak dependence"
+      },
+      "question": {
+        "zh": "有相关的时间序列，为什么有时仍能用大样本方法？",
+        "en": "Why can large-sample methods sometimes work for dependent time series?"
+      },
+      "intuition": {
+        "zh": "平稳性关注统计规律是否随时间变；弱依赖关注相隔很远的观测是否仍紧密相连。",
+        "en": "Stationarity concerns whether statistical laws change over time; weak dependence concerns whether distant observations remain closely connected."
+      },
+      "explanation": {
+        "zh": [
+          "协方差平稳要求均值和方差不随 t 改变，且两期协方差只取决于相隔多少期。严格平稳则要求任意有限组合的联合分布在整体平移时间后不变。二者不是同一句话：有有限二阶矩的严格平稳蕴含协方差平稳，但反向通常不成立。入门时先用均值、波动和自相关图建立直觉。",
+          "平稳不自动等于弱依赖。弱依赖大致要求远期依赖逐渐减弱；具体大数定律与中心极限定理还需要明确的依赖和矩条件。平稳 AR(1) 在 |ρ|<1 的适当创新条件下，冲击影响按 ρ 的幂衰减，是常见例子。若 ρ 很接近 1，有限样本仍可能表现得高度持久，推断要格外谨慎。"
+        ],
+        "en": [
+          "Covariance stationarity requires a time-invariant mean and variance and covariances that depend only on the lag between dates. Strict stationarity requires every finite joint distribution to be unchanged by shifting all dates. These are different concepts: strict stationarity with finite second moments implies covariance stationarity, but generally not conversely. Start by examining means, volatility, and autocorrelations.",
+          "Stationarity does not automatically imply weak dependence. Weak dependence roughly requires dependence to diminish at long separations; specific laws of large numbers and central limit theorems require explicit dependence and moment conditions. Under appropriate innovation assumptions, a stationary AR(1) with |ρ|<1 has shocks that decay as powers of ρ. When ρ is close to one, finite samples can remain highly persistent and require particular care."
+        ]
+      },
+      "formula": "yₜ = c + ρyₜ₋₁ + eₜ;  |ρ| < 1;  E(yₜ) = c/(1−ρ)",
+      "symbols": {
+        "zh": "eₜ 是均值为零、满足适当条件的创新；ρ 衡量持续性；均值公式针对平稳过程。",
+        "en": "eₜ is a mean-zero innovation satisfying appropriate conditions; ρ measures persistence. The mean formula applies to the stationary process."
+      },
+      "example": {
+        "zh": "ρ=0.5 时，一个单位冲击在一、二、三期后的影响为 0.5、0.25、0.125；ρ=1 时冲击不会这样消退，需另行分析单位根。",
+        "en": "With ρ=0.5, a unit shock has effects 0.5, 0.25, and 0.125 after one, two, and three periods. At ρ=1, shocks do not decay this way and require unit-root analysis."
+      },
+      "pitfall": {
+        "zh": "图上“上下波动”不等于已证明平稳；自相关很高也不单独证明单位根。",
+        "en": "Visual fluctuation does not prove stationarity, and high autocorrelation alone does not prove a unit root."
+      },
+      "quiz": {
+        "question": {
+          "zh": "协方差平稳要求哪一项？",
+          "en": "What does covariance stationarity require?"
+        },
+        "options": [
+          {
+            "zh": "所有时期完全独立",
+            "en": "Complete independence across all dates"
+          },
+          {
+            "zh": "均值必须等于零",
+            "en": "The mean must equal zero"
+          },
+          {
+            "zh": "均值与方差不随时间变化，协方差只依赖时距",
+            "en": "Constant mean and variance, with covariance depending only on lag"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "平稳允许均值非零和序列相关；关键是相应统计规律的时间不变性。",
+          "en": "Stationarity permits nonzero means and serial correlation; the key is time invariance of the relevant statistical properties."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "11",
+          "section": "11.1 Stationary and Weakly Dependent Time Series"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m08-c01"
+      ]
+    },
+    {
+      "id": "m08-c03",
+      "module": "m08",
+      "title": {
+        "zh": "趋势、季节性与伪回归",
+        "en": "Trends, seasonality, and spurious regression"
+      },
+      "question": {
+        "zh": "两条都向上走的曲线，为什么可能“显著”却无实质联系？",
+        "en": "Why can two upward-moving series appear significant without a substantive relationship?"
+      },
+      "intuition": {
+        "zh": "共同时间形状可能制造表面相关；要区分可预测的日历规律与随机的持久漂移。",
+        "en": "Shared time patterns can create apparent association. Distinguish predictable calendar structure from persistent stochastic drift."
+      },
+      "explanation": {
+        "zh": [
+          "确定性趋势是均值按固定时间函数变化，例如线性 t；季节性是月份、季度等日历位置反复出现的差异。在适当模型中加入时间趋势和季节虚拟变量，可以把解释变量效应与这些规律分开。含截距时季节虚拟变量需要省略一个基准季，否则产生完全共线性。趋势形式应有经济依据，并检查残差。",
+          "随机趋势不同：单位根过程中的冲击可有永久作用。两个不相关但各自高度持久的序列，水平回归可能出现高 R² 和误导性 t 统计量。加入一条线性时间趋势不能普遍解决随机趋势问题；需要考察差分、单位根与协整。差分会改变为短期变化问题，若存在长期均衡，还应保留适当误差修正结构。"
+        ],
+        "en": [
+          "A deterministic trend is a mean changing according to a fixed time function, such as linear t; seasonality is a recurring difference by calendar position, such as month or quarter. Including suitable trends and seasonal indicators can separate regressor effects from these patterns. With an intercept, omit one seasonal category to avoid perfect collinearity. Trend specifications should be economically motivated and residuals examined.",
+          "A stochastic trend is different: shocks in a unit-root process can have permanent effects. A levels regression between unrelated but highly persistent series can produce a high R² and misleading t statistics. Adding a linear time trend does not generally solve stochastic-trend problems; differences, unit roots, and cointegration must be considered. Differencing changes the question to short-run changes, while long-run equilibrium may require an error-correction structure."
+        ]
+      },
+      "formula": "yₜ = β₀ + β₁xₜ + δt + Σₛ γₛDₛₜ + uₜ",
+      "symbols": {
+        "zh": "t 是确定性时间趋势；Dₛₜ 为季节虚拟变量；有截距时省略一个季节。",
+        "en": "t is a deterministic time trend; Dₛₜ are seasonal indicators, with one category omitted when an intercept is present."
+      },
+      "example": {
+        "zh": "冰淇淋销量与溺水事件夏季都上升，简单相关可能主要反映季节。控制月份能处理这种日历规律，但仍不能仅凭回归断言销量造成溺水。",
+        "en": "Ice-cream sales and drownings both rise in summer, so their correlation may largely reflect seasonality. Month controls can address that calendar pattern but do not establish that sales cause drownings."
+      },
+      "pitfall": {
+        "zh": "高 R² 或残差看起来较小，不能排除伪回归；“加趋势”和“做差分”也不是同一种处理。",
+        "en": "High R² or small-looking residuals do not rule out spurious regression. Adding a trend and differencing are not the same operation."
+      },
+      "quiz": {
+        "question": {
+          "zh": "哪种说法正确？",
+          "en": "Which statement is correct?"
+        },
+        "options": [
+          {
+            "zh": "季节虚拟变量能证明因果",
+            "en": "Seasonal indicators prove causality"
+          },
+          {
+            "zh": "线性时间趋势不能普遍消除随机趋势导致的伪回归",
+            "en": "A linear time trend does not generally remove spurious regression from stochastic trends"
+          },
+          {
+            "zh": "R²>0.9 就能排除伪回归",
+            "en": "R²>0.9 rules out spurious regression"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "随机趋势需要单位根与协整框架，不能机械套用确定性趋势处理。",
+          "en": "Stochastic trends require unit-root and cointegration reasoning rather than mechanically applying deterministic detrending."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "10",
+          "section": "10.5 Trends and Seasonality"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "18",
+          "section": "18.3 Spurious Regression"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m08-c02"
+      ]
+    },
+    {
+      "id": "m08-c04",
+      "module": "m08",
+      "title": {
+        "zh": "序列相关与 HAC 推断",
+        "en": "Serial correlation and HAC inference"
+      },
+      "question": {
+        "zh": "回归误差延续到下一期，会改变什么？",
+        "en": "What changes when regression errors persist into later periods?"
+      },
+      "intuition": {
+        "zh": "相邻误差携带重复信息，样本行数不再直接等于独立信息量。",
+        "en": "Neighboring errors can contain overlapping information, so the row count no longer directly represents independent information."
+      },
+      "explanation": {
+        "zh": [
+          "序列相关描述不同时期误差之间的相关。若解释变量与误差仍满足所需外生性，序列相关本身不必使 OLS 不一致，但常规标准误可能错误、OLS 效率降低。若模型含滞后因变量且误差有序列相关，滞后因变量可能与当期误差相关，这时还会出现一致性问题，不能只修标准误。",
+          "HAC（异方差与自相关一致）协方差估计，例如 Newey–West 类方法，在适当弱依赖与大样本条件下允许异方差和一定序列相关。它需要选择带宽等设置，结果对选择可能敏感。先审视模型是否遗漏动态项，再检查残差相关并选择推断方式；改变协方差估计不会自动修正错误的条件均值、内生性或单位根推断。"
+        ],
+        "en": [
+          "Serial correlation is correlation between errors at different dates. If regressors retain the required exogeneity, serial correlation need not itself make OLS inconsistent, but conventional standard errors can fail and efficiency can fall. With lagged outcomes and serially correlated errors, the lagged outcome may correlate with the current error, creating a consistency problem that cannot be solved by standard-error adjustment alone.",
+          "HAC covariance estimation, including Newey–West-type methods, accommodates heteroskedasticity and serial dependence under suitable weak-dependence and large-sample conditions. It requires bandwidth and other choices, and results may be sensitive to them. First consider omitted dynamics, then inspect residual dependence and select inference methods. Changing the covariance estimator does not automatically repair conditional-mean misspecification, endogeneity, or unit-root inference."
+        ]
+      },
+      "formula": "Cov(uₜ, uₜ₋₁) ≠ 0;  uₜ = ρuₜ₋₁ + eₜ  (AR(1) example)",
+      "symbols": {
+        "zh": "ρ 衡量此例中误差延续程度；HAC 对回归得分的跨期协方差进行估计，并不要求只有 AR(1)。",
+        "en": "ρ measures error persistence in this example. HAC estimates cross-time covariances of regression scores and is not restricted to AR(1)."
+      },
+      "example": {
+        "zh": "月度需求回归遗漏持续的消费情绪，残差可能连续数月同号。HAC 可以改进满足条件下的推断；若消费情绪还与价格相关，价格系数的内生性另需解决。",
+        "en": "Omitted persistent consumer sentiment may leave monthly demand residuals with the same sign for several months. HAC can improve inference when its conditions hold, but sentiment correlated with price creates a separate endogeneity problem."
+      },
+      "pitfall": {
+        "zh": "异方差稳健 HC 与 HAC 不同；HAC 也不是任意非平稳数据的通用修复器。",
+        "en": "Heteroskedasticity-robust HC and HAC differ. HAC is also not a universal repair for arbitrary nonstationary data."
+      },
+      "quiz": {
+        "question": {
+          "zh": "滞后因变量与当期误差相关时，只用 HAC 是否足够？",
+          "en": "Is HAC alone sufficient when a lagged outcome correlates with the current error?"
+        },
+        "options": [
+          {
+            "zh": "不够，系数估计的一致性也受到威胁",
+            "en": "No; coefficient consistency is also threatened"
+          },
+          {
+            "zh": "足够，HAC 会改变系数为真值",
+            "en": "Yes; HAC changes coefficients to their true values"
+          },
+          {
+            "zh": "足够，只要序列很长",
+            "en": "Yes, provided the series is long"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "HAC 修正协方差估计，不消除解释变量与误差的相关。",
+          "en": "HAC adjusts covariance estimation; it does not eliminate correlation between regressors and errors."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "12",
+          "section": "12.1 Properties of OLS with Serially Correlated Errors"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "12",
+          "section": "12.5 Serial Correlation-Robust Inference after OLS"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m08-c02",
+        "m07-c01"
+      ]
+    },
+    {
+      "id": "m08-c05",
+      "module": "m08",
+      "title": {
+        "zh": "动态模型与滞后效应",
+        "en": "Dynamic models and lagged effects"
+      },
+      "question": {
+        "zh": "一次变化为什么可能在未来多期持续产生影响？",
+        "en": "Why can one change continue to affect outcomes over several future periods?"
+      },
+      "intuition": {
+        "zh": "经济调整需要时间：习惯、合同和投资可能把冲击分散到未来。",
+        "en": "Economic adjustment takes time: habits, contracts, and investment can spread a shock over future periods."
+      },
+      "explanation": {
+        "zh": [
+          "静态模型只写当期解释变量，有限分布滞后模型加入 x 的若干滞后；自回归模型则加入 y 的滞后。两者可以结合，但含义不同：x 的滞后描述过去投入的直接延迟作用，y 的滞后描述结果的持续性。模型选择应兼顾理论、数据频率、样本长度和残差诊断，不能把所有可能滞后无限加入。",
+          "在稳定的简单 ARDL 模型中，x 的当期变化首先通过 β 影响 y，随后通过 ρ 的反馈继续传递。β 是冲击当期效应，不等于长期效应。含滞后因变量通常不满足严格外生性，因此需要适合动态模型的条件与大样本推断。动态完整性讨论的是给定足够历史后误差是否还可预测，不是“加入滞后就必然因果”。"
+        ],
+        "en": [
+          "A static model includes current regressors; a finite distributed-lag model adds lags of x; an autoregressive model adds lags of y. They can be combined but have distinct interpretations: lags of x represent delayed direct effects of past inputs, while lags of y represent persistence in outcomes. Choose dynamics using theory, data frequency, sample length, and residual diagnostics rather than adding unlimited lags.",
+          "In a stable simple ARDL model, a current change in x first affects y through β and then continues through feedback governed by ρ. β is the impact effect, not the long-run effect. Lagged outcomes usually violate strict exogeneity, requiring assumptions and large-sample inference appropriate for dynamic models. Dynamic completeness concerns whether errors remain predictable given a sufficient history; adding lags does not establish causality."
+        ]
+      },
+      "formula": "yₜ = α + ρyₜ₋₁ + βxₜ + uₜ;  ∂yₜ/∂xₜ = β;  LR = β/(1−ρ), |ρ|<1",
+      "symbols": {
+        "zh": "ρ 是结果持续性；长期公式对应 x 永久提高一单位、模型稳定且其他条件不变。",
+        "en": "ρ is outcome persistence. The long-run formula concerns a permanent one-unit increase in x, stability, and other conditions held fixed."
+      },
+      "example": {
+        "zh": "若 ρ=0.5、β=2，永久提高 x 一单位，第一期效应为 2，接下来为 3、3.5，逐渐趋向 4；一次短暂冲击的路径则不同。",
+        "en": "With ρ=0.5 and β=2, a permanent one-unit increase in x has effects 2, then 3, then 3.5, approaching 4. A temporary one-period shock has a different path."
+      },
+      "pitfall": {
+        "zh": "“滞后先发生”不等于外生：共同冲击、预期和反馈仍可能造成内生性。",
+        "en": "Occurring earlier does not make a lag exogenous: common shocks, anticipation, and feedback can still create endogeneity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "ρ=0.5、β=2 的稳定模型中，永久提高 x 一单位的长期效应是多少？",
+          "en": "For a stable model with ρ=0.5 and β=2, what is the long-run effect of a permanent unit increase in x?"
+        },
+        "options": [
+          {
+            "zh": "2",
+            "en": "2"
+          },
+          {
+            "zh": "1",
+            "en": "1"
+          },
+          {
+            "zh": "4",
+            "en": "4"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "长期反馈累积为 β/(1−ρ)=2/0.5=4；2 只是当期效应。",
+          "en": "Long-run feedback accumulates to β/(1−ρ)=2/0.5=4; 2 is only the impact effect."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "10",
+          "section": "10.2 Examples of Time Series Regression Models"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "11",
+          "section": "11.4 Dynamically Complete Models and the Absence of Serial Correlation"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "18",
+          "section": "18.1 Infinite Distributed Lag Models"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m08-c01",
+        "m08-c02"
+      ]
+    },
+    {
+      "id": "m09-c01",
+      "module": "m09",
+      "title": {
+        "zh": "单位根与差分平稳",
+        "en": "Unit roots and difference stationarity"
+      },
+      "question": {
+        "zh": "高度持久的序列，什么时候需要单位根框架？",
+        "en": "When does a highly persistent series require a unit-root framework?"
+      },
+      "intuition": {
+        "zh": "稳定过程会逐渐忘记冲击；随机游走会把冲击永久累积到水平中。",
+        "en": "A stable process gradually forgets a shock; a random walk permanently accumulates shocks in its level."
+      },
+      "explanation": {
+        "zh": [
+          "固定初值的随机游走 yₜ=yₜ₋₁+eₜ 有单位根。若创新独立、均值为零且有恒定正方差，y 的方差随时间增长，因此水平不具有协方差平稳性，而差分 Δyₜ=eₜ 可以平稳。本卡中的 I(1) 指含单位根的随机趋势过程，其一阶差分是弱依赖的 I(0)，典型设定下也平稳。不是所有非平稳都是单位根：确定性趋势、结构突变和变化的波动也可能导致非平稳；不能只因差分后平稳就断言存在单位根。",
+          "Dickey–Fuller 思路将单位根假设写为差分回归中 γ=0；增广版本加入滞后差分来处理额外动态。单位根原假设下 t 统计量不服从通常的 t 分布，必须用相应临界值。是否含截距或趋势、滞后阶数都会影响结果；不拒绝单位根不等于证明其成立，尤其是样本短或过程接近单位根时。"
+        ],
+        "en": [
+          "A random walk yₜ=yₜ₋₁+eₜ with a fixed initial value has a unit root. If innovations are independent, mean zero, and have constant positive variance, the variance of y grows over time. Levels are therefore not covariance stationary, while Δyₜ=eₜ can be stationary. Here I(1) refers to a unit-root stochastic-trend process whose first difference is weakly dependent, I(0), and stationary in the typical specification. Not all nonstationarity comes from unit roots: deterministic trends, structural breaks, and changing volatility can also matter. Stationarity after differencing alone does not establish a unit root.",
+          "The Dickey–Fuller approach writes the unit-root null as γ=0 in a difference regression; the augmented version adds lagged differences to address additional dynamics. Under the null, its t statistic does not have the usual t distribution, so appropriate critical values are required. Intercept, trend, and lag choices affect the result. Failure to reject is not proof of a unit root, especially with a short sample or a near-unit-root process."
+        ]
+      },
+      "formula": "Δyₜ = a + γyₜ₋₁ + Σⱼ φⱼΔyₜ₋ⱼ + eₜ;  H₀: γ=0",
+      "symbols": {
+        "zh": "AR(1) 中 γ=ρ−1；一般 AR(p) 中 γ 等于各水平滞后系数之和减 1。γ=0 对应单位根限制；是否加入趋势需根据过程与检验设定决定。",
+        "en": "For AR(1), γ=ρ−1; for a general AR(p), γ is the sum of coefficients on lagged levels minus one. γ=0 is the unit-root restriction. Including a trend depends on the process and test specification."
+      },
+      "example": {
+        "zh": "价格水平可能非常持久，而通胀近似为价格对数的一阶差分。是否可将价格对数视为 I(1)，需要图形、经济背景和单位根检验共同判断。",
+        "en": "Price levels can be highly persistent, while inflation is approximately a first difference in log prices. Whether log prices are reasonably treated as I(1) requires plots, economic context, and unit-root testing together."
+      },
+      "pitfall": {
+        "zh": "不能拿普通回归输出里的常规 p 值直接当作单位根检验结论。",
+        "en": "Do not interpret an ordinary regression’s conventional p value as the unit-root test result."
+      },
+      "quiz": {
+        "question": {
+          "zh": "ADF 回归中检验 γ=0 时应使用哪种参考分布？",
+          "en": "Which reference distribution is needed for γ=0 in an ADF regression?"
+        },
+        "options": [
+          {
+            "zh": "与设定匹配的单位根检验分布",
+            "en": "The unit-root test distribution appropriate to the specification"
+          },
+          {
+            "zh": "任何普通 t 分布都可以",
+            "en": "Any ordinary t distribution"
+          },
+          {
+            "zh": "标准误越小就无需参考分布",
+            "en": "No reference distribution if the standard error is small"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "单位根原假设带来非标准分布，截距和趋势设定也影响临界值。",
+          "en": "The unit-root null yields a nonstandard distribution, with critical values affected by intercept and trend choices."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "11",
+          "section": "11.3 Using Highly Persistent Time Series in Regression Analysis"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "18",
+          "section": "18.2 Testing for Unit Roots"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m08-c02",
+        "m08-c03"
+      ]
+    },
+    {
+      "id": "m09-c02",
+      "module": "m09",
+      "title": {
+        "zh": "协整与误差修正",
+        "en": "Cointegration and error correction"
+      },
+      "question": {
+        "zh": "两个非平稳序列，为什么有时仍有稳定的长期联系？",
+        "en": "How can two nonstationary series have a stable long-run relationship?"
+      },
+      "intuition": {
+        "zh": "两人各自漫步，却由一根松绳连接：位置会漂移，彼此距离可能受到约束。",
+        "en": "Two walkers may drift while connected by a loose rope: their positions wander, but their separation can remain constrained."
+      },
+      "explanation": {
+        "zh": [
+          "若 y 和 x 都是 I(1)，但存在某个 θ 使 y−a−θx 为 I(0)，则它们协整。长期组合是稳定的，不代表各序列自身平稳，也不自动证明 x 对 y 的因果作用。检验协整需使用合适方法；对估计残差做单位根检验时，不能机械沿用针对直接观测序列的普通临界值。",
+          "误差修正模型同时表达短期变化和偏离长期关系后的调整。给定误差修正项为 yₜ₋₁−a−θxₜ₋₁，负的调整系数表示 y 高于长期关系时，下一期 y 的变化倾向于向下修正。是否稳定还取决于整个动态系统。若只对所有变量差分而忽略存在的协整关系，会丢失长期偏离所包含的信息。"
+        ],
+        "en": [
+          "If y and x are I(1) but y−a−θx is I(0) for some θ, they are cointegrated. The long-run combination is stable, although each series is not, and this does not itself establish causality from x to y. Cointegration requires appropriate testing. A unit-root test on estimated residuals must not mechanically use the ordinary critical values for directly observed series.",
+          "An error-correction model represents both short-run changes and adjustment after deviations from the long-run relation. With the correction term yₜ₋₁−a−θxₜ₋₁, a negative adjustment coefficient means that y above the long-run relation tends to be followed by a downward correction in y’s change. Stability depends on the whole dynamic system. Differencing every variable while ignoring genuine cointegration discards information in long-run deviations."
+        ]
+      },
+      "formula": "Δyₜ = c + λ(yₜ₋₁ − a − θxₜ₋₁) + δΔxₜ + ΣⱼφⱼΔyₜ₋ⱼ + ΣₖψₖΔxₜ₋ₖ + eₜ",
+      "symbols": {
+        "zh": "θ 是长期关系系数；λ 是 y 对上期偏离的调整系数；δ 是此规格中的短期关系。 求和项表示进一步的滞后短期动态。",
+        "en": "θ is the long-run coefficient; λ is y’s adjustment to the previous deviation; δ is the short-run relationship in this specification. The summed terms represent additional lagged short-run dynamics."
+      },
+      "example": {
+        "zh": "若收入与消费对数协整，上期消费偏离长期关系过高时，λ<0 可表示消费增长随后回调；这不是收入政策效应的自动因果估计。",
+        "en": "If log income and consumption are cointegrated, λ<0 can describe consumption growth correcting after unusually high consumption relative to the long-run relation. It is not automatically a causal estimate of an income policy."
+      },
+      "pitfall": {
+        "zh": "高相关不等于协整；协整也不等于因果；长期方程的普通 t 检验不可不加检查地照搬。",
+        "en": "High correlation is not cointegration, and cointegration is not causality. Ordinary t inference in a long-run equation cannot be imported without checking its validity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "协整最核心的特征是什么？",
+          "en": "What is the defining feature of cointegration?"
+        },
+        "options": [
+          {
+            "zh": "两个序列相关系数等于 1",
+            "en": "Their correlation is exactly one"
+          },
+          {
+            "zh": "两者都必须水平平稳",
+            "en": "Both must be stationary in levels"
+          },
+          {
+            "zh": "非平稳序列的某个非平凡线性组合平稳",
+            "en": "A nontrivial linear combination of nonstationary series is stationary"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "I(1) 序列可共享随机趋势，使适当线性组合变为 I(0)。",
+          "en": "I(1) series can share stochastic trends so that a suitable linear combination is I(0)."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "18",
+          "section": "18.4 Cointegration and Error Correction Models"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m09-c01"
+      ]
+    },
+    {
+      "id": "m09-c03",
+      "module": "m09",
+      "title": {
+        "zh": "时间序列预测与样本外评估",
+        "en": "Time-series forecasting and out-of-sample evaluation"
+      },
+      "question": {
+        "zh": "拟合历史很好，为什么预测未来仍可能很差？",
+        "en": "Why can a model fit the past well yet forecast the future poorly?"
+      },
+      "intuition": {
+        "zh": "预测是在当时可获得的信息下做判断；未来信息不能偷偷进入过去的预测。",
+        "en": "A forecast must use information available at the forecast date; future information must not leak into a past prediction."
+      },
+      "explanation": {
+        "zh": [
+          "平方损失下，给定信息集的条件均值是最优点预测，但实际模型只是它的近似。拟合值利用了估计样本的信息，不能当作真正的样本外预测。按时间留出后段数据，或用扩展窗口、滚动窗口逐次预测，能更贴近使用场景；变量修订、公布延迟和未来解释变量是否已知都要考虑。",
+          "用 RMSE 或 MAE 等指标比较相同目标和预测期的模型，并设置朴素基准，如上一期值或季节性基准。点预测不能表达全部不确定性，预测区间还包括未来不可预测冲击，通常比条件均值置信区间更宽。多步预测的误差会传播；结构突变使历史规律失效时，漂亮的样本内结果也难以保护预测。"
+        ],
+        "en": [
+          "Under squared loss, the conditional mean given the available information is the optimal point forecast, but a fitted model only approximates it. Fitted values use estimation-sample information and are not genuine out-of-sample forecasts. A later holdout period, expanding windows, or rolling windows can better reflect deployment. Data revisions, release delays, and whether future regressors are known must all be considered.",
+          "Compare models for the same target and horizon using measures such as RMSE or MAE, with a naive benchmark such as the previous value or a seasonal baseline. A point forecast does not express all uncertainty: prediction intervals also include future unpredictable shocks and are generally wider than confidence intervals for the conditional mean. Errors propagate over multiple steps, and structural breaks can undermine even excellent in-sample results."
+        ]
+      },
+      "formula": "RMSE(h) = √[(1/N)Σⱼ₌₁ᴺ (y(tⱼ+h) − ŷ(tⱼ+h | tⱼ))²]",
+      "symbols": {
+        "zh": "h 是固定预测步长；tⱼ 是第 j 次预测的起点；N 是评估次数。ŷ(tⱼ+h | tⱼ) 只使用 tⱼ 当时可获得的信息，避免把不同步长与预测数量混淆。",
+        "en": "h is a fixed forecast horizon; tⱼ is forecast origin j; N is the number evaluated. ŷ(tⱼ+h | tⱼ) uses only information available at tⱼ. Distinguish the horizon from the number of forecasts."
+      },
+      "example": {
+        "zh": "用 2010–2020 年数据拟合，再逐月预测 2021 年，并和“上月值”比较。若在标准化、选变量时已经用到 2021 年结果，就发生了信息泄漏。",
+        "en": "Fit on 2010–2020 data, then forecast 2021 month by month and compare with the previous-month value. Using 2021 outcomes during scaling or variable selection leaks future information."
+      },
+      "pitfall": {
+        "zh": "随机打乱时间序列再划分训练与测试集，可能使未来信息流入过去；预测准确也不证明因果识别。",
+        "en": "Randomly shuffling a time series into training and test sets can leak future information into the past. Predictive accuracy also does not establish causal identification."
+      },
+      "quiz": {
+        "question": {
+          "zh": "预测区间为什么通常宽于条件均值的置信区间？",
+          "en": "Why is a prediction interval generally wider than a confidence interval for the conditional mean?"
+        },
+        "options": [
+          {
+            "zh": "因为预测必然存在偏误",
+            "en": "Because forecasts must be biased"
+          },
+          {
+            "zh": "它还包含未来个体或时期不可预测冲击",
+            "en": "It also includes unpredictable future individual or period shocks"
+          },
+          {
+            "zh": "它不使用数据",
+            "en": "It does not use data"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "预测未来实现值需要计入均值估计不确定性之外的新冲击。",
+          "en": "Predicting a future realized value requires accounting for new shocks beyond uncertainty in the estimated mean."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "18",
+          "section": "18.5 Forecasting"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m08-c05"
+      ]
+    },
+    {
+      "id": "m09-c04",
+      "module": "m09",
+      "title": {
+        "zh": "分布滞后与长期乘数",
+        "en": "Distributed lags and long-run multipliers"
+      },
+      "question": {
+        "zh": "一次冲击和永久政策变化，应该怎样区分？",
+        "en": "How should a one-time shock be distinguished from a permanent policy change?"
+      },
+      "intuition": {
+        "zh": "一次变化只发出一列波纹；永久变化每期都继续发出新波纹。",
+        "en": "A one-time change sends out one sequence of ripples; a permanent change sends new ripples every period."
+      },
+      "explanation": {
+        "zh": [
+          "有限分布滞后模型把当期 y 写成 x 的当期及若干滞后值的函数。一次只持续一期的 x 冲击，其逐期效应依次为各滞后系数；若 x 从某期起永久提高一单位，当期及后续效应逐步累积，最终达到全部滞后系数之和。这一区分决定“长期效应”的含义。",
+          "加入滞后因变量后，还要计入 y 的反馈；简单稳定 ARDL 的长期乘数是 x 系数之和除以 1−ρ。该公式依赖稳定性及模型适用范围，不能在单位根边界机械使用。检验长期效应时需利用系数间协方差；把每个单独系数的显著性拼起来，不能替代对其和或比值的正确推断。",
+          "报告时明确冲击是暂时还是永久、单位如何定义，并分别给出当期、累计与长期结果；若研究的是价格上涨百分比，解释变量尺度也必须一致。"
+        ],
+        "en": [
+          "A finite distributed-lag model writes current y as a function of current and lagged x. A one-period x shock has successive effects equal to the lag coefficients. If x permanently increases by one unit, effects accumulate over subsequent dates until reaching the sum of all lag coefficients. This distinction determines the meaning of a long-run effect.",
+          "When lagged y is included, outcome feedback must also be counted. In a simple stable ARDL, the long-run multiplier is the sum of x coefficients divided by 1−ρ. This requires stability and model validity and cannot be mechanically applied at the unit-root boundary. Inference for a long-run effect must use covariances among coefficients; separate coefficient significance tests cannot replace correct inference for their sum or ratio.",
+          "State whether a shock is temporary or permanent and define its units; distinguish impact, cumulative, and long-run results. If the question concerns a percentage price increase, the regressor scale must match."
+        ]
+      },
+      "formula": "yₜ = α + ρyₜ₋₁ + Σⱼ₌₀ᵠ βⱼxₜ₋ⱼ + uₜ;  LR = (Σⱼβⱼ)/(1−ρ)",
+      "symbols": {
+        "zh": "q 是有限滞后阶数；LR 是稳定条件下永久单位变化的长期乘数；无滞后 y 时取 ρ=0。",
+        "en": "q is the finite lag length; LR is the long-run multiplier of a permanent unit change under stability. Set ρ=0 when lagged y is absent."
+      },
+      "example": {
+        "zh": "若没有滞后 y，β₀=1、β₁=0.5、β₂=0.2：一次冲击的效应是 1、0.5、0.2 后归零；永久变化的效应是 1、1.5、1.7 后维持 1.7。",
+        "en": "With no lagged y and coefficients 1, 0.5, and 0.2, a one-period shock has effects 1, 0.5, 0.2, then zero. A permanent change has effects 1, 1.5, 1.7, then remains at 1.7."
+      },
+      "pitfall": {
+        "zh": "“长期乘数”不是自动可外推到任意政策规模的结构参数；因果解释仍需要外生性与政策适用性。",
+        "en": "A long-run multiplier is not automatically a structural parameter valid for arbitrary policy scales. Causal interpretation still requires exogeneity and policy relevance."
+      },
+      "quiz": {
+        "question": {
+          "zh": "β₀=1、β₁=0.5、ρ=0.5 时长期乘数为多少？",
+          "en": "With β₀=1, β₁=0.5, and ρ=0.5, what is the long-run multiplier?"
+        },
+        "options": [
+          {
+            "zh": "3",
+            "en": "3"
+          },
+          {
+            "zh": "1.5",
+            "en": "1.5"
+          },
+          {
+            "zh": "0.75",
+            "en": "0.75"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "先加总直接作用 1.5，再除以 1−0.5，得到 3。",
+          "en": "Sum direct effects to 1.5, then divide by 1−0.5 to obtain 3."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "10",
+          "section": "10.2 Examples of Time Series Regression Models"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "18",
+          "section": "18.1 Infinite Distributed Lag Models"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m08-c05"
+      ]
+    },
+    {
+      "id": "m09-c05",
+      "module": "m09",
+      "title": {
+        "zh": "严格外生性与序贯外生性",
+        "en": "Strict and sequential exogeneity"
+      },
+      "question": {
+        "zh": "为什么“当前误差不可预测”比严格外生性弱？",
+        "en": "Why is unpredictability of the current error weaker than strict exogeneity?"
+      },
+      "intuition": {
+        "zh": "今天的冲击可以影响明天的选择；允许这种反馈，就不能要求误差与所有未来解释变量都无关。",
+        "en": "Today’s shock can affect tomorrow’s choices. Allowing this feedback rules out requiring the error to be unrelated to all future regressors."
+      },
+      "explanation": {
+        "zh": [
+          "严格外生性要求每期误差在给定样本中所有时期解释变量后条件均值为零。这不仅约束同期相关，还排除当期冲击对未来解释变量的反馈。在满足其他经典条件时，它支持时间序列 OLS 的有限样本无偏性，但经济行为中的调整和政策响应常使这一要求过强。",
+          "序贯外生性要求当期误差在给定当期及过去解释变量后条件均值为零，同时允许未来变量对当期冲击作出反应。必须明确解释变量向量包含哪些变量及其决定时点。正确设定的模型在弱依赖等条件下可有适当大样本结论，但这不等于有限样本无偏，也不能自动使用需要严格外生性的固定效应变换。",
+          "动态完整性还要求给定全部相关过去结果后误差不可预测，通常比序贯外生性强；若解释变量向量本来就包括一期滞后因变量，两者在教材的此项定义下重合。"
+        ],
+        "en": [
+          "Strict exogeneity requires each period’s error to have zero conditional mean given regressors from every sample date. It restricts contemporaneous relationships and excludes feedback from a current shock to future regressors. With other classical conditions it supports finite-sample OLS unbiasedness, but economic adjustment and policy responses often make it too demanding.",
+          "Sequential exogeneity requires the current error to have zero conditional mean given current and past regressors, while allowing future variables to respond to today’s shock. Specify the variables included in the regressor vector and when they are determined. A correctly specified model can support suitable large-sample results under conditions such as weak dependence, but this is not finite-sample unbiasedness and does not automatically justify fixed-effects transformations requiring strict exogeneity.",
+          "Dynamic completeness additionally requires the error to be unpredictable given all relevant past outcomes and is generally stronger than sequential exogeneity. If the regressor vector already includes the first lag of the outcome, the two coincide under this textbook definition."
+        ]
+      },
+      "formula": "Strict: E(uₜ | x₁,…,xT)=0;  Sequential: E(uₜ | xₜ,xₜ₋₁,…)=0",
+      "symbols": {
+        "zh": "第一式为严格外生性，第二式为序贯外生性；xₜ 是模型完整解释变量向量，可能包含滞后结果，其组成与信息时序必须明确。",
+        "en": "The first condition is strict exogeneity and the second sequential exogeneity. xₜ is the complete regressor vector and may include lagged outcomes; its composition and information timing must be explicit."
+      },
+      "example": {
+        "zh": "企业遭遇本期未预期需求冲击后提高下期投资，这可能违背严格外生性；若本期投资在冲击前已决定，适当序贯外生性仍可能成立。",
+        "en": "A firm raising next period’s investment after an unexpected demand shock can violate strict exogeneity. If current investment was decided before the shock, an appropriate sequential exogeneity assumption may still hold."
+      },
+      "pitfall": {
+        "zh": "使用滞后解释变量不自动满足序贯外生性；误差的持久性和遗漏预期信息仍可能破坏条件。",
+        "en": "Using lagged regressors does not automatically establish sequential exogeneity; persistent errors and omitted expectation information can still violate it."
+      },
+      "quiz": {
+        "question": {
+          "zh": "当期冲击影响未来 x，但不影响已决定的当前 x，哪项一定值得重新审视？",
+          "en": "If today’s shock affects future x but not already chosen current x, which assumption needs reassessment?"
+        },
+        "options": [
+          {
+            "zh": "解释变量必须有方差",
+            "en": "Regressors must have variance"
+          },
+          {
+            "zh": "样本必须有时间顺序",
+            "en": "The sample must have time ordering"
+          },
+          {
+            "zh": "严格外生性",
+            "en": "Strict exogeneity"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "严格外生性条件包含未来解释变量，因而排除了这种反馈。",
+          "en": "Strict exogeneity conditions on future regressors and therefore rules out this feedback."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "10",
+          "section": "10.3 Finite Sample Properties of OLS under Classical Assumptions"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "11",
+          "section": "11.4 Dynamically Complete Models and the Absence of Serial Correlation",
+          "pdfPage": 429
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m08-c05"
+      ]
+    },
+    {
+      "id": "m10-c01",
+      "module": "m10",
+      "title": {
+        "zh": "混合横截面与面板",
+        "en": "Pooled cross sections and panels"
+      },
+      "question": {
+        "zh": "多年份数据就一定是面板数据吗？",
+        "en": "Are data from multiple years necessarily panel data?"
+      },
+      "intuition": {
+        "zh": "关键不是“有几年的数据”，而是“是否追踪同一对象”。",
+        "en": "The key is not how many years are observed, but whether the same units are followed."
+      },
+      "explanation": {
+        "zh": [
+          "混合横截面把不同时间抽到的个体样本拼在一起，例如每年独立抽取居民；面板则反复观察同一居民、企业或地区。二者都可加入年份虚拟变量处理共同时间变化，但只有真正的面板能直接利用同一个体前后变化，消去不随时间变化的个体特征。重复横截面也能研究群体政策变化，但识别条件需要另外说明。",
+          "建模前确认个体标识是否稳定、个体—时间组合是否唯一，以及缺失时期和退出样本的原因。每人每期都被观察到是平衡面板，否则是不平衡面板。不平衡本身并不宣布估计无效，但若退出与未观测冲击相关，就会产生选择问题。面板中一个人多行记录不能当作相互独立的多个人。"
+        ],
+        "en": [
+          "Pooled cross sections combine individual samples drawn at different dates, such as independent annual household surveys. Panels repeatedly observe the same households, firms, or regions. Both can include year indicators for common time changes, but a genuine panel can directly use within-unit changes to eliminate time-invariant unit characteristics. Repeated cross sections can also study group policy changes, with additional identification assumptions.",
+          "Before modeling, verify stable unit identifiers, unique unit–time pairs, missing periods, and reasons for attrition. A balanced panel observes every unit at every date; otherwise it is unbalanced. Imbalance alone does not invalidate estimation, but attrition related to unobserved shocks can create selection problems. Multiple rows from one person cannot be treated as multiple independent people."
+        ]
+      },
+      "formula": "yᵢₜ = β₀ + xᵢₜ′β + aᵢ + λₜ + uᵢₜ",
+      "symbols": {
+        "zh": "i 是个体，t 是时期；aᵢ 是不随时间变化的个体因素；λₜ 是共同时间因素。",
+        "en": "i indexes units and t periods; aᵢ is a time-invariant unit factor; λₜ is a common time factor."
+      },
+      "example": {
+        "zh": "每年重新随机抽 1,000 人调查收入是混合横截面；连续五年跟踪同样的 1,000 人才是面板，即使其中部分人后来退出。",
+        "en": "Independently sampling 1,000 people each year for income surveys gives pooled cross sections. Following the same 1,000 people for five years gives a panel, even if some later leave."
+      },
+      "pitfall": {
+        "zh": "姓名相同不保证是同一人，行政区域边界变化也可能破坏单位一致性；先校验标识再做差分。",
+        "en": "Identical names need not identify the same person, and changing administrative boundaries can break unit consistency. Validate identifiers before differencing."
+      },
+      "quiz": {
+        "question": {
+          "zh": "每年独立抽一批不同家庭，属于什么结构？",
+          "en": "What structure results from independently sampling different households each year?"
+        },
+        "options": [
+          {
+            "zh": "混合横截面",
+            "en": "Pooled cross sections"
+          },
+          {
+            "zh": "必然是平衡面板",
+            "en": "Necessarily a balanced panel"
+          },
+          {
+            "zh": "单个家庭时间序列",
+            "en": "A single-household time series"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "多期存在并不足以定义面板，必须能够识别同一对象的重复观测。",
+          "en": "Multiple dates alone do not define a panel; repeated observations of the same units must be identifiable."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "13",
+          "section": "13.1 Pooling Independent Cross Sections across Time"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "13",
+          "section": "13.3 Two-Period Panel Data Analysis"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": []
+    },
+    {
+      "id": "m10-c02",
+      "module": "m10",
+      "title": {
+        "zh": "一阶差分估计",
+        "en": "First-difference estimation"
+      },
+      "question": {
+        "zh": "如何用“自己的前后变化”消掉恒定的遗漏因素？",
+        "en": "How can before-and-after changes remove constant omitted factors?"
+      },
+      "intuition": {
+        "zh": "每个人身上不随时间变的部分，减去上一期后恰好抵消。",
+        "en": "A person’s time-invariant component cancels when the preceding period is subtracted."
+      },
+      "explanation": {
+        "zh": [
+          "在含个体效应 aᵢ 的线性面板模型中，相邻两期相减可消去 aᵢ，即使它与解释变量相关。因此差分可以控制固定能力、固定地理特征等未观测因素。时间共同效应不会自动消失，而会变成相邻时期的差，应保留适当时间控制。差分需要有意义的相邻观测，缺期时不能把任意上一行当作上一期。",
+          "差分后的解释变量还需要与差分误差不相关，严格外生性是常用充分条件。若政策变化响应近期未观测冲击，或解释变量存在测量误差，这一条件可能不成立。多期面板的相邻差分共享误差项，会产生跨期相关，因此需要适当的面板推断。差分也无法估计完全不随时间变化解释变量的单独系数。"
+        ],
+        "en": [
+          "In a linear panel model with a unit effect aᵢ, subtracting adjacent periods eliminates aᵢ even when it correlates with regressors. Differencing can therefore control fixed ability or fixed geography. Common time effects do not disappear; they become adjacent-period differences and require suitable time controls. Differences must connect meaningful adjacent observations, not simply the preceding row when dates are missing.",
+          "Differenced regressors must still be uncorrelated with differenced errors; strict exogeneity is a common sufficient condition. Policy changes responding to recent unobserved shocks or measurement error can violate this condition. In multiple-period panels, adjacent differences share error components and can become serially correlated, requiring appropriate panel inference. Differencing cannot separately estimate coefficients on regressors that never vary over time."
+        ]
+      },
+      "formula": "Δyᵢₜ = Δxᵢₜ′β + Δλₜ + Δuᵢₜ;  Δaᵢ = 0",
+      "symbols": {
+        "zh": "Δ 表示同一个体相邻两期之差；模型仍需 E(Δxᵢₜ Δuᵢₜ)=0 等估计条件。",
+        "en": "Δ denotes adjacent-period differences for the same unit; estimation still requires conditions such as E(Δxᵢₜ Δuᵢₜ)=0."
+      },
+      "example": {
+        "zh": "用同一工人两期工资和培训变化做差分，可去掉恒定能力；但如果刚遭遇收入下降的工人更可能参加培训，差分仍可能存在内生性。",
+        "en": "Differencing wages and training for the same worker removes constant ability. But if workers who recently suffered income declines are more likely to enter training, endogeneity may remain."
+      },
+      "pitfall": {
+        "zh": "“固定因素被消去”不等于所有混杂因素都被消去；随时间变化的遗漏变量依然重要。",
+        "en": "Removing fixed factors does not remove all confounding; omitted time-varying factors still matter."
+      },
+      "quiz": {
+        "question": {
+          "zh": "一阶差分会自动消除哪一种因素？",
+          "en": "Which factor does first differencing automatically eliminate?"
+        },
+        "options": [
+          {
+            "zh": "任意随时间变化的冲击",
+            "en": "Any time-varying shock"
+          },
+          {
+            "zh": "所有测量误差",
+            "en": "All measurement error"
+          },
+          {
+            "zh": "进入模型加总项且不随时间变化的个体因素",
+            "en": "An additive time-invariant unit factor"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "同一个体恒定项相减为零；变化的误差和遗漏因素并不会消失。",
+          "en": "A constant unit component subtracts to zero; changing errors and omitted factors remain."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "13",
+          "section": "13.3 Two-Period Panel Data Analysis"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "13",
+          "section": "13.5 Differencing with More Than Two Time Periods"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m10-c01"
+      ]
+    },
+    {
+      "id": "m10-c03",
+      "module": "m10",
+      "title": {
+        "zh": "固定效应估计",
+        "en": "Fixed-effects estimation"
+      },
+      "question": {
+        "zh": "固定效应系数到底比较了什么？",
+        "en": "What comparison identifies a fixed-effects coefficient?"
+      },
+      "intuition": {
+        "zh": "把每个人的长期平均水平扣掉，比较其高于或低于自身平均时的变化。",
+        "en": "Subtract each unit’s average and compare deviations above or below that unit’s own usual level."
+      },
+      "explanation": {
+        "zh": [
+          "固定效应的组内变换是每个变量减去该个体的时间平均，因而消去加总的 aᵢ。在线性模型中，这与加入个体虚拟变量估计斜率等价。系数来自个体内部随时间变化，而不是单纯比较不同个体的平均水平；若某变量对每个个体都恒定，其变换后为零，不能单独估计它的系数。",
+          "一致性通常需要条件于个体效应的严格外生性以及适当的大样本条件。固定效应允许 aᵢ 与 X 相关，却不允许未处理的时变冲击与 X 相关；加入时间固定效应可控制共同冲击。短面板中加入滞后因变量会使组内变换后的变量与误差相关，不能直接套用静态固定效应结论。标准误还需处理组内依赖。"
+        ],
+        "en": [
+          "The fixed-effects within transformation subtracts each unit’s time average from every variable, eliminating additive aᵢ. In a linear model it gives the same slopes as including unit indicators. Coefficients use within-unit changes over time rather than merely comparing unit averages. A variable constant within every unit becomes zero after transformation, so its separate coefficient cannot be estimated.",
+          "Consistency typically requires strict exogeneity conditional on the unit effect and suitable large-sample conditions. Fixed effects allow aᵢ to correlate with X, but not untreated time-varying shocks to correlate with X. Time effects can absorb common shocks. With short panels, lagged outcomes become correlated with transformed errors, so static fixed-effects results cannot be imported directly. Standard errors must also address within-unit dependence."
+        ]
+      },
+      "formula": "yᵢₜ − ȳᵢ = (xᵢₜ − x̄ᵢ)′β + (uᵢₜ − ūᵢ)",
+      "symbols": {
+        "zh": "ȳᵢ、x̄ᵢ、ūᵢ 是个体 i 在其观测时期内的平均；有时间效应时也需相应处理。",
+        "en": "ȳᵢ, x̄ᵢ, and ūᵢ are unit i’s averages over observed dates. Time effects require corresponding treatment when included."
+      },
+      "example": {
+        "zh": "学校面板中估计班级规模对成绩的关系，学校固定效应比较同一学校班级规模变化，控制恒定校风；但同步变化的师资质量仍可能混杂。",
+        "en": "In a school panel, school fixed effects relate class-size changes within the same school to achievement, controlling constant school culture. Simultaneously changing teacher quality may still confound the relationship."
+      },
+      "pitfall": {
+        "zh": "固定效应不等于因果保证；组内变化太小也可能使估计很不精确。",
+        "en": "Fixed effects are not a causal guarantee, and little within-unit variation can make estimates imprecise."
+      },
+      "quiz": {
+        "question": {
+          "zh": "个体固定效应回归能否单独估计每个人固定不变的出生地系数？",
+          "en": "Can unit fixed effects separately estimate a coefficient on each person’s unchanging birthplace?"
+        },
+        "options": [
+          {
+            "zh": "只有用稳健标准误后才能",
+            "en": "Only after using robust standard errors"
+          },
+          {
+            "zh": "不能，它被个体效应吸收",
+            "en": "No; it is absorbed by unit effects"
+          },
+          {
+            "zh": "一定能，只要人数够多",
+            "en": "Always, if there are enough people"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "完全不随时间变化的变量在组内去均值后为零。",
+          "en": "A completely time-invariant variable becomes zero after within-unit demeaning."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "14",
+          "section": "14.1 Fixed Effects Estimation"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m10-c02"
+      ]
+    },
+    {
+      "id": "m10-c04",
+      "module": "m10",
+      "title": {
+        "zh": "随机效应模型",
+        "en": "Random-effects models"
+      },
+      "question": {
+        "zh": "为什么随机效应可以同时利用组内与组间变化？",
+        "en": "Why can random effects use both within- and between-unit variation?"
+      },
+      "intuition": {
+        "zh": "如果个体长期特征与解释变量无关，个体之间的差异也能提供可靠信息。",
+        "en": "If persistent unit characteristics are unrelated to regressors, differences between units can also provide valid information."
+      },
+      "explanation": {
+        "zh": [
+          "随机效应仍承认同一个体误差相关，因为复合误差包含共享的 aᵢ；它通过广义最小二乘式变换利用这种结构。与固定效应相比，关键额外假设是 aᵢ 与各期解释变量满足适当的不相关或条件均值独立条件，而不是“aᵢ 是否真的随机”。在其他模型条件也正确时，组间信息可提高精度，并允许估计时间不变变量的系数。",
+          "若能力较高者长期教育水平也更高，未观测能力与教育相关，普通随机效应就可能不一致。固定效应与随机效应的选择应以经济机制和数据结构为先，Hausman 类比较只是辅助，并依赖其协方差与检验条件。不拒绝差异不证明随机效应假设正确，较小标准误也不能弥补偏误。"
+        ],
+        "en": [
+          "Random effects still recognize error dependence within a unit because the composite error contains shared aᵢ. They use a GLS-type transformation to exploit this structure. Relative to fixed effects, the key extra assumption is appropriate orthogonality or conditional-mean independence between aᵢ and regressors at all dates, not whether aᵢ is literally random. With the other model assumptions correct, between-unit information can improve precision and allow coefficients on time-invariant variables to be estimated.",
+          "If higher-ability people also have persistently higher schooling, unobserved ability correlates with schooling and conventional random effects may be inconsistent. Choose between fixed and random effects using economic mechanisms and data structure; Hausman-type comparisons are supplementary and depend on covariance and testing assumptions. Failure to reject a difference does not establish the random-effects assumption, and smaller standard errors do not compensate for bias."
+        ]
+      },
+      "formula": "vᵢₜ = aᵢ + uᵢₜ;  Cov(vᵢₜ,vᵢₛ)=Var(aᵢ)  (t≠s, under standard RE errors)",
+      "symbols": {
+        "zh": "vᵢₜ 是复合误差；此协方差式要求不同时期 u 互不相关且与 a 不相关。",
+        "en": "vᵢₜ is the composite error. The covariance expression assumes serially uncorrelated u and no correlation between u and a."
+      },
+      "example": {
+        "zh": "研究企业生产率时，管理能力可能既提高产出又影响资本投入。把它只放进随机效应而假设与资本无关，需要很强的实质论证。",
+        "en": "In firm productivity research, managerial ability may raise output and influence capital investment. Treating it as a random effect unrelated to capital requires a strong substantive argument."
+      },
+      "pitfall": {
+        "zh": "“随机效应”这个名称不意味着数据是随机分配实验，也不意味着无需处理组内相关。",
+        "en": "The term random effects does not mean randomized treatment and does not remove the need to address within-unit dependence."
+      },
+      "quiz": {
+        "question": {
+          "zh": "普通随机效应相对固定效应主要增加了什么要求？",
+          "en": "What key additional requirement does conventional random effects impose relative to fixed effects?"
+        },
+        "options": [
+          {
+            "zh": "个体效应与各期解释变量满足适当不相关条件",
+            "en": "Appropriate orthogonality between unit effects and regressors at every date"
+          },
+          {
+            "zh": "每个变量都必须不随时间变化",
+            "en": "Every variable must be time invariant"
+          },
+          {
+            "zh": "所有系数都必须等于零",
+            "en": "Every coefficient must equal zero"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "它需要利用组间信息不会引入由 a 与 X 相关造成的偏误。",
+          "en": "Between-unit information is usable only when correlation between a and X does not create bias."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "14",
+          "section": "14.2 Random Effects Models"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m10-c03"
+      ]
+    },
+    {
+      "id": "m10-c05",
+      "module": "m10",
+      "title": {
+        "zh": "相关随机效应与面板推断",
+        "en": "Correlated random effects and panel inference"
+      },
+      "question": {
+        "zh": "如何更明确地建模个体特征与解释变量的相关？",
+        "en": "How can correlation between unit effects and regressors be modeled explicitly?"
+      },
+      "intuition": {
+        "zh": "把“这个人通常处在什么水平”与“这次偏离自身通常水平多少”分开。",
+        "en": "Separate a unit’s usual level from its current deviation from that level."
+      },
+      "explanation": {
+        "zh": [
+          "相关随机效应（Mundlak 思路）用各个时变解释变量的个体均值解释 aᵢ 与 X 的相关，再为剩余个体部分施加相应条件。在标准线性平衡面板、正确加入相关均值等条件下，它的时变变量斜率可与固定效应一致，并可把组内与组间关系分开展示。时间不变变量的系数仍依赖额外识别假设；加均值不是所有内生性的万能修复。",
+          "面板推断应允许同一个体的误差在各期相关，常用个体层面的聚类稳健标准误；若处理在更高层级分配或共同冲击在该层级相关，应考虑相应聚类层级。聚类方法通常依赖足够多、相互独立的组，而非仅依赖总行数大。很少的组和跨组依赖需要专门处理，不能自动用默认聚类结果作强结论。"
+        ],
+        "en": [
+          "Correlated random effects, in the Mundlak approach, use unit means of time-varying regressors to model correlation between aᵢ and X, with suitable assumptions on the remaining unit component. Under standard linear balanced-panel conditions and inclusion of the relevant means, slopes on time-varying variables can match fixed effects, while within- and between-unit relationships can be displayed separately. Coefficients on time-invariant variables still require additional identification assumptions; adding means does not solve every form of endogeneity.",
+          "Panel inference should allow errors to correlate across dates within a unit, often using unit-clustered standard errors. If treatment is assigned or shared shocks operate at a higher level, the relevant clustering level should be considered. Cluster methods ordinarily require sufficiently many independent clusters, not merely many rows. Few clusters and dependence across clusters need specialized treatment rather than strong conclusions from default clustered output."
+        ]
+      },
+      "formula": "aᵢ = α + x̄ᵢ′π + rᵢ;  yᵢₜ = α + xᵢₜ′β + x̄ᵢ′π + rᵢ + uᵢₜ",
+      "symbols": {
+        "zh": "x̄ᵢ 是时变解释变量的个体均值向量；π 描述其与个体效应的联系；rᵢ 是剩余部分。",
+        "en": "x̄ᵢ is the vector of unit means of time-varying regressors; π describes its relationship with the unit effect; rᵢ is the remainder."
+      },
+      "example": {
+        "zh": "有 20 个县、每县观察 20 年，共 400 行，并不等于 400 个独立县。县级政策分析的聚类推断应正视只有 20 个县这一限制。",
+        "en": "Twenty counties observed for twenty years produce 400 rows, not 400 independent counties. Clustered inference for county policies must acknowledge that there are only twenty counties."
+      },
+      "pitfall": {
+        "zh": "稳健标准误不会增加独立组数，也不会修复固定效应模型的时变遗漏变量偏误。",
+        "en": "Robust standard errors do not increase the number of independent clusters or fix time-varying omitted-variable bias in a fixed-effects model."
+      },
+      "quiz": {
+        "question": {
+          "zh": "1,000 行观测来自 10 个高度内部相关的组，聚类推断主要担心什么？",
+          "en": "If 1,000 observations come from ten highly internally dependent groups, what is a key concern for clustered inference?"
+        },
+        "options": [
+          {
+            "zh": "行数必然不足以估计任何模型",
+            "en": "Too few rows to estimate any model"
+          },
+          {
+            "zh": "聚类会自动改变估计目标为总体均值",
+            "en": "Clustering automatically changes the estimand to a population mean"
+          },
+          {
+            "zh": "独立组数过少",
+            "en": "Too few independent clusters"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "聚类渐近近似依赖组的数量与独立性，很多组内重复观测不能替代更多独立组。",
+          "en": "Cluster asymptotics depend on the number and independence of clusters; many repeated observations within clusters do not replace additional independent clusters."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "14",
+          "section": "14.3 The Correlated Random Effects Approach"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "14",
+          "section": "14.1 Fixed Effects Estimation"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m10-c03",
+        "m10-c04",
+        "m07-c01"
+      ]
+    },
+    {
+      "id": "m11-c01",
+      "module": "m11",
+      "title": {
+        "zh": "线性概率模型",
+        "en": "The linear probability model"
+      },
+      "question": {
+        "zh": "因变量只有 0 和 1，OLS 系数怎么解释？",
+        "en": "How are OLS coefficients interpreted when the outcome is zero or one?"
+      },
+      "intuition": {
+        "zh": "零一变量的平均值就是取 1 的比例；其条件均值就是概率。",
+        "en": "The mean of a zero–one variable is its fraction of ones, so its conditional mean is a probability."
+      },
+      "explanation": {
+        "zh": [
+          "线性概率模型把 P(y=1|X) 写成解释变量的线性函数。对简单加总的连续变量，系数表示其他条件不变时 x 增加一单位对应的概率变化；用百分比点表述通常最清楚。二元解释变量若也以简单加总形式进入，其系数表示从 0 切换到 1 的条件概率差；有交互项时，须合并计算相关项。它计算和解释方便，也常用于有固定效应的实证规格。",
+          "概率只能在 0 与 1 之间，而直线在某些取值上可能给出区间外预测，因此要检查数据支持范围，避免远距离外推。二元结果的条件方差为 p(X)[1−p(X)]，通常异方差，推断应采用适当稳健方法。若真实概率函数非线性，OLS 也可理解为线性投影，但不要无条件把每个系数解释成处处相同的结构边际效应。"
+        ],
+        "en": [
+          "The linear probability model writes P(y=1|X) as a linear function of regressors. For an additively entered continuous regressor, its coefficient is the probability change associated with a one-unit increase, holding other conditions fixed; percentage points are usually the clearest unit. For an additively entered binary regressor, its coefficient is the conditional probability difference between zero and one; with interactions, combine the relevant terms. The model is simple to estimate and interpret and is often used in specifications with fixed effects.",
+          "Probabilities lie between zero and one, while a line can predict outside that interval at some regressor values. Check the supported data range and avoid distant extrapolation. The conditional variance of a binary outcome is p(X)[1−p(X)], ordinarily implying heteroskedasticity and requiring suitable robust inference. If the true probability function is nonlinear, OLS can still represent a linear projection, but coefficients should not automatically be interpreted as constant structural marginal effects everywhere."
+        ]
+      },
+      "formula": "E(y|X)=P(y=1|X)=X′β;  Var(y|X)=p(X)[1−p(X)]",
+      "symbols": {
+        "zh": "y∈{0,1}；p(X) 是条件成功概率；β 的概率单位换成百分比点需乘以 100。",
+        "en": "y∈{0,1}; p(X) is the conditional success probability. Multiply a coefficient in probability units by 100 to express percentage points."
+      },
+      "example": {
+        "zh": "培训变量的系数为 0.08，表示条件就业概率相差 8 个百分点；若基准概率为 40%，相对增长是 20%，不是 8%。因果解释仍需识别条件。",
+        "en": "A training coefficient of 0.08 indicates an eight-percentage-point conditional employment-probability difference. With a 40% baseline, that is a 20% relative increase, not 8%. Causal interpretation still requires identification assumptions."
+      },
+      "pitfall": {
+        "zh": "百分点和百分比不同；预测概率合规也不证明回归没有内生性。",
+        "en": "Percentage points differ from percentages. Predictions lying inside the valid range do not establish exogeneity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "系数 0.03 对二元结果意味着什么？",
+          "en": "What does a coefficient of 0.03 mean for a binary outcome?"
+        },
+        "options": [
+          {
+            "zh": "概率差 3 个百分点",
+            "en": "A probability difference of three percentage points"
+          },
+          {
+            "zh": "必然相对增加 3%",
+            "en": "Necessarily a relative increase of 3%"
+          },
+          {
+            "zh": "概率增加 30 个百分点",
+            "en": "A probability increase of thirty percentage points"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "概率单位乘以 100 转为百分点，相对百分比还需要基准概率。",
+          "en": "Multiply probability units by 100 for percentage points; relative percentages additionally require a baseline probability."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "7",
+          "section": "7.5 A Binary Dependent Variable: The Linear Probability Model"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "8",
+          "section": "8.5 The Linear Probability Model Revisited"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c01"
+      ]
+    },
+    {
+      "id": "m11-c02",
+      "module": "m11",
+      "title": {
+        "zh": "Logit、Probit 与边际效应",
+        "en": "Logit, probit, and marginal effects"
+      },
+      "question": {
+        "zh": "为什么 Logit 的系数不能直接当作概率变化？",
+        "en": "Why is a logit coefficient not directly a probability change?"
+      },
+      "intuition": {
+        "zh": "先把解释变量压缩成一个指数，再通过 S 形曲线映射到 0 与 1 之间。",
+        "en": "Regressors first form an index, which an S-shaped function maps into the interval between zero and one."
+      },
+      "explanation": {
+        "zh": [
+          "Logit 使用逻辑分布函数，Probit 使用标准正态分布函数。两者保证预测概率落在合理区间，并允许同一 x 变化在不同基准概率处产生不同影响。通常用极大似然估计：选择使观测到的零一结果更可能出现的参数。比较两种模型时，应关注预测概率与边际效应，而不是直接比较尺度不同的原始系数。",
+          "连续变量的边际效应等于分布函数导数乘以该系数，取决于所有解释变量的位置；有交互项或非线性项时还需用链式法则。二元变量应计算从 0 到 1 的离散概率差。平均边际效应是先为每个观测算效应再平均；在均值处计算一次的效应一般不同，而且“平均人”的取值组合可能缺少实际意义。"
+        ],
+        "en": [
+          "Logit uses the logistic distribution function, while probit uses the standard normal distribution function. Both keep predicted probabilities within the admissible interval and allow the same x change to have different effects at different baseline probabilities. They are usually estimated by maximum likelihood, choosing parameters that make observed zero–one outcomes more likely. Compare predicted probabilities and marginal effects rather than raw coefficients on different scales.",
+          "A continuous regressor’s marginal effect is the distribution-function derivative times its coefficient and depends on the full regressor vector. Interactions or nonlinear terms require the chain rule. For a binary regressor, compute the discrete probability change from zero to one. An average marginal effect averages observation-specific effects; it generally differs from an effect evaluated once at mean regressors, and the resulting average person may not be substantively meaningful."
+        ]
+      },
+      "formula": "p(X)=G(X′β);  ∂p/∂xⱼ=g(X′β)βⱼ;  AMEⱼ=(1/n)Σᵢg(Xᵢ′β)βⱼ",
+      "symbols": {
+        "zh": "G 是 Logistic 或标准正态累积分布函数，g=G′；导数式针对简单加总的连续 xⱼ。",
+        "en": "G is the logistic or standard normal CDF, with g=G′. The derivative formula is for an additively entered continuous xⱼ."
+      },
+      "example": {
+        "zh": "同样增加一年教育，起初就业概率为 50% 的人与 99% 的人，概率增量可能不同。教育的平均边际效应为 0.02，表示样本平均的局部变化率为每年 2 个百分点；完整增加一年的平均变化，应分别计算新旧预测概率之差再平均。",
+        "en": "An extra year of schooling can change employment probabilities differently for people starting near 50% and 99%. A schooling average marginal effect of 0.02 is an average local rate of two percentage points per year. For the average change from a full additional year, calculate each new-minus-old predicted probability and then average."
+      },
+      "pitfall": {
+        "zh": "把 Logit 系数 0.5 直接写为概率提高 50 个百分点是错误的；边际效应也需相应标准误。",
+        "en": "A logit coefficient of 0.5 does not mean a fifty-percentage-point probability increase. Marginal effects also need their own standard errors."
+      },
+      "quiz": {
+        "question": {
+          "zh": "二元解释变量的效应最直接应如何计算？",
+          "en": "How should the effect of a binary regressor be computed most directly?"
+        },
+        "options": [
+          {
+            "zh": "直接把原始系数乘以 100",
+            "en": "Simply multiply its raw coefficient by 100"
+          },
+          {
+            "zh": "只看拟合优度",
+            "en": "Only inspect goodness of fit"
+          },
+          {
+            "zh": "其他变量固定时，从 0 到 1 的预测概率差",
+            "en": "The predicted probability difference from zero to one, holding other regressors fixed"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "二元变量是离散变化，应该计算两种状态的预测概率之差。",
+          "en": "A binary regressor changes discretely, so compare predicted probabilities in its two states."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.1 Logit and Probit Models for Binary Response"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m11-c01"
+      ]
+    },
+    {
+      "id": "m11-c03",
+      "module": "m11",
+      "title": {
+        "zh": "Tobit、角点解、删失与截断",
+        "en": "Tobit, corner solutions, censoring, and truncation"
+      },
+      "question": {
+        "zh": "数据里很多零，是否都应该使用 Tobit？",
+        "en": "Should Tobit be used whenever an outcome contains many zeros?"
+      },
+      "intuition": {
+        "zh": "真实地选择零、被记录上限挡住、整个人没有入样，是不同的数据生成过程。",
+        "en": "Choosing a genuine zero, having a value hidden by a reporting limit, and being absent from the sample are different data-generating processes."
+      },
+      "explanation": {
+        "zh": [
+          "角点结果如家庭购买某商品支出为零，是实际选择；删失是对象仍在样本中，但结果只知道不高于或不低于某界限；截断则是超出某范围的对象完全不被观察。必须先弄清零的来源和入样规则。对零支出的角点解，经典 Tobit 用潜在正态、同方差线性变量经 max(0,·) 形成观测结果；这是一套具体模型假设，不是有零就成立的定义。",
+          "Tobit 原始系数描述潜在变量关系，不直接等于实际结果均值 E(y|X)、正值子样本均值 E(y|X,y>0) 或正值概率 P(y>0|X) 的边际效应。三者都给定 X，只是后两者额外涉及是否为正，必须分别计算；不能把 E(y|X) 误解成完全不带条件的总体均值 E(y)。模型把是否为正与正值大小联系得很紧，若经济上是两个不同过程，可能需要其他设定。仅删掉零后做 OLS 会改变分析对象，并可能因选择引入偏误；正态与同方差假设也值得检查。"
+        ],
+        "en": [
+          "A corner outcome, such as zero household spending on a product, is an actual choice. Censoring keeps a unit in the sample but reveals only that its outcome lies beyond a threshold; truncation excludes units outside a range altogether. Establish the origin of zeros and selection rules first. For a zero-spending corner solution, classical Tobit maps a normal, homoskedastic latent linear variable through max(0,·). These are specific modeling assumptions, not consequences of merely observing zeros.",
+          "A raw Tobit coefficient describes the latent-variable relation, not directly the marginal effect on E(y|X), E(y|X,y>0), or P(y>0|X). All three condition on X, while the latter two additionally involve positivity, and must be calculated separately. E(y|X) must not be confused with the entirely unconditional population mean E(y). Tobit tightly links participation and positive amounts; distinct economic processes may require a different specification. Dropping zeros and applying OLS changes the population and can introduce selection bias. Normality and homoskedasticity assumptions also deserve scrutiny."
+        ]
+      },
+      "formula": "y*=X′β+u;  y=max(0,y*);  u|X∼N(0,σ²);  ∂E(y|X)/∂xⱼ=Φ(X′β/σ)βⱼ",
+      "symbols": {
+        "zh": "y* 是潜在变量；y 是观察到的角点或左删失结果；Φ 为标准正态分布函数；边际式针对简单加总的连续变量。",
+        "en": "y* is latent; y is the observed corner or left-censored outcome; Φ is the standard normal CDF. The marginal-effect formula concerns an additively entered continuous variable."
+      },
+      "example": {
+        "zh": "收入调查把所有高于 100 万的收入记为“100 万以上”是右删失；只调查收入低于 100 万的人是截断；某家庭本月旅游支出为零可能是角点选择。",
+        "en": "Recording all incomes above one million as “one million or more” is right censoring; surveying only people below that income is truncation; zero travel spending this month may be a corner choice."
+      },
+      "pitfall": {
+        "zh": "把缺失值填成零不等于构建合法 Tobit 数据；计数结果的零也不能自动按连续 Tobit 处理。",
+        "en": "Replacing missing values with zero does not create valid Tobit data. Zeros in count outcomes also do not automatically justify a continuous Tobit model."
+      },
+      "quiz": {
+        "question": {
+          "zh": "超过记录上限者仍在样本中，但只记上限，属于什么？",
+          "en": "What is it called when units above a reporting ceiling remain in the sample but only the ceiling is recorded?"
+        },
+        "options": [
+          {
+            "zh": "完全随机缺失的必然情形",
+            "en": "Necessarily missing completely at random"
+          },
+          {
+            "zh": "右删失",
+            "en": "Right censoring"
+          },
+          {
+            "zh": "截断",
+            "en": "Truncation"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "删失保留对象但限制结果信息；截断连对象本身都不入样。",
+          "en": "Censoring retains units but limits outcome information; truncation omits the units themselves."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.2 The Tobit Model for Corner Solution Responses"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.4 Censored and Truncated Regression Models"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m07-c04",
+        "m11-c02"
+      ]
+    },
+    {
+      "id": "m11-c04",
+      "module": "m11",
+      "title": {
+        "zh": "计数结果与 Poisson 模型",
+        "en": "Count outcomes and the Poisson model"
+      },
+      "question": {
+        "zh": "就诊次数、专利数量等非负整数怎样建模？",
+        "en": "How can nonnegative integer outcomes such as doctor visits or patent counts be modeled?"
+      },
+      "intuition": {
+        "zh": "先描述平均次数怎样随解释变量变化，再问围绕均值的波动是否符合分布假设。",
+        "en": "First specify how the expected count changes with regressors, then assess whether variation around the mean matches distributional assumptions."
+      },
+      "explanation": {
+        "zh": [
+          "Poisson 回归常用指数条件均值 E(y|X)=exp(X′β)，保证预测均值为正，允许非整数的期望值，虽然实际结果是整数。简单加总的连续解释变量系数描述条件均值的半弹性；x 增加一单位的精确比例变化是 exp(β)−1，β 较小时可近似为 β。若观察暴露时长不同，应明确每单位时间的发生率与总次数的区别。",
+          "完整 Poisson 分布还要求条件方差等于条件均值，实际数据常过度离散。不过在适当外生性与正则条件下，Poisson 准极大似然可仅凭正确的指数条件均值获得一致性，此时应使用适当稳健标准误；有组内依赖时要相应处理。方差设错与均值设错不是同一问题，稳健标准误不能修复错误的均值关系或内生性。"
+        ],
+        "en": [
+          "Poisson regression commonly uses the exponential conditional mean E(y|X)=exp(X′β), ensuring positive predicted means. Expected counts may be nonintegers even though realizations are integers. A coefficient on an additively entered continuous regressor is a semielasticity of the conditional mean: a unit increase gives the exact proportional change exp(β)−1, approximately β when small. With different exposure durations, distinguish an occurrence rate from the total count.",
+          "The full Poisson distribution additionally imposes equality of conditional variance and mean, while real data often exhibit overdispersion. Under suitable exogeneity and regularity conditions, Poisson quasi-maximum likelihood can remain consistent when the exponential conditional mean is correct, using appropriate robust standard errors and accounting for within-group dependence where present. A wrong variance and a wrong mean are different problems; robust standard errors do not fix a misspecified mean or endogeneity."
+        ]
+      },
+      "formula": "μᵢ=E(yᵢ|Xᵢ)=exp(Xᵢ′β);  (μᵢ,new−μᵢ,old)/μᵢ,old = exp(βⱼ)−1",
+      "symbols": {
+        "zh": "μᵢ 是期望次数；βⱼ 为简单加总 xⱼ 的系数；完整 Poisson 还假设 Var(yᵢ|Xᵢ)=μᵢ。",
+        "en": "μᵢ is the expected count; βⱼ is the coefficient on an additively entered xⱼ. The full Poisson model also assumes Var(yᵢ|Xᵢ)=μᵢ."
+      },
+      "example": {
+        "zh": "培训系数为 0.1 时，模型中的预期专利数随培训增加一单位约提高 10.5%，不是增加 0.1 件，也不是概率提高 10 个百分点。",
+        "en": "A training coefficient of 0.1 implies about a 10.5% rise in expected patent counts for a one-unit increase, rather than 0.1 additional patents or a ten-percentage-point probability increase."
+      },
+      "pitfall": {
+        "zh": "零很多并不自动否定 Poisson；应检查条件均值、方差、暴露和零的生成机制，避免仅凭直方图选模型。",
+        "en": "Many zeros do not automatically invalidate Poisson. Examine the mean, variance, exposure, and zero-generating mechanism rather than choosing a model from a histogram alone."
+      },
+      "quiz": {
+        "question": {
+          "zh": "Poisson 回归预测均值为 2.4 是否错误？",
+          "en": "Is a predicted Poisson mean of 2.4 an error?"
+        },
+        "options": [
+          {
+            "zh": "不是，期望次数可以不是整数",
+            "en": "No; an expected count need not be an integer"
+          },
+          {
+            "zh": "是，预测必须四舍五入为整数才能估计",
+            "en": "Yes; forecasts must be rounded before estimation"
+          },
+          {
+            "zh": "是，说明结果变量不是计数",
+            "en": "Yes; it proves the outcome is not a count"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "实际取值为整数不要求概率加权平均值也是整数。",
+          "en": "Integer realizations do not require their probability-weighted average to be an integer."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.3 The Poisson Regression Model"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c01",
+        "m11-c02"
+      ]
+    },
+    {
+      "id": "m11-c05",
+      "module": "m11",
+      "title": {
+        "zh": "联立方程的识别：阶条件与秩条件",
+        "en": "Simultaneous-equation identification: order and rank conditions"
+      },
+      "question": {
+        "zh": "价格和数量一起决定时，为什么回归一条需求曲线很困难？",
+        "en": "Why is estimating demand difficult when price and quantity are jointly determined?"
+      },
+      "intuition": {
+        "zh": "市场观测是供求同时作用的交点；移动交点不等于只沿一条曲线移动。 这张卡建议在学完工具变量的前两张卡后回读。",
+        "en": "A market observation is the intersection of supply and demand; movement of that intersection need not trace only one curve. Return to this card after the first two IV cards."
+      },
+      "explanation": {
+        "zh": [
+          "需求与供给共同决定均衡价格和数量。需求冲击会改变数量并推动价格变化，所以价格通常与需求方程误差相关，直接 OLS 不再能识别需求斜率。要识别某条结构方程，需要有理论可信、影响另一侧却不直接进入本方程误差的外生变动，再通过工具变量或 2SLS 等方法估计。仅有多条方程并不会自动产生有效工具。",
+          "阶数条件先数数量：方程外排除的外生变量至少要足以为方程内各内生解释变量提供工具，这是必要而非充分条件。秩条件还要求这些变量提供足够独立、相关的变动来区分待估参数；工具虽多却重复同一方向，仍可能不识别。即使秩满足，弱工具会使有限样本估计和常规推断不可靠，排除限制也需实质论证。"
+        ],
+        "en": [
+          "Demand and supply jointly determine equilibrium price and quantity. A demand shock changes quantity and moves price, making price generally correlated with the demand-equation error; direct OLS therefore does not identify the demand slope. Identification requires theoretically credible exogenous variation that shifts the other side without directly entering the target equation’s error, followed by an estimator such as IV or 2SLS. Merely writing several equations does not create valid instruments.",
+          "The order condition counts excluded exogenous variables: there must be at least enough for the endogenous regressors in the equation. It is necessary but not sufficient. The rank condition additionally requires enough independent, relevant variation to distinguish the unknown parameters. Many instruments moving in the same direction can still fail identification. Even when rank holds, weak instruments can undermine finite-sample estimation and conventional inference, while exclusions still need substantive justification."
+        ]
+      },
+      "formula": "Qd = α₀ + α₁P + uᵈ;  Qs = γ₀ + γ₁P + γ₂Z + uˢ;  Qd=Qs",
+      "symbols": {
+        "zh": "P 是内生均衡价格；Z 是被需求方程排除的供给移动因素，其有效性需相关性与需求误差外生性。",
+        "en": "P is endogenous equilibrium price. Z is a supply shifter excluded from demand; validity requires relevance and exogeneity to the demand error."
+      },
+      "example": {
+        "zh": "天气冲击可能移动农产品供给，从而帮助识别需求，但只有当它不直接改变需求且能影响价格时才有用；这需要结合具体市场论证。",
+        "en": "Weather shocks may shift agricultural supply and help identify demand, but only if they do not directly alter demand and meaningfully affect price. This requires a market-specific argument."
+      },
+      "pitfall": {
+        "zh": "“工具数量够多”不能证明识别，更不能证明排除限制；把内生变量互相当工具也没有自动效力。",
+        "en": "Having enough instruments does not prove identification or exclusion. Using endogenous variables as instruments for one another is not automatically valid."
+      },
+      "quiz": {
+        "question": {
+          "zh": "满足阶数条件是否足以证明方程已识别？",
+          "en": "Does satisfying the order condition establish identification?"
+        },
+        "options": [
+          {
+            "zh": "足够，只需数变量",
+            "en": "Yes; counting variables is sufficient"
+          },
+          {
+            "zh": "足够，样本量无关且工具可以无关",
+            "en": "Yes; sample size is irrelevant and instruments may be irrelevant"
+          },
+          {
+            "zh": "不够，还需要秩条件与有效外生限制",
+            "en": "No; rank and valid exogeneity restrictions are also needed"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "阶数只数工具数量，秩还检查独立的相关变动；有效性另需经济论证。",
+          "en": "Order counts instruments; rank checks independent relevant variation. Validity additionally needs an economic argument."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "16",
+          "section": "16.1 The Nature of Simultaneous Equations Models"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "16",
+          "section": "16.3 Identifying and Estimating a Structural Equation"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "16",
+          "section": "16.4 Systems with More Than Two Equations"
+        }
+      ],
+      "minutes": 15,
+      "prerequisites": [
+        "m15-c01",
+        "m15-c02"
+      ]
+    },
+    {
+      "id": "m12-c01",
+      "module": "m12",
+      "title": {
+        "zh": "研究问题、目标参数与识别设计",
+        "en": "Research questions, estimands, and identification designs"
+      },
+      "question": {
+        "zh": "怎样把“我想研究教育”变成一项可执行研究？",
+        "en": "How can “I want to study education” become a feasible empirical project?"
+      },
+      "intuition": {
+        "zh": "先明确要回答的比较，再寻找能支撑这个比较的数据和假设。",
+        "en": "Specify the comparison you want to answer before seeking data and assumptions that can support it."
+      },
+      "explanation": {
+        "zh": [
+          "好问题需要界定总体、结果、处理或解释变量、时间范围和目标量。描述“哪些人收入更高”、预测“谁未来收入更高”和因果“增加教育是否提高收入”是不同任务，不能用同一回归自动回答。将宽泛主题改写成一句可检验问题，再用一段话说明答案为什么有经济意义、可能服务何种决策。",
+          "因果问题需要明确反事实：同类对象如果接受另一种处理，结果会怎样。先画出你认为主要的选择机制和混杂路径，再判断随机化、控制变量、面板、工具变量或其他设计是否合理。文献综述不仅寻找显著结论，还要比较研究总体、制度背景、识别假设和结果单位，避免把不同问题的答案直接当作冲突。"
+        ],
+        "en": [
+          "A good question specifies a population, outcome, treatment or regressor, time horizon, and estimand. Describing who earns more, predicting who will earn more, and asking whether extra education raises earnings are different tasks; a single regression does not automatically answer all three. Rewrite a broad topic as a testable question and explain its economic relevance and possible decision use.",
+          "A causal question needs an explicit counterfactual: what would comparable units experience under another treatment? Map the main selection mechanisms and confounding paths, then assess whether randomization, controls, panels, instruments, or another design is defensible. A literature review should compare populations, institutions, identifying assumptions, and outcome units rather than merely collect significant findings or label answers to different questions contradictory."
+        ]
+      },
+      "formula": "Q = {P, Y, D, T, θ}",
+      "symbols": {
+        "zh": "Q 是研究问题；P 为目标总体，Y 为结果，D 为处理或比较，T 为时间范围，θ 为目标量，例如平均处理效应。",
+        "en": "Q is the research question: P is the target population, Y the outcome, D the treatment or comparison, T the horizon, and θ the estimand, such as an average treatment effect."
+      },
+      "example": {
+        "zh": "把“培训有用吗”细化为“本市失业青年参加六个月培训，相比未参加，在结束一年后的就业概率平均变化多少”；接着追问谁更可能主动报名。",
+        "en": "Refine “Does training work?” to “For unemployed youth in this city, how does six months of training change employment probability one year later relative to nonparticipation?” Then investigate who is more likely to enroll."
+      },
+      "pitfall": {
+        "zh": "有一个数据集不代表其中任何相关性都是好研究问题；显著性也不是问题的重要性标准。",
+        "en": "Possessing a dataset does not make every association in it a good research question; significance is not a measure of importance."
+      },
+      "quiz": {
+        "question": {
+          "zh": "下面哪项最接近清楚的因果研究问题？",
+          "en": "Which is closest to a clear causal research question?"
+        },
+        "options": [
+          {
+            "zh": "某培训对指定人群一年后就业概率的影响",
+            "en": "A program’s effect on a specified population’s employment probability one year later"
+          },
+          {
+            "zh": "找出所有显著变量",
+            "en": "Find every significant variable"
+          },
+          {
+            "zh": "把 R² 提高到 0.9",
+            "en": "Raise R² to 0.9"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "它界定了处理、总体、结果和时间，并指向可讨论的反事实比较。",
+          "en": "It specifies treatment, population, outcome, and timing and points to an assessable counterfactual comparison."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "19",
+          "section": "19.1 Posing a Question"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "19",
+          "section": "19.2 Literature Review"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": []
+    },
+    {
+      "id": "m12-c02",
+      "module": "m12",
+      "title": {
+        "zh": "数据字典与可复现分析流程",
+        "en": "Data dictionaries and reproducible analysis workflows"
+      },
+      "question": {
+        "zh": "怎样让别人知道每个结果是怎么得到的？",
+        "en": "How can others see exactly how each result was produced?"
+      },
+      "intuition": {
+        "zh": "从原始记录到最终表格，应是一条能解释、能重跑、能追踪的链。",
+        "en": "Raw records and final tables should be connected by an explainable, rerunnable, traceable chain."
+      },
+      "explanation": {
+        "zh": [
+          "先建立数据字典：每个变量的含义、单位、来源、时间范围、编码、缺失值规则与构造公式。确认分析单位和唯一键后再合并数据；检查合并前后行数、重复键和未匹配记录，防止多对多合并悄悄制造观测。对样本筛选保留逐步数量，明确最终结论对应的总体。",
+          "保留原始数据副本，以脚本生成清洁数据、描述统计、模型和输出；避免手动改表后无法复原。教材强调进入、储存、检查和清理数据；实践中还可记录软件版本、随机种子、相对路径与执行顺序。代码可运行只是最低要求，仍需检查单位、缺失、分布、逻辑范围及变量与研究概念是否对应。"
+        ],
+        "en": [
+          "Start with a data dictionary describing meanings, units, sources, periods, coding, missingness rules, and construction formulas. Establish the analysis unit and unique keys before merging. Check row counts, duplicate keys, and unmatched records so many-to-many joins do not silently manufacture observations. Record counts at each sample restriction and state the population to which the final results apply.",
+          "Preserve raw data and use scripts to generate cleaned data, summaries, models, and outputs, avoiding unrecoverable manual table edits. The textbook emphasizes entering, storing, inspecting, and cleaning data; practical implementation can also record software versions, random seeds, relative paths, and execution order. Executable code is only a starting point: verify units, missingness, distributions, logical ranges, and the correspondence between variables and research concepts."
+        ]
+      },
+      "formula": "(D₀, C) → D₁ → S → M → O",
+      "symbols": {
+        "zh": "D₀ 是原始数据，C 是检查与处理代码，D₁ 是清洁数据，S 是分析样本，M 是模型，O 是表格与图形输出；每一步都需可追踪。",
+        "en": "D₀ is raw data, C checking and processing code, D₁ clean data, S the analysis sample, M the models, and O tables and figures. Every step should be traceable."
+      },
+      "example": {
+        "zh": "收入有的记录以元计、有的以千元计，直接合并会制造“异常值”。数据字典、来源标记和分来源摘要能在回归之前发现问题。",
+        "en": "Combining income measured in currency units with income measured in thousands creates artificial outliers. A data dictionary, source labels, and source-specific summaries can catch this before regression."
+      },
+      "pitfall": {
+        "zh": "最终样本行数“看起来差不多”不能证明合并正确；有重复键时必须先理解记录层级。",
+        "en": "A final row count that looks plausible does not prove a merge is correct. Duplicate keys require understanding the record level first."
+      },
+      "quiz": {
+        "question": {
+          "zh": "合并前发现两张表同一键都重复，最合理的下一步是什么？",
+          "en": "If both tables have duplicate merge keys, what should come next?"
+        },
+        "options": [
+          {
+            "zh": "直接合并，样本越多越好",
+            "en": "Merge directly; more rows are always better"
+          },
+          {
+            "zh": "任意保留第一行",
+            "en": "Arbitrarily keep the first row"
+          },
+          {
+            "zh": "确认记录层级与目标关系，避免无意的多对多扩张",
+            "en": "Clarify record levels and intended relationships to avoid accidental many-to-many expansion"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "先明确一个对象对应几行和如何汇总，才能判断合法合并关系。",
+          "en": "The legitimate merge relationship depends on how many rows represent each unit and how aggregation should work."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "19",
+          "section": "19.3 Data Collection"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c04"
+      ]
+    },
+    {
+      "id": "m12-c03",
+      "module": "m12",
+      "title": {
+        "zh": "模型设定与稳健性分析",
+        "en": "Model specification and robustness analysis"
+      },
+      "question": {
+        "zh": "多跑几个回归，怎样才算有意义的稳健性分析？",
+        "en": "When does running additional regressions become meaningful robustness analysis?"
+      },
+      "intuition": {
+        "zh": "每个变化都应针对一个具体疑虑，并说明它是否还在回答同一个问题。",
+        "en": "Each specification change should address a specific concern and clarify whether it still answers the same question."
+      },
+      "explanation": {
+        "zh": [
+          "先写出主规格、目标量、样本范围和识别假设，再针对函数形式、控制变量、异常点、推断方式或样本范围做有依据的变化。控制变量并非越多越好：控制处理后的变量可能截断部分作用路径，某些选择变量还可能引入新的偏误。规格选择需要时间顺序和机制判断，不应只靠显著性筛选。",
+          "比较结果时同时看系数、区间、样本量和估计目标。加控制后系数改变可能来自控制本身，也可能来自缺失值使样本改变；可用共同样本辅助分解。多种规格方向相似是有用信息，但不能证明所有模型共同依赖的外生性假设成立。报告不利结果，避免把大量尝试中最显著的模型伪装为唯一预先选定规格。"
+        ],
+        "en": [
+          "Specify the main model, estimand, sample, and identifying assumptions, then make motivated changes to functional form, controls, unusual observations, inference, or sample scope. More controls are not automatically better: post-treatment variables can block part of an effect, while some selection variables can introduce new bias. Specification choices require timing and mechanism arguments, not significance-based selection alone.",
+          "When comparing results, track coefficients, intervals, sample size, and estimands. A coefficient change after adding controls may reflect the controls or a changed sample caused by missingness; a common-sample comparison can help separate them. Similar signs across specifications are informative but cannot establish an exogeneity assumption shared by all models. Report unfavorable findings rather than presenting the most significant result among many attempts as the only prespecified model."
+        ]
+      },
+      "formula": "Δβ̂ = β̂₂ − β̂₁",
+      "symbols": {
+        "zh": "Δβ̂ 是两次估计之差；它可能来自规格、样本组成或估计目标变化，不能仅凭差值判断是哪一原因。",
+        "en": "Δβ̂ is the difference between estimates; it may reflect changes in specification, sample composition, or estimand. The difference alone does not reveal which."
+      },
+      "example": {
+        "zh": "加入家庭背景后教育系数下降，同时样本从 5,000 人变成 3,000 人。先在相同 3,000 人上比较加与不加背景变量，才更清楚变化来自哪里。",
+        "en": "Adding family-background controls lowers the schooling coefficient while reducing the sample from 5,000 to 3,000. First compare models with and without those controls on the same 3,000 people to better understand the change."
+      },
+      "pitfall": {
+        "zh": "“所有回归都显著”不等于没有偏误；稳健标准误这一术语也不等于整项研究在识别上稳健。",
+        "en": "Significance in every regression does not establish absence of bias. The term robust standard errors also does not mean the study’s identification is robust."
+      },
+      "quiz": {
+        "question": {
+          "zh": "加变量后系数改变且样本量减少，优先做哪种比较？",
+          "en": "If adding controls changes a coefficient and reduces sample size, what comparison is useful first?"
+        },
+        "options": [
+          {
+            "zh": "把变化全部归因于遗漏变量偏误",
+            "en": "Attribute all change to omitted-variable bias"
+          },
+          {
+            "zh": "在共同样本上比较规格",
+            "en": "Compare specifications on a common sample"
+          },
+          {
+            "zh": "只保留更显著的模型",
+            "en": "Keep only the more significant model"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "共同样本比较有助于把规格变化与样本组成变化分开。",
+          "en": "Common-sample comparisons help distinguish specification effects from changes in sample composition."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "19",
+          "section": "19.4 Econometric Analysis"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.1 Functional Form Misspecification"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m07-c03",
+        "m12-c01"
+      ]
+    },
+    {
+      "id": "m12-c04",
+      "module": "m12",
+      "title": {
+        "zh": "回归结果表与统计不确定性",
+        "en": "Regression tables and statistical uncertainty"
+      },
+      "question": {
+        "zh": "怎样避免只看星号就下结论？",
+        "en": "How can a regression table be read without relying only on significance stars?"
+      },
+      "intuition": {
+        "zh": "一张表要同时回答“估计了什么”“大小多少”“有多不确定”“为什么可信”。",
+        "en": "A table should reveal what was estimated, its magnitude, its uncertainty, and the basis for credibility."
+      },
+      "explanation": {
+        "zh": [
+          "先读因变量定义与单位，再看系数对应的变量变化、函数形式、样本和控制。水平、对数、概率、计数均值等规格有不同解释。接着阅读标准误类型、聚类层级、样本量、固定效应和注释。一个很小但精确的系数可能经济意义有限，一个较大但不精确的估计则提示数据不足以排除多种实质结论。",
+          "置信区间应结合其覆盖的效应大小来解释，而不是只看是否跨过零。在合适重复抽样条件下，95% 区间程序有 95% 的覆盖率；频率学派意义下不能把已计算区间直接说成“参数有 95% 概率位于其中”。不显著不证明无效应，两组中一个显著一个不显著也不证明组间差异显著，需要直接检验差异。"
+        ],
+        "en": [
+          "Read the outcome definition and units first, followed by the regressor change, functional form, sample, and controls. Levels, logs, probabilities, and count means imply different interpretations. Then inspect the standard-error type, clustering level, sample size, fixed effects, and notes. A small precise coefficient may have limited economic importance, while a large imprecise estimate indicates that the data do not rule out multiple substantively different conclusions.",
+          "Interpret confidence intervals through the effect sizes they contain, not just whether they cross zero. Under suitable repeated-sampling conditions, a 95% interval procedure has 95% coverage; the frequentist statement is not that the fixed parameter has a 95% probability of lying in a computed interval. Nonsignificance does not prove no effect, and significance in one group but not another does not establish a significant between-group difference; test that difference directly."
+        ]
+      },
+      "formula": "CI₀.₉₅ ≈ [β̂ − 1.96 SE(β̂), β̂ + 1.96 SE(β̂)]",
+      "symbols": {
+        "zh": "这是大样本正态近似；小样本、少数聚类、弱工具或非标准分布情形可能需要不同方法。",
+        "en": "This is a large-sample normal approximation. Small samples, few clusters, weak instruments, or nonstandard distributions may require different methods."
+      },
+      "example": {
+        "zh": "就业概率效应为 0.04、标准误 0.03，近似区间为 −0.019 到 0.099，即约 −1.9 到 9.9 个百分点。应说估计不精确，不能直接说培训没有效果。",
+        "en": "An employment-probability estimate of 0.04 with standard error 0.03 gives an approximate interval from −0.019 to 0.099, or −1.9 to 9.9 percentage points. Describe it as imprecise rather than concluding training has no effect."
+      },
+      "pitfall": {
+        "zh": "星号不表示因果可信度；更大的 R² 也不表示识别更好。",
+        "en": "Stars do not measure causal credibility, and a larger R² does not imply better identification."
+      },
+      "quiz": {
+        "question": {
+          "zh": "A 组显著、B 组不显著，能否直接说两组效应不同？",
+          "en": "If an effect is significant in group A but not B, can a difference be concluded directly?"
+        },
+        "options": [
+          {
+            "zh": "不能，需要直接检验两个效应之差",
+            "en": "No; the difference must be tested directly"
+          },
+          {
+            "zh": "能，只要星号数量不同",
+            "en": "Yes, if the stars differ"
+          },
+          {
+            "zh": "能，任何显著与不显著都互相矛盾",
+            "en": "Yes; significant and nonsignificant results always conflict"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "不同标准误会导致不同显著性；组间差异的标准误还涉及两估计的协方差。",
+          "en": "Different standard errors can produce different significance results; the uncertainty of a difference also involves the covariance between estimates."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "4",
+          "section": "4.2 Testing Hypotheses about a Single Population Parameter: The t Test"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "4",
+          "section": "4.3 Confidence Intervals"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "19",
+          "section": "19.5 Writing an Empirical Paper"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m12-c03"
+      ]
+    },
+    {
+      "id": "m12-c05",
+      "module": "m12",
+      "title": {
+        "zh": "实证论文结构与结果解释",
+        "en": "Empirical paper structure and interpretation"
+      },
+      "question": {
+        "zh": "一项好的实证报告最后应该交付什么？",
+        "en": "What should a good empirical report ultimately deliver?"
+      },
+      "intuition": {
+        "zh": "读者需要看见从问题到证据的每一步，以及证据在哪些地方不能继续延伸。",
+        "en": "Readers need to see each step from the question to the evidence and where that evidence stops supporting further claims."
+      },
+      "explanation": {
+        "zh": [
+          "按问题、制度或理论背景、数据、识别与估计方法、结果、局限组织报告。核心表格要能独立理解：清楚列出因变量、单位、样本、控制、标准误处理和样本量。正文应解释有经济意义的变化量，而不是逐项复述星号；图表与附录为主论点提供证据，读者应能回到代码与变量定义核查。",
+          "把“数据直接显示什么”和“在什么假设下可解释为什么”分开写。讨论内部有效性的威胁，如剩余混杂、测量误差、选择和模型限制，也说明结论可推广的人群、地区与时期。政策建议需要效应大小、不确定性、成本和实施环境，不能仅从显著相关跳到普遍建议。承认局限应具体说明方向或可能后果，而非一句“有待研究”。"
+        ],
+        "en": [
+          "Organize a report around the question, institutional or theoretical background, data, identification and estimation, results, and limitations. Core tables should be interpretable on their own, clearly stating outcomes, units, samples, controls, standard-error methods, and sample sizes. Explain economically meaningful changes rather than narrating stars. Figures and appendices should support the argument, with code and variable definitions enabling verification.",
+          "Separate what the data directly show from what can be interpreted under stated assumptions. Discuss threats to internal validity, including remaining confounding, measurement error, selection, and model limitations, as well as the populations, places, and periods to which results may generalize. Policy advice requires effect magnitude, uncertainty, costs, and implementation context, rather than a leap from significant association to universal recommendations. Limitations should state concrete directions or consequences instead of a generic call for more research."
+        ]
+      },
+      "formula": "C = (β̂, U, I, A, S)",
+      "symbols": {
+        "zh": "C 表示一项完整结论：β̂ 为估计，U 为单位，I 为不确定性区间，A 为识别假设，S 为适用范围；这是写作核对框架。",
+        "en": "C represents a complete claim: β̂ is the estimate, U the units, I the uncertainty interval, A the identifying assumptions, and S the scope. This is a writing checklist."
+      },
+      "example": {
+        "zh": "更好的表述是“在所列控制及条件外生性假设下，样本中培训与就业概率提高约 4 个百分点相符，但区间较宽，且主动报名选择仍是主要威胁”。",
+        "en": "A better statement is: “Under the listed controls and conditional-exogeneity assumption, the sample is consistent with about a four-percentage-point employment gain from training, but the interval is wide and self-selection into enrollment remains a major concern.”"
+      },
+      "pitfall": {
+        "zh": "不要把检验未拒绝当作假设已证实，也不要把局部样本结果直接推广到所有地区与年代。",
+        "en": "Do not treat failure to reject as proof of an assumption, or automatically generalize a local sample result to every place and period."
+      },
+      "quiz": {
+        "question": {
+          "zh": "下列哪种报告最能支持读者判断？",
+          "en": "Which reporting approach best supports a reader’s judgment?"
+        },
+        "options": [
+          {
+            "zh": "只展示显著的结果",
+            "en": "Show only significant results"
+          },
+          {
+            "zh": "删去所有模型限制以增强说服力",
+            "en": "Remove all limitations to increase persuasiveness"
+          },
+          {
+            "zh": "同时报告效应大小、区间、识别依据与适用范围",
+            "en": "Report magnitude, intervals, identification arguments, and scope together"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "透明呈现证据与边界，使读者能够判断结论是否由研究支持。",
+          "en": "Transparent evidence and boundaries allow readers to judge whether the study supports its conclusions."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "19",
+          "section": "19.5 Writing an Empirical Paper"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m12-c01",
+        "m12-c02",
+        "m12-c03",
+        "m12-c04"
+      ]
+    }
+  ]
+}

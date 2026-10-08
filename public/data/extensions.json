@@ -1,0 +1,1508 @@
+{
+  "modules": [
+    {
+      "id": "m19",
+      "title": {
+        "zh": "估计、检验与模型比较",
+        "en": "Estimation, tests, and model comparison"
+      },
+      "description": {
+        "zh": "补齐矩估计、似然、诊断检验与平均偏效应。",
+        "en": "Connect moments, likelihood, diagnostic tests, and average partial effects."
+      },
+      "stage": 1,
+      "level": "extension",
+      "prerequisites": [
+        "m05",
+        "m06",
+        "m07"
+      ]
+    },
+    {
+      "id": "m20",
+      "title": {
+        "zh": "代理变量与样本选择",
+        "en": "Proxy variables and sample selection"
+      },
+      "description": {
+        "zh": "区分代理、缺失、选择纠正、删失与截断。",
+        "en": "Distinguish proxies, missingness, selection correction, censoring, and truncation."
+      },
+      "stage": 2,
+      "level": "extension",
+      "prerequisites": [
+        "m07",
+        "m11",
+        "m19"
+      ]
+    },
+    {
+      "id": "m21",
+      "title": {
+        "zh": "时间序列诊断与非平衡面板",
+        "en": "Time-series diagnostics and unbalanced panels"
+      },
+      "description": {
+        "zh": "检验残差相关，学习误差变换、动态波动和非平衡面板。",
+        "en": "Test residual dependence and learn error transformations, dynamic volatility, and unbalanced panels."
+      },
+      "stage": 2,
+      "level": "extension",
+      "prerequisites": [
+        "m08",
+        "m10",
+        "m19"
+      ]
+    },
+    {
+      "id": "m22",
+      "title": {
+        "zh": "工具变量与面板因果推断扩展",
+        "en": "Extensions of IV and panel causal inference"
+      },
+      "description": {
+        "zh": "学习跨样本IV、不同面板识别策略和分布效应。",
+        "en": "Study cross-sample IV, alternative panel identification strategies, and distributional effects."
+      },
+      "stage": 3,
+      "level": "extension",
+      "prerequisites": [
+        "m10",
+        "m15",
+        "m18",
+        "m19"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "m19-c01",
+      "module": "m19",
+      "level": "extension",
+      "title": {
+        "zh": "矩估计与最大似然",
+        "en": "Method of moments and maximum likelihood"
+      },
+      "question": {
+        "zh": "除了最小化残差，还有哪些估计思路？",
+        "en": "What estimation principles exist beyond minimizing residuals?"
+      },
+      "intuition": {
+        "zh": "矩估计让样本特征匹配总体；似然选择最能解释已观察数据的参数。",
+        "en": "Moments match sample features to population restrictions; likelihood chooses parameters that best explain observed data."
+      },
+      "explanation": {
+        "zh": [
+          "矩是期望，例如 E(Y)、E(Y²) 或 E(Xu)。矩估计把总体限制换成样本平均，再求参数：若 E(Y)=μ，就令 μ̂=ȳ。OLS 的样本正交条件也是矩条件；矩条件数量多于参数时，可能需要加权最小化偏离，不能要求每一条都精确为零。",
+          "最大似然先指定概率模型，独立观察的联合似然是各观察概率或密度的乘积；取对数变成求和。把数据固定、把参数当候选值，寻找最大值。离散模型用概率，连续模型用密度，密度不是点概率。模型正确和常规条件是良好渐近性质的依据，并非“最大”二字本身。"
+        ],
+        "en": [
+          "Moments are expectations such as E(Y), E(Y²), or E(Xu). Method-of-moments estimation replaces population restrictions with sample averages and solves for parameters: E(Y)=μ gives μ̂=ȳ. OLS sample orthogonality is also a moment condition. With more conditions than parameters, one may minimize weighted discrepancies rather than set every condition exactly to zero.",
+          "Maximum likelihood starts with a probability model. For independent observations, the likelihood is the product of their probabilities or densities; taking logs turns it into a sum. Hold observed data fixed and vary candidate parameters. Discrete outcomes contribute probabilities, continuous outcomes densities—not point probabilities. Correct specification and regularity justify desirable asymptotic properties."
+        ]
+      },
+      "formula": "E[g(Y,θ)]=0 → (1/n)Σg(Yᵢ,θ̂)=0;  ℓ(θ)=Σ log f(Yᵢ;θ)",
+      "symbols": {
+        "zh": "θ 为待估参数；g 为矩条件函数；f 为概率质量函数或密度；ℓ 为对数似然。样本矩等于零的公式展示恰好识别且有解的情形；过度识别时通常最小化矩偏离的加权平方和。",
+        "en": "θ is the parameter, g a moment-condition function, f a mass function or density, and ℓ log likelihood. The zero sample-moment equation illustrates an exactly identified, solvable case; overidentification generally calls for minimizing a weighted sum of squared moment discrepancies."
+      },
+      "example": {
+        "zh": "教学示例：10 次独立伯努利试验有 7 次成功。矩估计 p̂=0.7；最大化 p⁷(1−p)³ 也得 0.7。两种原则在此给出相同答案，不代表所有模型都相同。",
+        "en": "Illustrative example: seven successes in ten independent Bernoulli trials give p̂=0.7 by moments and by maximizing p⁷(1−p)³. Agreement here does not imply agreement in every model."
+      },
+      "pitfall": {
+        "zh": "似然不是“参数为真的概率”；参数空间、独立性与分布假设必须明确。",
+        "en": "Likelihood is not the probability that a parameter is true; specify the parameter space, dependence, and distribution assumptions."
+      },
+      "quiz": {
+        "question": {
+          "zh": "独立观察取对数似然后，乘积变成什么？",
+          "en": "For independent observations, what does taking log likelihood do to the product?"
+        },
+        "options": [
+          {
+            "zh": "变成各项对数之和",
+            "en": "It becomes a sum of log contributions"
+          },
+          {
+            "zh": "变成参数的概率分布",
+            "en": "It becomes a probability distribution for parameters"
+          },
+          {
+            "zh": "自动消除内生性",
+            "en": "It automatically removes endogeneity"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "log(ab)=log(a)+log(b)，只是运算变换。",
+          "en": "log(ab)=log(a)+log(b); this is an algebraic transformation."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.4 General Approaches to Parameter Estimation"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m02-c02",
+        "m03-c02"
+      ]
+    },
+    {
+      "id": "m19-c02",
+      "module": "m19",
+      "level": "extension",
+      "title": {
+        "zh": "Wald、LM 与似然比检验",
+        "en": "Wald, LM, and likelihood-ratio tests"
+      },
+      "question": {
+        "zh": "检验同一组限制，为什么有三条路径？",
+        "en": "Why are there three approaches to testing the same restrictions?"
+      },
+      "intuition": {
+        "zh": "Wald 看估计离限制多远；LR 看施加限制损失多少拟合；LM 看受限点是否仍有改进方向。",
+        "en": "Wald measures distance from restrictions, LR measures lost likelihood, and LM measures the remaining improvement direction at the restricted fit."
+      },
+      "explanation": {
+        "zh": [
+          "Wald 从非受限估计出发，用协方差标准化限制的偏离；t² 是单个线性限制的一种形式。似然比 LR 需要在同一数据和同一嵌套概率模型下分别拟合受限与非受限模型，比较最大对数似然。LM 从受限模型的得分及信息量出发，不必完整估计非受限模型。",
+          "在正确设定、常规识别、真参数不在边界等大样本条件下，三者对 q 条独立限制都可用 χ²q 参照，并渐近等价；有限样本数值可以不同。线性回归的一些 LM 可写成辅助回归 nR²。异方差或似然误设时，不能机械沿用所有经典公式。"
+        ],
+        "en": [
+          "Wald starts from the unrestricted estimate and scales restriction violations by covariance; t² is one form for a single linear restriction. LR fits restricted and unrestricted versions of the same nested probability model to the same data and compares maximized log likelihoods. LM uses the score and information at the restricted fit without fully fitting the unrestricted model.",
+          "Under correct specification, regular identification, interior parameters, and other large-sample conditions, all three use a χ²q reference for q independent restrictions and are asymptotically equivalent; finite-sample values can differ. Some linear-regression LM tests use auxiliary-regression nR². Heteroskedasticity or likelihood misspecification can invalidate classical formulas."
+        ]
+      },
+      "formula": "LR=2(ℓᵤ−ℓᵣ);  W=(Rβ̂−r)′[R V̂ R′]⁻¹(Rβ̂−r);  reference: χ²q",
+      "symbols": {
+        "zh": "u/r 为非受限/受限；Rβ=r 表示限制；V̂ 是估计协方差；q 为独立限制数。",
+        "en": "u/r mean unrestricted/restricted; Rβ=r states restrictions; V̂ is estimated covariance; q counts independent restrictions."
+      },
+      "example": {
+        "zh": "教学示例：受限最大对数似然为 −100，非受限为 −98，则 LR=4；若只有一条常规限制，对照 χ²₁，不能把 4 当成 p 值。",
+        "en": "Illustrative example: restricted and unrestricted log likelihoods of −100 and −98 give LR=4. For one regular restriction, compare with χ²₁; 4 is not a p-value."
+      },
+      "pitfall": {
+        "zh": "IV 的 Wald 比率估计量与这里的 Wald 检验不是同一个对象；检验未拒绝不证明模型正确。",
+        "en": "The IV Wald ratio estimator is different from a Wald test. Failure to reject does not prove the model correct."
+      },
+      "quiz": {
+        "question": {
+          "zh": "哪种方法需要比较两个最大化后的对数似然？",
+          "en": "Which test compares two maximized log likelihoods?"
+        },
+        "options": [
+          {
+            "zh": "只看非受限点估计的Wald检验",
+            "en": "A Wald test based on the unrestricted estimate"
+          },
+          {
+            "zh": "似然比检验",
+            "en": "Likelihood-ratio test"
+          },
+          {
+            "zh": "样本相关系数",
+            "en": "Sample correlation"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "LR以受限和非受限拟合的对数似然差为基础。",
+          "en": "LR is based on the restricted–unrestricted log-likelihood difference."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "5",
+          "section": "5.2 Asymptotic Normality and Large Sample Inference"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.1 Logit and Probit Models for Binary Response"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix E",
+          "section": "E.4 Some Asymptotic Analysis"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m19-c01",
+        "m05-c03"
+      ]
+    },
+    {
+      "id": "m19-c03",
+      "module": "m19",
+      "level": "extension",
+      "title": {
+        "zh": "调整 R² 与模型比较",
+        "en": "Adjusted R² and model comparison"
+      },
+      "question": {
+        "zh": "加入更多变量，为什么不能只看 R² 上升？",
+        "en": "Why is a rise in R² insufficient to justify additional regressors?"
+      },
+      "intuition": {
+        "zh": "调整 R² 给参数数量加上代价，但仍然只是拟合指标。",
+        "en": "Adjusted R² penalizes parameter count, but remains a measure of fit."
+      },
+      "explanation": {
+        "zh": [
+          "同一样本、同一因变量且含截距时，增加回归元不能提高最小残差平方和，因此普通 R² 不下降。调整 R² 用自由度修正后的残差方差和 y 的样本方差比较；增加变量可能使它升也可能降，甚至可能为负。负值不表示计算错误，而是修正后不如只拟合均值。",
+          "比较时应固定样本与因变量尺度；y 与 ln(y) 的 R²不能直接比较。预测选择还应看样本外误差，因果研究则先看控制变量是否符合识别问题。必要混杂控制不能因为拉低调整 R²就删除；处理后的控制也不能因改善拟合就加入。"
+        ],
+        "en": [
+          "With the same sample and outcome and an intercept, adding regressors cannot increase minimized RSS, so ordinary R² cannot fall. Adjusted R² compares degrees-of-freedom-adjusted residual variance with sample outcome variance. It can rise, fall, or be negative; a negative value means the adjusted fit is worse than fitting only the mean.",
+          "Keep the sample and outcome scale fixed when comparing fits; raw R² values for y and ln(y) are not directly comparable. Prediction also calls for out-of-sample evaluation, while causal analysis prioritizes identification. Do not drop necessary confounding controls because adjusted R² falls, or add post-treatment controls merely because fit improves."
+        ]
+      },
+      "formula": "R̄²=1−[RSS/(n−k−1)]/[TSS/(n−1)]",
+      "symbols": {
+        "zh": "k 为不含截距的斜率数；RSS 为残差平方和；TSS 为总离差平方和，要求 TSS>0。",
+        "en": "k counts slopes excluding the intercept; RSS is residual sum of squares; TSS is total centered sum of squares and must be positive."
+      },
+      "example": {
+        "zh": "教学示例：n=100、k=4、R²=0.20，则 R̄²=1−0.8×99/95≈0.166；拟合比例经参数数量调整后更低。",
+        "en": "Illustrative example: n=100, k=4, and R²=0.20 give R̄²=1−0.8×99/95≈0.166, lower after adjustment for parameter count."
+      },
+      "pitfall": {
+        "zh": "缺失值导致样本变化时，R²变化也混入人群变化；先做共同样本比较。",
+        "en": "When missingness changes the estimation sample, R² changes also reflect population composition; compare on a common sample first."
+      },
+      "quiz": {
+        "question": {
+          "zh": "调整R²更高，是否证明因果识别更可信？",
+          "en": "Does higher adjusted R² establish stronger causal identification?"
+        },
+        "options": [
+          {
+            "zh": "能，因为已惩罚参数数量",
+            "en": "Yes, because parameter count is penalized"
+          },
+          {
+            "zh": "能，只要样本超过100",
+            "en": "Yes, if the sample exceeds 100"
+          },
+          {
+            "zh": "不能，识别依赖设计和假设",
+            "en": "No; identification depends on design and assumptions"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "拟合优度与误差是否外生是不同问题。",
+          "en": "Fit and error exogeneity are different issues."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "6",
+          "section": "6.3 More on Goodness-of-Fit and Selection of Regressors"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m03-c03",
+        "m14-c03"
+      ]
+    },
+    {
+      "id": "m19-c04",
+      "module": "m19",
+      "level": "extension",
+      "title": {
+        "zh": "BP 与 White 异方差检验",
+        "en": "Breusch–Pagan and White tests"
+      },
+      "question": {
+        "zh": "怎样检验误差的波动是否随解释变量变化？",
+        "en": "How can we test whether error variability changes with regressors?"
+      },
+      "intuition": {
+        "zh": "把残差平方当作待解释的波动指标，检查它能否被系统预测。",
+        "en": "Treat squared residuals as a proxy for variance and test whether they are systematically predictable."
+      },
+      "explanation": {
+        "zh": [
+          "先拟合适当的均值方程并保存残差。BP 型检验把残差平方回归到常数和选定解释变量上，检验所有非截距系数同时为零；原假设为同方差。常用大样本 LM=nR²，R²来自这个辅助回归，自由度是被检验的独立非截距项数量。",
+          "White 检验还加入平方项和交叉项，允许更丰富的方差模式，但变量多时容易消耗自由度。教材此处使用不要求误差正态的常用 BP/Koenker 形式。拒绝可能也反映均值模型错误；未拒绝不证明同方差。稳健标准误无需以检验显著为前提。"
+        ],
+        "en": [
+          "Fit an appropriate mean equation and save residuals. A BP-type test regresses squared residuals on a constant and selected regressors, jointly testing zero slopes; the null is homoskedasticity. A common large-sample statistic is LM=nR², using the auxiliary regression’s R² and degrees of freedom equal to its tested independent nonconstant terms.",
+          "White’s test adds squares and cross-products, allowing richer variance patterns but consuming degrees of freedom when there are many regressors. The textbook presents the common BP/Koenker form that does not require normal errors. Rejection can also reflect a misspecified mean; nonrejection does not prove constant variance. Robust standard errors need not wait for a significant preliminary test."
+        ]
+      },
+      "formula": "ûᵢ²=δ₀+δ′zᵢ+vᵢ;  H₀:δ=0;  LM=nR²_aux ≈ χ²q",
+      "symbols": {
+        "zh": "z 是辅助回归项；q 是独立斜率数；n 是该回归有效观察数；aux 标记辅助回归。",
+        "en": "z contains auxiliary regressors; q counts independent slopes; n is the effective auxiliary sample size; aux denotes the auxiliary regression."
+      },
+      "example": {
+        "zh": "教学示例：200 个观察，辅助回归含2个独立斜率，R²=0.05，则 LM=10，对照 χ²₂。不能误用原工资回归的 R²。",
+        "en": "Illustrative example: 200 observations, two independent auxiliary slopes, and R²=0.05 give LM=10, compared with χ²₂. Do not use the original earnings regression’s R²."
+      },
+      "pitfall": {
+        "zh": "异方差检验不能检验零条件均值，更不能证明解释变量的因果有效性。",
+        "en": "A heteroskedasticity test does not test zero conditional mean or establish causal validity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "LM=nR²中的R²来自哪里？",
+          "en": "Where does R² in LM=nR² come from?"
+        },
+        "options": [
+          {
+            "zh": "残差平方的辅助回归",
+            "en": "The auxiliary regression of squared residuals"
+          },
+          {
+            "zh": "任意一个拟合最高的模型",
+            "en": "Any model with the highest fit"
+          },
+          {
+            "zh": "因变量的均值",
+            "en": "The outcome mean"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "检验针对条件波动，使用的是残差平方关系的拟合。",
+          "en": "The test concerns conditional variation and uses the fit of the squared-residual relation."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "8",
+          "section": "8.3 Testing for Heteroskedasticity"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m07-c01",
+        "m19-c02"
+      ]
+    },
+    {
+      "id": "m19-c05",
+      "module": "m19",
+      "level": "extension",
+      "title": {
+        "zh": "Chow 检验与结构稳定性",
+        "en": "Chow tests and structural stability"
+      },
+      "question": {
+        "zh": "两个时期或群体的斜率不同，如何作联合判断？",
+        "en": "How can we jointly assess whether regression relationships differ across groups or periods?"
+      },
+      "intuition": {
+        "zh": "给组别加截距和全部斜率交互，再一起检验这些差异是否为零。",
+        "en": "Interact the group indicator with the intercept and all slopes, then test those differences jointly."
+      },
+      "explanation": {
+        "zh": [
+          "用 G 表示两组，包含 G 及 G×每个解释变量，允许两组拥有各自的截距和斜率。原假设是这些组别差异项全部为零，而非只看某一个交互项。两组各自样本足够且模型可识别时，这与分别拟合两条回归函数进行比较相对应。",
+          "经典 Chow F 检验比较合并受限模型与分组非受限模型的 RSS，精确推断依赖共同误差方差、正态等条件。组间方差不同应使用适当稳健联合检验；时间序列还需处理序列相关。断点若在看完结果后反复挑选，普通预设断点检验的显著性解释不再直接适用。"
+        ],
+        "en": [
+          "Let G mark two groups. Include G and its interaction with every regressor to allow separate intercepts and slopes. The null sets all group-difference terms to zero, rather than inspecting just one interaction. With adequate samples and identification within each group, this corresponds to comparing separately fitted regression functions.",
+          "The classical Chow F test compares pooled restricted and group-specific unrestricted RSS; exact inference relies on equal error variance, normality, and other classical conditions. Unequal group variances call for an appropriate robust joint test; time series also require dependence-aware inference. Searching repeatedly for a break after seeing results changes the interpretation of a prespecified-break test."
+        ]
+      },
+      "formula": "y=β₀+β₁x+δ₀G+δ₁Gx+u;  H₀:δ₀=δ₁=0",
+      "symbols": {
+        "zh": "G=0/1标记群体；δ₀ 是截距差，δ₁ 是斜率差；多个回归元时加入全部对应交互。",
+        "en": "G is a 0/1 group indicator; δ₀ is the intercept difference and δ₁ the slope difference. With more regressors, include all corresponding interactions."
+      },
+      "example": {
+        "zh": "教学示例：100人、每组一条含截距和一个斜率的线，RSS受限=120、RSS非受限=100。检验2条限制时 F=(20/2)/(100/96)=9.6。",
+        "en": "Illustrative example: with 100 people and two intercept-and-slope regressions, restricted RSS=120 and unrestricted RSS=100 give F=(20/2)/(100/96)=9.6 for two restrictions."
+      },
+      "pitfall": {
+        "zh": "拒绝只说明模型关系不稳定；不能据此认定某项政策造成了变化。",
+        "en": "Rejection indicates instability in the modeled relationship, not proof that a policy caused it."
+      },
+      "quiz": {
+        "question": {
+          "zh": "检验整条简单回归线相同，一般应检验哪些差异？",
+          "en": "To test equality of two simple regression lines, which differences are generally tested?"
+        },
+        "options": [
+          {
+            "zh": "只比较两个R²",
+            "en": "Only compare their R² values"
+          },
+          {
+            "zh": "截距差和斜率差一起",
+            "en": "Intercept and slope differences jointly"
+          },
+          {
+            "zh": "只检验样本量差",
+            "en": "Only the sample-size difference"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "整条函数相同要求截距与斜率都相同。",
+          "en": "Equal regression functions require both equal intercepts and equal slopes."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "7",
+          "section": "7.4 Interactions Involving Dummy Variables"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "13",
+          "section": "13.1 Pooling Independent Cross Sections across Time"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m06-c04",
+        "m05-c03"
+      ]
+    },
+    {
+      "id": "m19-c06",
+      "module": "m19",
+      "level": "extension",
+      "title": {
+        "zh": "平均偏效应的估计与推断",
+        "en": "Estimation and inference for average partial effects"
+      },
+      "question": {
+        "zh": "每个人的斜率不同，怎样用一个数字总结？",
+        "en": "How can one number summarize slopes that vary across people?"
+      },
+      "intuition": {
+        "zh": "先为每个观察计算模型中的偏效应，再按目标人群取平均。",
+        "en": "Calculate the model’s partial effect for each observation, then average over the target population."
+      },
+      "explanation": {
+        "zh": [
+          "在含平方或交互项的 OLS 中，系数本身通常不是统一效应。若 m(x,z)=β₀+β₁x+β₂x²+β₃xz，x 的偏效应为 β₁+2β₂x+β₃z；样本平均偏效应把这些导数逐个求出再平均。中文第六版6-2d专门补充这一计算。",
+          "本例导数对 x、z 线性，因此平均导数等于把样本均值代入导数；一般非线性模型没有这一等式。固定样本协变量时，平均效应是系数的线性组合，SE须用完整协方差。若目标是随机总体的平均，还需考虑协变量分布估计的不确定性；平均关联也不会自动变成平均因果效应。"
+        ],
+        "en": [
+          "With quadratic or interaction terms, an OLS coefficient is usually not a common effect. If m(x,z)=β₀+β₁x+β₂x²+β₃xz, the partial effect of x is β₁+2β₂x+β₃z. The sample average partial effect averages these observation-specific derivatives. Chinese sixth-edition section 6-2d explicitly develops this calculation.",
+          "Here the derivative is linear in x and z, so its average equals the derivative evaluated at sample means; general nonlinear models do not share this identity. Conditional on sample covariates, the average is a coefficient combination whose SE uses the full covariance matrix. A population-average target may also require uncertainty from estimating the covariate distribution. Average association is not automatically average causation."
+        ]
+      },
+      "formula": "APÊ=(1/n)Σᵢ[β̂₁+2β̂₂xᵢ+β̂₃zᵢ]=β̂₁+2β̂₂x̄+β̂₃z̄",
+      "symbols": {
+        "zh": "APE 为平均偏效应；x̄、z̄为样本均值；这里平均针对当前样本协变量。",
+        "en": "APE is average partial effect; x̄ and z̄ are sample means; this average is over the current sample covariates."
+      },
+      "example": {
+        "zh": "教学示例：拟合斜率为 4−0.2x，样本平均 x=10，则 APE=2；这不表示每个观察的斜率都是2。",
+        "en": "Illustrative example: if the fitted slope is 4−0.2x and mean x is 10, APE=2; individual slopes need not equal 2."
+      },
+      "pitfall": {
+        "zh": "平均边际效应与“平均人”的边际效应一般不同；二元变量应考虑离散的0到1预测差。",
+        "en": "Average marginal effects generally differ from effects for an “average person”; binary variables call for discrete 0-to-1 prediction differences."
+      },
+      "quiz": {
+        "question": {
+          "zh": "哪个步骤定义样本平均偏效应？",
+          "en": "Which operation defines a sample average partial effect?"
+        },
+        "options": [
+          {
+            "zh": "只报告平方项系数",
+            "en": "Report only the squared-term coefficient"
+          },
+          {
+            "zh": "选择最大的一条斜率",
+            "en": "Choose the largest slope"
+          },
+          {
+            "zh": "逐个计算偏效应后取平均",
+            "en": "Compute each partial effect, then average"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "平均的对象是模型偏效应，而非挑选某一个系数。",
+          "en": "Average the model’s partial effects, rather than select one coefficient."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-zh",
+          "chapter": "6",
+          "section": "6.2 对函数形式的进一步讨论 — 6-2d 计算平均偏效应"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m06-c02",
+        "m06-c03",
+        "m05-c02"
+      ]
+    },
+    {
+      "id": "m20-c01",
+      "module": "m20",
+      "level": "extension",
+      "title": {
+        "zh": "代理变量与遗漏因素控制",
+        "en": "Proxy variables and control of omitted factors"
+      },
+      "question": {
+        "zh": "无法观察能力时，加入测验分数就足够了吗？",
+        "en": "If ability is unobserved, is adding a test score enough?"
+      },
+      "intuition": {
+        "zh": "代理需要吸收遗漏因素中与其他解释变量相关的部分，只有相关性还不够。",
+        "en": "A proxy must absorb the part of an omitted factor associated with other regressors; correlation alone is insufficient."
+      },
+      "explanation": {
+        "zh": [
+          "设真实结果取决于 x 与不可观测 q*，但能观察代理 p。把 q*写成 δ₀+δ₁p+v 后，加入 p 的回归误差变为 u+γv。要恢复 x 的系数，需要剩余代理误差不再与 x 系统相关，并对原误差作适当外生性假设。代理和真实因素高度相关，不自动保证这些条件。",
+          "一个清楚的充分条件是 E(q*|x,p)=E(q*|p)=δ₀+δ₁p，且 E(u|x,p)=0。代理与工具变量承担不同任务：代理被直接放入结果方程以控制遗漏因素，工具变量则提供内生变量的外生变动。滞后结果也可能作代理，但同时可能反映既往处理或短期冲击，不能自动当作安全控制。"
+        ],
+        "en": [
+          "Suppose the outcome depends on x and an unobserved q*, with observed proxy p. Writing q*=δ₀+δ₁p+v makes the regression error after adding p equal u+γv. Recovering the x coefficient requires the remaining proxy error not to move systematically with x, together with appropriate exogeneity of the original error. Strong correlation between proxy and latent factor does not guarantee this.",
+          "A transparent sufficient condition is E(q*|x,p)=E(q*|p)=δ₀+δ₁p and E(u|x,p)=0. A proxy enters the outcome equation to control an omitted factor; an instrument instead supplies exogenous variation in an endogenous regressor. A lagged outcome may be a proxy but can also reflect earlier treatment or transitory shocks, so it is not automatically a safe control."
+        ]
+      },
+      "formula": "y=β₀+β₁x+γq*+u;  q*=δ₀+δ₁p+v;  new error=u+γv",
+      "symbols": {
+        "zh": "q* 为不可观测因素；p 为代理；v 为代理未捕捉的部分；γ为遗漏因素的系数。",
+        "en": "q* is the latent factor, p its proxy, v the uncaptured component, and γ the latent factor’s coefficient."
+      },
+      "example": {
+        "zh": "教学示例：q*=2p+v、y=3x+4q*+u，则 y=3x+8p+(u+4v)。只有新误差满足所需外生条件，x 的系数才可按原目标解释。",
+        "en": "Illustrative example: q*=2p+v and y=3x+4q*+u imply y=3x+8p+(u+4v). Recovering the original x coefficient requires exogeneity of the new error."
+      },
+      "pitfall": {
+        "zh": "加入更多代理并不保证偏差单调下降；测量与因果机制仍需论证。",
+        "en": "Adding proxies does not guarantee monotonically declining bias; measurement and causal mechanisms still need justification."
+      },
+      "quiz": {
+        "question": {
+          "zh": "代理只与遗漏因素相关，是否足以保证无偏？",
+          "en": "Does correlation with an omitted factor alone guarantee unbiasedness?"
+        },
+        "options": [
+          {
+            "zh": "不足，还要限制剩余代理误差",
+            "en": "No; remaining proxy error must satisfy additional restrictions"
+          },
+          {
+            "zh": "足够，相关越高越有因果性",
+            "en": "Yes; stronger correlation means stronger causality"
+          },
+          {
+            "zh": "只要p值小就足够",
+            "en": "Yes, if the p-value is small"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "未被代理解释的因素仍可能与目标解释变量相关。",
+          "en": "The uncaptured latent component may still correlate with the target regressor."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "9",
+          "section": "9.2 Using Proxy Variables for Unobserved Explanatory Variables"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m04-c03",
+        "m14-c03"
+      ]
+    },
+    {
+      "id": "m20-c02",
+      "module": "m20",
+      "level": "extension",
+      "title": {
+        "zh": "缺失指示变量法及其条件",
+        "en": "Missing-indicator methods and their conditions"
+      },
+      "question": {
+        "zh": "把缺失值填零，再加一个标记，就解决问题了吗？",
+        "en": "Does zero-filling plus a missingness indicator solve missing-data problems?"
+      },
+      "intuition": {
+        "zh": "标记可以允许缺失组有不同截距，却未必恢复它们丢失的协变量关系。",
+        "en": "An indicator allows a different intercept for missing cases, but need not recover their lost covariate relationships."
+      },
+      "explanation": {
+        "zh": [
+          "定义 M=1 表示 x 缺失，x*=x（已观察）或0（缺失），把 x*和 M 一起放入回归。单解释变量、截距与缺失标记的简单模型中，斜率等于完整案例的斜率；在随机缺失等适当条件下可估计原目标。单纯填零而不加标记会混淆“未知”与真实零。",
+          "多元回归需要额外条件：即便缺失完全随机（MCAR），若缺失变量与其他回归元相关，单一截距标记也未必恢复正确斜率。须检查填补后条件均值是否仍正确；不要把教材简单情形的结论无限推广。完整案例、建模填补等方法各有假设，缺失率本身不能决定方法是否有效。"
+        ],
+        "en": [
+          "Define M=1 when x is missing and x*=x if observed, zero otherwise; include both x* and M. In a simple model with one regressor, an intercept, and the indicator, the slope equals the complete-case slope and estimates the original target under suitable missingness assumptions. Zero-filling without an indicator conflates unknown with genuinely zero.",
+          "Multiple regression requires additional conditions. Even under missing completely at random (MCAR), correlation between the missing regressor and others can make an intercept indicator insufficient. Check the conditional mean after filling; do not generalize a simple-case result without qualification. Complete-case and model-based imputation approaches have different assumptions; the missingness percentage alone cannot establish validity."
+        ]
+      },
+      "formula": "xᵢ*= (1−Mᵢ)xᵢ when defined;  fitted model: yᵢ=a+b xᵢ*+c Mᵢ+error",
+      "symbols": {
+        "zh": "M=1时按定义令x*=0，不是真的观测到x=0；MCAR指缺失机制独立于数据。",
+        "en": "Set x*=0 by definition when M=1; this is not an observed zero. MCAR means missingness is independent of the data."
+      },
+      "example": {
+        "zh": "教学推导反例：y=x₂，x₁、x₂均值0、方差1、相关0.5；x₂随机缺一半。用x₁、零填补x₂和缺失标记回归，总体x₁斜率为2/7，而真系数为0。",
+        "en": "Illustrative derived counterexample: y=x₂; x₁ and x₂ have mean zero, variance one, and correlation 0.5; half of x₂ is missing completely at random. Regressing on x₁, zero-filled x₂, and the indicator gives population x₁ slope 2/7 although its true coefficient is zero."
+      },
+      "pitfall": {
+        "zh": "这里对多元推广作了额外限定；MCAR不是任意零填补回归都无偏的通行证。",
+        "en": "The multivariable extension is deliberately qualified: MCAR does not make every zero-filled regression unbiased."
+      },
+      "quiz": {
+        "question": {
+          "zh": "缺失标记最直接增加了哪种模型自由度？",
+          "en": "What flexibility does a missingness indicator most directly add?"
+        },
+        "options": [
+          {
+            "zh": "自动消除所有选择偏差",
+            "en": "Automatic removal of all selection bias"
+          },
+          {
+            "zh": "缺失组可以有不同截距",
+            "en": "A different intercept for missing cases"
+          },
+          {
+            "zh": "自动知道缺失变量的真实值",
+            "en": "Automatic knowledge of missing values"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "截距调整不等于恢复缺失协变量及其与其他变量的关系。",
+          "en": "An intercept adjustment does not restore missing covariates or their relationships with other variables."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-zh",
+          "chapter": "9",
+          "section": "9.5 数据缺失、非随机样本和异常观测"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m07-c04",
+        "m06-c04"
+      ]
+    },
+    {
+      "id": "m20-c03",
+      "module": "m20",
+      "level": "extension",
+      "title": {
+        "zh": "Heckman 样本选择纠正",
+        "en": "Heckman sample-selection correction"
+      },
+      "question": {
+        "zh": "只看到就业者工资，如何处理参与选择？",
+        "en": "How can selection be addressed when wages are observed only for workers?"
+      },
+      "intuition": {
+        "zh": "同时建模“是否观察到”和“观察到多少”，把选择带来的平均误差加入结果方程。",
+        "en": "Model both observation and outcome, then account for the nonzero mean error created by selection."
+      },
+      "explanation": {
+        "zh": [
+          "设潜在工资 y*=x′β+u，只有 s=1[z′γ+v>0] 时观察到。若工资误差和参与误差相关，就业者的条件平均 u 不为零。经典 Heckman 模型规定联合正态误差、合适外生性及选择方程，于是选中样本的均值多出逆米尔斯比项。",
+          "两步法先用所有人的 s、z 估计 probit，计算 λ̂=φ(z′γ̂)/Φ(z′γ̂)；再对有工资的人回归 y 到 x 与 λ̂。标准误须考虑第一步估计，不能直接照抄第二步普通 OLS 输出。最好有影响参与但不直接影响工资的可信排除变量；仅靠正态非线性识别往往脆弱。"
+        ],
+        "en": [
+          "Let latent wages be y*=x′β+u, observed only when s=1[z′γ+v>0]. Correlation between wage and participation errors can make the selected sample’s mean u nonzero. The classical Heckman model specifies jointly normal errors, appropriate exogeneity, and a selection equation, yielding an inverse-Mills-ratio term in the selected conditional mean.",
+          "First estimate probit for s using all observations and compute λ̂=φ(z′γ̂)/Φ(z′γ̂). Then regress observed wages on x and λ̂ in the selected sample. Standard errors must account for first-stage estimation; ordinary second-step OLS output is insufficient. A credible variable affecting participation but not wages directly is highly valuable; identification relying only on normality-driven nonlinearity is fragile."
+        ]
+      },
+      "formula": "E(y*|x,z,s=1)=x′β+ρσᵤλ(z′γ);  λ(a)=φ(a)/Φ(a)",
+      "symbols": {
+        "zh": "φ/Φ为标准正态密度/分布函数；v标准化方差为1；ρ为u与v相关系数。",
+        "en": "φ/Φ are the standard-normal density/CDF; v has variance one; ρ is the correlation of u and v."
+      },
+      "example": {
+        "zh": "教学示例：高工资机会与更强就业倾向来自共同未观测因素时，观察工资样本会偏向高机会者。λ项在假设成立时描述这种选择，而不是把未就业工资填成0。",
+        "en": "Illustrative example: common unobserved factors raise both wage offers and employment propensity, selecting high-offer people into observed wages. Under the model, λ represents this selection; nonworkers’ wages are not set to zero."
+      },
+      "pitfall": {
+        "zh": "λ不显著不证明没有选择；分布、排除限制和检验功效仍然关键。",
+        "en": "An insignificant λ does not prove absence of selection; distributions, exclusion restrictions, and power still matter."
+      },
+      "quiz": {
+        "question": {
+          "zh": "第一步probit应使用谁？",
+          "en": "Who should enter the first-step probit?"
+        },
+        "options": [
+          {
+            "zh": "只有已就业者",
+            "en": "Only employed people"
+          },
+          {
+            "zh": "只有工资最高的人",
+            "en": "Only the highest earners"
+          },
+          {
+            "zh": "有选择状态与所需z的全部观察",
+            "en": "All observations with selection status and required z"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "只保留s=1就失去参与与未参与的比较。",
+          "en": "Keeping only s=1 removes the participation comparison."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.5 Sample Selection Corrections"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m11-c02",
+        "m19-c01",
+        "m07-c04"
+      ]
+    },
+    {
+      "id": "m20-c04",
+      "module": "m20",
+      "level": "extension",
+      "title": {
+        "zh": "删失与截断模型的似然",
+        "en": "Likelihoods for censored and truncated models"
+      },
+      "question": {
+        "zh": "收入封顶记录，与完全不调查高收入者，有何不同？",
+        "en": "How does top-coding income differ from excluding high-income people?"
+      },
+      "intuition": {
+        "zh": "删失保留“这人超过门槛”的信息；截断让这人根本不在样本中。",
+        "en": "Censoring retains information that someone exceeds a threshold; truncation removes that person from the sample."
+      },
+      "explanation": {
+        "zh": [
+          "以右侧门槛 c 为例，删失记录 w=min(y,c)，仍知道谁被封顶。未删失观察贡献密度 f(y|x)，封顶者贡献尾概率 1−F(c|x)。把封顶数当真实收入做OLS，或只保留未封顶者，一般都不对应原总体线性关系。",
+          "若只抽取 y<c 的人，则样本来自截断分布，观察密度要除以进入样本的概率 F(c|x)。正态截断回归与删失回归因此有不同似然。还应区分真实零支出这种角点结果：它是行为结果，不一定是记录被遮住。模型要求正确的分布、门槛机制和外生条件。"
+        ],
+        "en": [
+          "For right censoring at c, observe w=min(y,c) and know which cases are top-coded. Uncensored cases contribute f(y|x); censored cases contribute tail probability 1−F(c|x). Treating c as actual income in OLS, or retaining only uncensored cases, generally fails to recover the original population relationship.",
+          "If only people with y<c enter the sample, observations come from a truncated distribution and their density must be divided by inclusion probability F(c|x). Censored and truncated normal regressions therefore have different likelihoods. A genuine zero expenditure is a behavioral corner solution, not necessarily hidden data. Distribution, threshold mechanism, and exogeneity assumptions must be appropriate."
+        ]
+      },
+      "formula": "censoring: Lᵢ=f(yᵢ|xᵢ) if yᵢ<c; Lᵢ=1−F(c|xᵢ) if censored;  truncation: Lᵢ=f(yᵢ|xᵢ)/F(c|xᵢ), yᵢ<c",
+      "symbols": {
+        "zh": "此式限定连续型结果、给定且已知门槛的右侧删失或截断；F 为条件 CDF；不同方向和门槛需改相应概率。",
+        "en": "These formulas concern continuous outcomes with a given known upper censoring or truncation threshold. F is the conditional CDF; other directions or thresholds require corresponding probabilities."
+      },
+      "example": {
+        "zh": "教学示例：收入超过10万元仍有一行、记“10万以上”是删失；调查规则排除所有超过10万元的人是截断。两者不能用同一个数据处理规则替代。",
+        "en": "Illustrative example: keeping a record marked “above 100,000” is censoring; excluding everyone above 100,000 by survey design is truncation. They require different modeling treatments."
+      },
+      "pitfall": {
+        "zh": "尾概率和密度的区别是似然关键；不要把封顶者当作确实等于门槛的连续观察。",
+        "en": "The distinction between tail probability and density is central; do not treat a top-coded case as an exact continuous observation at the threshold."
+      },
+      "quiz": {
+        "question": {
+          "zh": "右删失且已知y≥c的观察贡献什么？",
+          "en": "What does a right-censored observation known to have y≥c contribute?"
+        },
+        "options": [
+          {
+            "zh": "条件尾概率1−F(c|x)",
+            "en": "Conditional tail probability 1−F(c|x)"
+          },
+          {
+            "zh": "密度f(c|x)",
+            "en": "Density f(c|x)"
+          },
+          {
+            "zh": "必须删除，完全没有信息",
+            "en": "It must be deleted because it contains no information"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "虽然看不到精确值，但超过门槛这一事件仍有信息。",
+          "en": "The exact value is unknown, but the event of exceeding the threshold is informative."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "17",
+          "section": "17.4 Censored and Truncated Regression Models"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m11-c03",
+        "m19-c01"
+      ]
+    },
+    {
+      "id": "m21-c01",
+      "module": "m21",
+      "level": "extension",
+      "title": {
+        "zh": "序列相关的 BG 与 DW 检验",
+        "en": "BG and DW tests for serial correlation"
+      },
+      "question": {
+        "zh": "怎样检验时间序列回归的误差是否相关？",
+        "en": "How can we test serial correlation in regression errors?"
+      },
+      "intuition": {
+        "zh": "检查今天的残差能否被过去残差解释，同时保留原模型的信息。",
+        "en": "Check whether past residuals predict today’s residual while retaining the original model’s regressors."
+      },
+      "explanation": {
+        "zh": [
+          "Breusch–Godfrey 检验先取得OLS残差，再把当前残差回归到原解释变量和 q 个残差滞后上，联合检验滞后系数为零。常用 LM=n有效R² 近似服从 χ²q；有效样本须扣除因滞后损失的观察。普通公式有相应外生性、弱依赖和同方差条件，异方差需使用稳健版本。",
+          "Durbin–Watson 统计量大致为2(1−残差一阶相关)，但其传统临界值依赖严格条件，含滞后因变量时不能直接套用。BG 在适当条件下可处理这类动态模型及更高阶相关。拒绝说明尚有时间依赖，并不自动区分遗漏动态、函数误设或误差结构；未拒绝也不能证明独立。"
+        ],
+        "en": [
+          "The Breusch–Godfrey test regresses OLS residuals on the original regressors and q residual lags, jointly testing zero lag coefficients. The usual LM=n_effective R² has an asymptotic χ²q reference; count only usable observations after lag losses. The standard form requires appropriate exogeneity, weak dependence, and homoskedasticity conditions; use a robust version when needed.",
+          "Durbin–Watson is approximately twice one minus first-order residual correlation, but its traditional critical values rely on restrictive assumptions and should not be applied mechanically with lagged outcomes. Under appropriate conditions, BG accommodates such dynamic models and higher orders. Rejection detects remaining temporal dependence without uniquely diagnosing omitted dynamics, functional form, or error structure; nonrejection does not prove independence."
+        ]
+      },
+      "formula": "ûₜ=Xₜ′a+ρ₁ûₜ₋₁+…+ρqûₜ₋q+eₜ;  LM=n_eff R²;  DW=Σ(ûₜ−ûₜ₋₁)²/Σûₜ²",
+      "symbols": {
+        "zh": "q 为检验阶数；X含原回归项和适用截距；n_eff为辅助回归有效样本量。",
+        "en": "q is the tested order; X includes original regressors and the appropriate intercept; n_eff is the auxiliary sample size."
+      },
+      "example": {
+        "zh": "教学示例：检验2阶相关，辅助回归有120个有效观察，R²=0.06，则LM=7.2，参照χ²₂，而非用原始122直接相乘。",
+        "en": "Illustrative example: testing order two with 120 usable observations and R²=0.06 gives LM=7.2 against χ²₂, rather than multiplying by the original 122."
+      },
+      "pitfall": {
+        "zh": "不要事后反复挑选滞后阶数只报告显著者；阶数应结合数据频率与模型设定。",
+        "en": "Do not search over lag orders and report only significant results; motivate orders from frequency and specification."
+      },
+      "quiz": {
+        "question": {
+          "zh": "BG辅助回归通常为何保留原解释变量？",
+          "en": "Why does the BG auxiliary regression normally retain original regressors?"
+        },
+        "options": [
+          {
+            "zh": "保证R²等于1",
+            "en": "To guarantee R²=1"
+          },
+          {
+            "zh": "检验在原回归信息条件下的残差相关",
+            "en": "To assess residual dependence conditional on original regression information"
+          },
+          {
+            "zh": "保证得到因果效应",
+            "en": "To guarantee causal effects"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "简单只回归残差滞后，通常需要更强的严格外生性条件。",
+          "en": "Regressing only on residual lags generally requires stronger strict-exogeneity conditions."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "12",
+          "section": "12.2 Testing for Serial Correlation"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m08-c04",
+        "m19-c02"
+      ]
+    },
+    {
+      "id": "m21-c02",
+      "module": "m21",
+      "level": "extension",
+      "title": {
+        "zh": "AR(1) 误差的 GLS 与 FGLS",
+        "en": "GLS and FGLS for AR(1) errors"
+      },
+      "question": {
+        "zh": "除了换标准误，还能怎样利用误差的相关结构？",
+        "en": "How can an error-correlation model be used beyond changing standard errors?"
+      },
+      "intuition": {
+        "zh": "按误差的记忆程度对整条方程作准差分，使剩余冲击更接近白噪声。",
+        "en": "Quasi-difference the whole equation using error persistence to isolate innovations."
+      },
+      "explanation": {
+        "zh": [
+          "若 uₜ=ρuₜ₋₁+eₜ、|ρ|<1，且有严格外生解释变量和合适创新方差条件，已知ρ时，对第2期起的y和每一列X都减去ρ倍滞后值，再OLS；截距也必须变成1−ρ。这是GLS的准差分部分，完整样本的GLS还要按下段所述处理首期。它通常改变系数，和保留OLS系数只修协方差的HAC不同。",
+          "ρ未知时先用OLS残差估计，再变换重估，称FGLS。Cochrane–Orcutt舍去首期；Prais–Winsten在平稳初始误差设定下将首期整行乘√(1−ρ²)保留。估计ρ后推断一般是大样本近似，不能继续宣称有限样本BLUE；误设AR结构或含内生滞后结果时，也不能盲用这一修正。"
+        ],
+        "en": [
+          "If uₜ=ρuₜ₋₁+eₜ with |ρ|<1, strictly exogenous regressors, and appropriate innovation-variance conditions, known ρ permits quasi-differencing y and every X column from the second period onward, then applying OLS. The intercept transforms to 1−ρ. This is the quasi-differenced part of GLS; full-sample GLS also handles the first observation as described below. Coefficients generally change, unlike OLS with HAC covariance adjustment.",
+          "With unknown ρ, estimate it from OLS residuals and refit transformed data: FGLS. Cochrane–Orcutt drops the first observation; Prais–Winsten retains it, multiplying the first row by √(1−ρ²) under a stationary initial-error specification. Estimating ρ makes inference generally asymptotic and removes the finite-sample BLUE claim. A wrong AR model or endogenous lagged outcome can invalidate a mechanical correction."
+        ]
+      },
+      "formula": "yₜ−ρyₜ₋₁=(1−ρ)β₀+β′(xₜ−ρxₜ₋₁)+eₜ",
+      "symbols": {
+        "zh": "ρ为误差持续性；eₜ为创新；GLS用已知ρ，FGLS用估计ρ；全部回归项须同步变换。",
+        "en": "ρ is error persistence, eₜ the innovation; GLS uses known ρ and FGLS an estimate. Transform every regressor consistently."
+      },
+      "example": {
+        "zh": "教学示例：ρ=0.6，yₜ=80、yₜ₋₁=100，准差分y为20，截距列为0.4；只变换y而保留原X，估计的已不是同一个模型。",
+        "en": "Illustrative example: ρ=0.6, yₜ=80, and yₜ₋₁=100 give transformed y=20 and intercept column 0.4. Transforming only y changes the model instead of implementing GLS."
+      },
+      "pitfall": {
+        "zh": "相关结构模型可信时可提高效率；“残差相关”本身并不证明AR(1)就是正确结构。",
+        "en": "A credible correlation model can improve efficiency; detecting dependence does not prove an AR(1) specification correct."
+      },
+      "quiz": {
+        "question": {
+          "zh": "Prais–Winsten与Cochrane–Orcutt的一项区别是什么？",
+          "en": "What is one difference between Prais–Winsten and Cochrane–Orcutt?"
+        },
+        "options": [
+          {
+            "zh": "前者永远无偏，后者永远有偏",
+            "en": "The former is always unbiased and the latter always biased"
+          },
+          {
+            "zh": "只有后者需要外生性",
+            "en": "Only the latter requires exogeneity"
+          },
+          {
+            "zh": "前者适当变换并保留首期，后者舍去首期",
+            "en": "The former transforms and retains the first observation; the latter drops it"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "首期处理不同；二者均依赖模型条件，估计ρ后没有一般有限样本无偏保证。",
+          "en": "Their first-observation treatment differs; both rely on assumptions and lack a general finite-sample unbiasedness guarantee after estimating ρ."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "12",
+          "section": "12.3 Correcting for Serial Correlation with Strictly Exogenous Regressors"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m21-c01",
+        "m07-c02",
+        "m09-c05"
+      ]
+    },
+    {
+      "id": "m21-c03",
+      "module": "m21",
+      "level": "extension",
+      "title": {
+        "zh": "ARCH 与条件方差动态",
+        "en": "ARCH and conditional-variance dynamics"
+      },
+      "question": {
+        "zh": "今天的正负方向难预测，为什么波动大小仍可预测？",
+        "en": "Why might the size of fluctuations be predictable when their sign is not?"
+      },
+      "intuition": {
+        "zh": "大冲击之后更容易出现大波动，但下一次冲击仍可能正也可能负。",
+        "en": "Large shocks can be followed by high volatility while the next shock may still have either sign."
+      },
+      "explanation": {
+        "zh": [
+          "ARCH把条件方差建模为过去误差平方的函数。ARCH(1)写成hₜ=ω+αuₜ₋₁²，uₜ=√hₜ εₜ，其中标准化创新条件均值0、方差1。ω>0和α≥0保证方差为正；在标准设定下α<1给出有限无条件方差ω/(1−α)。",
+          "即使E(uₜ|过去)=0、误差没有线性序列相关，uₜ²仍可能相关。估计前要先给均值模型合理设定；诊断可把残差平方回归到其滞后并联合检验，常规ARCH-LM需相应矩与大样本条件。是否需要特殊系数标准误取决于对哪些变量条件化及均值结构，不能从“有ARCH”一概推断OLS必然有偏。"
+        ],
+        "en": [
+          "ARCH models conditional variance as a function of past squared errors. ARCH(1) uses hₜ=ω+αuₜ₋₁² and uₜ=√hₜ εₜ, with standardized innovations having conditional mean zero and variance one. ω>0 and α≥0 ensure positive variance; in the standard setting α<1 gives finite unconditional variance ω/(1−α).",
+          "Even if E(uₜ|past)=0 and errors are serially uncorrelated, their squares can be correlated. Specify the conditional mean appropriately first. Diagnostic tests regress squared residuals on their lags and test jointly; ARCH-LM requires suitable moments and asymptotic conditions. Inference implications depend on conditioning information and mean dynamics; ARCH does not automatically make OLS coefficients biased."
+        ]
+      },
+      "formula": "hₜ=ω+αuₜ₋₁²;  uₜ=√hₜ εₜ;  Var(uₜ)=ω/(1−α) under standard finite-variance conditions",
+      "symbols": {
+        "zh": "hₜ是给定过去信息的方差；ω是基准项；α衡量冲击对随后波动的持续影响。",
+        "en": "hₜ is variance conditional on past information; ω is the baseline and α measures persistence in shock-driven volatility."
+      },
+      "example": {
+        "zh": "教学示例：ω=1、α=0.5。上期误差为1时h=1.5，为3时h=5.5，为−3时也为5.5：此模型响应大小而非正负。",
+        "en": "Illustrative example: with ω=1 and α=0.5, a previous error of 1 gives h=1.5; either 3 or −3 gives h=5.5. This model responds to magnitude, not sign."
+      },
+      "pitfall": {
+        "zh": "条件异方差不等于条件均值可预测；两者的模型与诊断应分开。",
+        "en": "Predictable conditional variance does not imply a predictable conditional mean; model and diagnose them separately."
+      },
+      "quiz": {
+        "question": {
+          "zh": "ARCH(1)允许哪一种情况？",
+          "en": "Which situation can ARCH(1) allow?"
+        },
+        "options": [
+          {
+            "zh": "误差不相关，但误差平方相关",
+            "en": "Uncorrelated errors but correlated squared errors"
+          },
+          {
+            "zh": "方差必定为负",
+            "en": "Variance must be negative"
+          },
+          {
+            "zh": "误差有波动就必有内生性",
+            "en": "Any fluctuation implies endogeneity"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "方差依赖历史冲击大小，而条件平均冲击仍可为零。",
+          "en": "Variance depends on past shock magnitudes while the conditional mean shock can remain zero."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "12",
+          "section": "12.6 Heteroskedasticity in Time Series Regressions"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m08-c02",
+        "m07-c01",
+        "m21-c01"
+      ]
+    },
+    {
+      "id": "m21-c04",
+      "module": "m21",
+      "level": "extension",
+      "title": {
+        "zh": "非平衡面板与 FE、FD 估计",
+        "en": "Unbalanced panels and FE/FD estimation"
+      },
+      "question": {
+        "zh": "每个人观察期数不同，还能做固定效应吗？",
+        "en": "Can fixed effects be used when people have different numbers of observed periods?"
+      },
+      "intuition": {
+        "zh": "可以按各人的实际观察做变换，但退出机制与误差相关会改变识别。",
+        "en": "Transform each unit over its observed periods, while checking whether observation patterns are related to errors."
+      },
+      "explanation": {
+        "zh": [
+          "非平衡面板可按各单位实际观察期计算组内均值再做FE，不必机械删除所有不完整单位。有效性要求在合适协变量、个体效应及观察模式条件下，特异误差仍满足所需外生条件；退出若依赖当前未观测冲击，去均值不能修复选择。只有一期的单位无法提供组内变化。",
+          "同一两期样本中，标准FE与FD斜率相同；多期时不同。特异误差各期不相关且同方差时FE通常更有效；误差近似随机游走时，FD的误差结构更简单。FD需明确时间间隔，有缺期时不能把跨两年的差称为一年差。无论选哪一种，推断都应允许适当的单位内相关。"
+        ],
+        "en": [
+          "Unbalanced-panel FE demeans over each unit’s observed periods; incomplete units need not all be discarded. Validity requires suitable exogeneity of idiosyncratic errors conditional on covariates, unit effects, and observation patterns. Attrition driven by current unobserved shocks is not fixed by demeaning. A unit observed once supplies no within-unit variation.",
+          "On the same two-period sample, standard FE and FD slopes coincide; with more periods they differ. FE is generally more efficient with serially uncorrelated homoskedastic idiosyncratic errors, whereas FD has a simpler error structure when those errors resemble a random walk. Specify intervals carefully: a two-year difference across a missing year is not a one-year difference. Both methods need dependence-appropriate inference."
+        ]
+      },
+      "formula": "within: yᵢₜ−ȳᵢ,obs;  FD: Δyᵢₜ=yᵢₜ−yᵢ,ₜ₋₁;  T=2: β̂FE=β̂FD (same sample/specification)",
+      "symbols": {
+        "zh": "obs表示实际观察期；T为期数；两期等价要求相同模型、样本与标准权重。",
+        "en": "obs denotes observed periods; T counts periods. Two-period equivalence requires the same model, sample, and standard weighting."
+      },
+      "example": {
+        "zh": "教学示例：A在2020、2021、2022都观察到，B只在2020和2022观察到。B可以贡献FE变化，但其相邻记录差是两年变化，不能直接塞入一年FD。",
+        "en": "Illustrative example: A is observed in 2020–2022, B only in 2020 and 2022. B can contribute to FE, but its adjacent-record difference spans two years and cannot be treated as a one-year FD."
+      },
+      "pitfall": {
+        "zh": "非平衡只是数据形状；是否造成偏差取决于缺期和退出的机制。",
+        "en": "Unbalancedness describes data shape; bias depends on why observations are missing or units exit."
+      },
+      "quiz": {
+        "question": {
+          "zh": "两期FE与FD斜率相同，能否推广到任意多期？",
+          "en": "Does equality of two-period FE and FD slopes extend to any number of periods?"
+        },
+        "options": [
+          {
+            "zh": "只有因变量为0时才相同",
+            "en": "They coincide only when the outcome is zero"
+          },
+          {
+            "zh": "不能，多期变换一般不同",
+            "en": "No; with more periods their transformations generally differ"
+          },
+          {
+            "zh": "能，永远只是同名方法",
+            "en": "Yes; they are always the same method"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "两期去均值等价于对差分缩放；多期则没有这个一般等式。",
+          "en": "With two periods, demeaning is a rescaling of differences; that identity does not hold generally with more periods."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "14",
+          "section": "14.1 Fixed Effects Estimation"
+        },
+        {
+          "book": "wooldridge-zh",
+          "chapter": "14",
+          "section": "14.1 固定效应估计法 — 14-1c 非平衡面板数据的固定效应法"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m10-c02",
+        "m10-c03",
+        "m07-c04"
+      ]
+    },
+    {
+      "id": "m22-c01",
+      "module": "m22",
+      "level": "extension",
+      "title": {
+        "zh": "双样本 IV 与分样本 IV",
+        "en": "Two-sample and split-sample IV"
+      },
+      "question": {
+        "zh": "结果与处理变量不在同一份数据里，还能做IV吗？",
+        "en": "Can IV work when outcomes and treatment are in different datasets?"
+      },
+      "intuition": {
+        "zh": "IV依赖相应总体矩；在可比条件下，约化式和第一阶段可以分别估计。",
+        "en": "IV relies on population moments; under comparability conditions, the reduced form and first stage can be estimated separately."
+      },
+      "explanation": {
+        "zh": [
+          "双样本IV在样本A观察Y、Z，在样本B观察D、Z。简单二元工具下，可把A中Z对Y的均值差除以B中Z对D的均值差。除了工具外生、排除和相关性，还需要总体、变量定义及第一阶段关系可迁移；不能只因两份数据都有“教育”就拼接。含协变量时还须匹配条件矩或相应总体结构。",
+          "分样本IV可把同一数据随机分开，在一部分估计第一阶段，用它预测另一部分的D再做第二阶段，减少同一观察的噪声被重复使用。但样本拆分损失精度，也不能解决弱工具或无效工具。推断必须计入两个样本及第一阶段估计的不确定性；不能直接使用第二阶段普通OLS标准误。"
+        ],
+        "en": [
+          "Two-sample IV observes Y and Z in sample A and D and Z in sample B. With a simple binary instrument, divide the Z–Y mean difference in A by the Z–D mean difference in B. Beyond instrument exogeneity, exclusion, and relevance, populations, definitions, and the first-stage relationship must be transportable. Shared variable names alone are insufficient; covariate-adjusted applications require compatible conditional moments or population structure.",
+          "Split-sample IV estimates a first stage in one random subsample and applies it to another before the second stage, reducing reuse of the same observations’ noise. Splitting costs precision and does not cure weak or invalid instruments. Inference must include both samples and first-stage estimation uncertainty, rather than use ordinary second-stage OLS standard errors."
+        ]
+      },
+      "formula": "β̂TSIV=[ȲA,Z=1−ȲA,Z=0]/[D̄B,Z=1−D̄B,Z=0]  (simple comparable binary-IV setting)",
+      "symbols": {
+        "zh": "A/B为两个样本；Z为工具，D为处理；分母是可迁移且非零的第一阶段均值差。",
+        "en": "A/B index samples, Z is the instrument, D treatment; the denominator is a transportable nonzero first-stage difference."
+      },
+      "example": {
+        "zh": "教学示例：A中约化式差为100，B中第一阶段差为0.25，则比率为400。若B来自不同年代且工具对参与影响不同，这个400可能没有A中的目标解释。",
+        "en": "Illustrative example: a reduced-form difference of 100 in A and first-stage difference 0.25 in B give 400. If B is from a different period with a different first stage, 400 may not identify the target in A."
+      },
+      "pitfall": {
+        "zh": "独立样本避免某些误差相关，不等于两样本具有同一个总体关系。",
+        "en": "Independent samples avoid some error correlation; they do not ensure identical population relationships."
+      },
+      "quiz": {
+        "question": {
+          "zh": "双样本IV额外需要核查什么？",
+          "en": "What additional issue must two-sample IV address?"
+        },
+        "options": [
+          {
+            "zh": "只需文件格式一致",
+            "en": "Only matching file formats"
+          },
+          {
+            "zh": "两样本量必须完全相等",
+            "en": "Exactly equal sample sizes"
+          },
+          {
+            "zh": "总体与第一阶段关系能否跨样本对应",
+            "en": "Whether population and first-stage relationships correspond across samples"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "识别依赖相容的总体矩，而非同样的文件或人数。",
+          "en": "Identification requires compatible population moments, not identical files or counts."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.3 Two-Sample IV and Split-Sample IV"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m15-c03",
+        "m15-c05"
+      ]
+    },
+    {
+      "id": "m22-c02",
+      "module": "m22",
+      "level": "extension",
+      "title": {
+        "zh": "固定效应与滞后结果控制的识别",
+        "en": "Identification with fixed effects and lagged outcomes"
+      },
+      "question": {
+        "zh": "控制个人固定效应，还是控制处理前结果？",
+        "en": "Should we control unit effects or pretreatment outcomes?"
+      },
+      "intuition": {
+        "zh": "两种方法假设混杂来自不同来源，不能只按哪个更显著来选择。",
+        "en": "The methods address different sources of confounding; significance is not a basis for choosing between them."
+      },
+      "explanation": {
+        "zh": [
+          "FE/差分利用不随时间改变的加性因素，因果解释还需要适当的共同趋势或外生条件。滞后结果控制则依赖：给定处理前结果和其他协变量后，处理与未处理潜在结果可比。若参加培训是因为刚经历收入下跌，暂时冲击不能被固定个人能力完全吸收，回归均值也会影响前后差。",
+          "应根据选择机制说明哪种假设更可信，并把不同结果作为敏感性信息。教材特定设定的FE/滞后结果上下界关系，不是任意研究都成立的定理。同时加入固定效应与滞后因变量也不是免费保险：短面板去均值或差分会让滞后结果与变换误差相关，需要更强的动态识别方法。"
+        ],
+        "en": [
+          "FE/differencing removes additive time-invariant factors, with causal interpretation requiring appropriate common-trend or exogeneity assumptions. Lagged-outcome adjustment instead assumes comparability of treatment groups conditional on pretreatment outcomes and covariates. If training follows a recent earnings dip, fixed ability alone cannot absorb that transitory shock, and mean reversion can affect before–after changes.",
+          "Justify assumptions from the selection mechanism and use differences across estimates as sensitivity information. The textbook’s bracketing result is conditional on a particular setup, not a universal bound. Combining FE and lagged outcomes is not free insurance: in short panels, demeaning or differencing correlates lagged outcomes with transformed errors, requiring stronger dynamic identification methods."
+        ]
+      },
+      "formula": "LDV: Ypost=a+θYpre+δD+X′β+e;  FE/FD: ΔY=Δλ+δD+ΔX′β+Δu (two-period illustrative form)",
+      "symbols": {
+        "zh": "Ypre 为处理前结果；LDV 指滞后因变量调整；Δλ 为共同时间效应的变化；D 标记政策后接受处理的组别，此两期例子中政策前均未处理。δ 的因果解释取决于各自识别假设。",
+        "en": "Ypre is the pretreatment outcome; LDV denotes lagged-outcome adjustment. Δλ is the common time-effect change. D marks the group treated after the policy; everyone is untreated before it in this two-period example. Each causal interpretation of δ depends on its own identifying assumptions."
+      },
+      "example": {
+        "zh": "教学示例：培训者在报名前年份收入异常低，次年即使不培训也可能反弹。把反弹全部归于培训会高估作用；仅加个人固定效应未必消除这类暂时选择。",
+        "en": "Illustrative example: trainees have unusually low income before enrollment and might rebound without training. Assigning the rebound to training overstates its effect; unit FE may not remove this transitory selection."
+      },
+      "pitfall": {
+        "zh": "不能把“都用了面板数据”理解成“依赖相同假设”。",
+        "en": "Using panel data does not mean relying on the same assumptions."
+      },
+      "quiz": {
+        "question": {
+          "zh": "在短面板中同时加FE和滞后因变量，最需注意什么？",
+          "en": "What is a key concern when adding FE and lagged outcomes in a short panel?"
+        },
+        "options": [
+          {
+            "zh": "变换后的滞后结果可能与误差相关",
+            "en": "Transformed lagged outcomes may correlate with errors"
+          },
+          {
+            "zh": "一定比所有其他模型更可信",
+            "en": "It must be more credible than every alternative"
+          },
+          {
+            "zh": "不再需要时间信息",
+            "en": "Time information is no longer needed"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "滞后结果与变换误差共享过去冲击，产生动态面板偏差问题。",
+          "en": "Lagged outcomes and transformed errors share past shocks, creating a dynamic-panel bias problem."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.3 Fixed Effects versus Lagged Dependent Variables"
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.4 Appendix: More on Fixed Effects and Lagged Dependent Variables"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m10-c03",
+        "m16-c02"
+      ]
+    },
+    {
+      "id": "m22-c03",
+      "module": "m22",
+      "level": "extension",
+      "title": {
+        "zh": "工具变量与服从者分位数效应",
+        "en": "IV and complier quantile treatment effects"
+      },
+      "question": {
+        "zh": "有不遵从时，能否研究中位数而不仅是平均效应？",
+        "en": "With noncompliance, can we study median effects rather than only mean effects?"
+      },
+      "intuition": {
+        "zh": "先识别服从者的处理与未处理分布，再比较对应分位数。",
+        "en": "Identify treated and untreated outcome distributions for compliers, then compare corresponding quantiles."
+      },
+      "explanation": {
+        "zh": [
+          "MHE这里讨论二元处理、二元工具的Abadie–Angrist–Imbens方法。在适当条件工具独立、排除限制、单调性、相关性和工具重叠下，可研究服从者的条件分位数差。若指定加性线性分位数模型，处理系数描述同一X下两种潜在结果分布的分位数差；不是个体处理效应的分位数。",
+          "κ权重把观察信息转换为服从者目标，可用于加权分位数损失。原始κ可能为负，实施需处理优化问题，例如估计给定Y、D、X的条件期望权重；标准误还要计入权重估计。不应把第一阶段拟合D直接代入普通分位数回归。此服从者QTE方法不要求另一类结构IVQR的秩相似假设。"
+        ],
+        "en": [
+          "MHE presents the Abadie–Angrist–Imbens approach for binary treatment and instrument. Under conditional instrument independence, exclusion, monotonicity, relevance, and instrument overlap, it studies conditional quantile differences for compliers. In an additive linear quantile specification, the treatment coefficient compares potential-outcome quantiles at the same X; it is not a quantile of individual treatment effects.",
+          "Kappa weights translate observed information into a complier target for weighted quantile loss. Raw kappa can be negative, requiring attention to optimization, for example via estimated expected weights conditional on Y, D, and X; inference must include weight estimation. Simply inserting fitted D into ordinary quantile regression is not the procedure. This complier-QTE approach does not require the rank-similarity assumption used by a different structural IVQR framework."
+        ]
+      },
+      "formula": "Qτ(Y(1)|X,C)−Qτ(Y(0)|X,C)=ατ;  κ=1−D(1−Z)/(1−π(X))−(1−D)Z/π(X)",
+      "symbols": {
+        "zh": "C为服从者；π(X)=P(Z=1|X)，介于0与1；τ为分位数水平；κ为理论权重。",
+        "en": "C denotes compliers; π(X)=P(Z=1|X) lies between zero and one; τ is the quantile level; κ is a theoretical weight."
+      },
+      "example": {
+        "zh": "教学示例：在某X下，服从者Y(1)中位数为120、Y(0)为100，QTE为20；这不等于“服从者个人收益的中位数为20”。",
+        "en": "Illustrative example: complier medians at a given X are 120 under treatment and 100 without it, giving QTE=20. This does not imply a median individual gain of 20."
+      },
+      "pitfall": {
+        "zh": "条件分位数差也不自动等于总体边际分位数差；后者需整合分布再求分位数。",
+        "en": "Conditional quantile differences do not automatically equal marginal quantile differences; the latter require integrating distributions before taking quantiles."
+      },
+      "quiz": {
+        "question": {
+          "zh": "QTE=20最直接描述什么？",
+          "en": "What does QTE=20 most directly describe?"
+        },
+        "options": [
+          {
+            "zh": "个人收益分布的第τ分位数必为20",
+            "en": "The τ-quantile of individual gains must be 20"
+          },
+          {
+            "zh": "两种潜在结果分布相应分位数的差",
+            "en": "A difference between corresponding potential-outcome quantiles"
+          },
+          {
+            "zh": "每个人收益都为20",
+            "en": "Every individual gains 20"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "分位数之差一般不等于个体差值的分位数。",
+          "en": "A difference of quantiles generally differs from the quantile of individual differences."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "7",
+          "section": "7.2 IV Estimation of Quantile Treatment Effects"
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "7",
+          "section": "7.2.1 The QTE Estimator"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m15-c04",
+        "m18-c01",
+        "m18-c02"
+      ]
+    },
+    {
+      "id": "m22-c04",
+      "module": "m22",
+      "level": "extension",
+      "title": {
+        "zh": "内生性与过度识别检验",
+        "en": "Endogeneity and overidentification tests"
+      },
+      "question": {
+        "zh": "有了工具变量，哪些假设可以检验到什么程度？",
+        "en": "With instruments available, how far can the assumptions be tested?"
+      },
+      "intuition": {
+        "zh": "每项诊断检验一个受维护假设支撑的限制，不能给整套工具签发有效证明。",
+        "en": "Each diagnostic tests restrictions conditional on maintained assumptions; none certifies the whole instrument set."
+      },
+      "explanation": {
+        "zh": [
+          "线性模型中可先把疑似内生变量D对全部外生控制和工具回归，保存残差v̂；再把v̂加入含D的原结果方程，检验其系数为零。多内生变量则联合检验相应残差。这个内生性检验维护了工具有效及相关模型条件；拒绝与否不能反过来证明工具成立，异方差时应使用相应稳健版本。",
+          "过度识别需要工具多于内生变量。经典同方差Sargan做法是用2SLS残差对全部工具及外生控制作辅助回归，nR²参照χ²的多余工具自由度；异方差时需稳健矩条件检验。拒绝可来自工具失效或共同参数模型错误，异质效应下有效工具也可能对应不同LATE；未拒绝只表示没有检测出冲突。"
+        ],
+        "en": [
+          "In a linear model, regress a potentially endogenous D on all exogenous controls and instruments, save v̂, and add it to the original outcome equation containing D. Test its coefficient as zero; with several suspect regressors, test their residuals jointly. This maintains valid instruments and other model conditions. The result does not validate instruments; use an appropriate robust version under heteroskedasticity.",
+          "Overidentification requires more excluded instruments than endogenous regressors. The classical homoskedastic Sargan procedure regresses 2SLS residuals on all instruments and exogenous controls, comparing nR² with χ² degrees of freedom equal to the excess instrument count. Heteroskedasticity requires robust moment-based testing. Rejection may reflect invalid instruments or a wrong common-parameter model; valid instruments can target different LATEs under heterogeneity. Nonrejection only means no conflict was detected."
+        ]
+      },
+      "formula": "endogeneity: Y=X′β+δD+λv̂+e, H₀:λ=0;  Sargan: J=nR²_aux ≈ χ²(q−r)",
+      "symbols": {
+        "zh": "q为排除工具数；r为内生回归元数；q>r才有过度识别自由度；辅助回归使用2SLS残差。",
+        "en": "q counts excluded instruments, r endogenous regressors; q>r provides overidentification degrees of freedom. The auxiliary regression uses 2SLS residuals."
+      },
+      "example": {
+        "zh": "教学示例：3个排除工具识别1个内生变量，n=400，Sargan辅助R²=0.01，则J=4、自由度2。若检验不显著，仍须用制度背景论证排除限制。",
+        "en": "Illustrative example: three excluded instruments for one endogenous regressor, n=400, and auxiliary R²=0.01 give J=4 with two degrees of freedom. A nonsignificant test still requires a substantive argument for exclusion."
+      },
+      "pitfall": {
+        "zh": "恰好识别时没有多余限制可检验；弱工具也会使传统诊断与推断不可靠。",
+        "en": "Exact identification supplies no excess restrictions to test, and weak instruments can undermine conventional diagnostics and inference."
+      },
+      "quiz": {
+        "question": {
+          "zh": "过度识别检验未拒绝，能否证明所有工具有效？",
+          "en": "Does nonrejection of overidentification establish that every instrument is valid?"
+        },
+        "options": [
+          {
+            "zh": "能，每个排除限制都已证明",
+            "en": "Yes; every exclusion restriction is proven"
+          },
+          {
+            "zh": "能，只要工具多于两个",
+            "en": "Yes, if there are more than two instruments"
+          },
+          {
+            "zh": "不能，它没有发现与维护模型的显著冲突",
+            "en": "No; it detected no significant conflict with the maintained model"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "检验功效、共同参数假设和共同失效等问题仍在。",
+          "en": "Power, common-parameter assumptions, and possible joint invalidity remain concerns."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "15",
+          "section": "15.5 Testing for Endogeneity and Testing Overidentifying Restrictions"
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.2.2 Overidentification and the 2SLS Minimand"
+        }
+      ],
+      "minutes": 12,
+      "prerequisites": [
+        "m15-c02",
+        "m15-c03",
+        "m15-c05",
+        "m19-c02"
+      ]
+    }
+  ]
+}

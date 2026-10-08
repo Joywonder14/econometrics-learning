@@ -1,0 +1,221 @@
+{
+  "review_date": "2026-10-08",
+  "reviewed_cards": 114,
+  "reviewed_modules": 23,
+  "baseline_commit": "241af9c6ca20024865a7d92f538df12c66c58331",
+  "scope": [
+    "Definitions, formulas and assumptions",
+    "Chinese/English consistency",
+    "Teaching examples and quiz answers",
+    "Textbook references",
+    "Prerequisite graph and navigation",
+    "Glossary and three interactive simulations"
+  ],
+  "modified_cards": 29,
+  "changes": [
+    {
+      "card_id": "m00-c02",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m00-c03",
+      "updated_fields": [
+        "pitfall"
+      ]
+    },
+    {
+      "card_id": "m00-c04",
+      "updated_fields": [
+        "intuition",
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m00-c06",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m01-c02",
+      "updated_fields": [
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m01-c03",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m02-c02",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m02-c03",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m02-c04",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m03-c03",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m05-c04",
+      "updated_fields": [
+        "intuition",
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m06-c01",
+      "updated_fields": [
+        "explanation",
+        "formula"
+      ]
+    },
+    {
+      "card_id": "m07-c04",
+      "updated_fields": [
+        "explanation",
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m09-c01",
+      "updated_fields": [
+        "explanation",
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m09-c03",
+      "updated_fields": [
+        "formula",
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m11-c01",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m11-c02",
+      "updated_fields": [
+        "example"
+      ]
+    },
+    {
+      "card_id": "m11-c03",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m13-c03",
+      "updated_fields": [
+        "explanation",
+        "formula"
+      ]
+    },
+    {
+      "card_id": "m15-c01",
+      "updated_fields": [
+        "pitfall",
+        "quiz"
+      ]
+    },
+    {
+      "card_id": "m16-c04",
+      "updated_fields": [
+        "explanation",
+        "formula",
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m17-c01",
+      "updated_fields": [
+        "example"
+      ]
+    },
+    {
+      "card_id": "m17-c03",
+      "updated_fields": [
+        "formula"
+      ]
+    },
+    {
+      "card_id": "m18-c01",
+      "updated_fields": [
+        "explanation",
+        "formula",
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m18-c02",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m19-c01",
+      "updated_fields": [
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m20-c04",
+      "updated_fields": [
+        "symbols"
+      ]
+    },
+    {
+      "card_id": "m21-c02",
+      "updated_fields": [
+        "explanation"
+      ]
+    },
+    {
+      "card_id": "m22-c02",
+      "updated_fields": [
+        "formula",
+        "symbols"
+      ]
+    }
+  ],
+  "module_title_change": {
+    "module_id": "m00",
+    "zh": "计量分析导论与数学工具",
+    "en": "Introduction to econometric analysis and mathematical tools"
+  },
+  "findings": [
+    "Clarified assumptions behind finite-sample inference, measurement-error attenuation, IV, DID, RD and likelihood formulas.",
+    "Distinguished quadratic turning points from inflection points, local derivatives from finite changes, and conditional from unconditional means.",
+    "Corrected notation for fixed-horizon forecast evaluation, staggered-treatment potential outcomes, quantiles and common time effects.",
+    "No incorrect quiz-answer indices found; all 114 questions reviewed."
+  ],
+  "limits": [
+    "This editorial and numerical review is not a guarantee that no errors remain.",
+    "No reproduction of the books’ empirical datasets was performed.",
+    "The Chinese Mostly Harmless Econometrics scan could not be reliably text-extracted; substantive checks rely on the English original.",
+    "Full matrix derivations, lengthy proofs and exercise collections remain textbook reading; coverage is not a page-by-page replacement."
+  ]
+}

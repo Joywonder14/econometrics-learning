@@ -1,0 +1,481 @@
+{
+  "modules": [
+    {
+      "id": "m00",
+      "title": {
+        "zh": "计量分析导论与数学工具",
+        "en": "Introduction to econometric analysis and mathematical tools"
+      },
+      "description": {
+        "zh": "先弄清在问什么，再读懂符号、斜率、对数与矩阵。",
+        "en": "Define the question, then read symbols, slopes, logs and matrices."
+      },
+      "stage": 0,
+      "prerequisites": []
+    }
+  ],
+  "cards": [
+    {
+      "id": "m00-c01",
+      "module": "m00",
+      "title": {
+        "zh": "计量经济学的研究目标",
+        "en": "Objectives of econometric analysis"
+      },
+      "question": {
+        "zh": "看到“多读一年书的人收入更高”，我们能得出什么？",
+        "en": "What can we conclude when more-educated people earn more?"
+      },
+      "intuition": {
+        "zh": "计量经济学把经济问题变成能用数据讨论的问题。但“描述差异”“预测结果”“识别原因”是三个不同目标，不能只凭一条回归线互相替代。",
+        "en": "Econometrics turns economic questions into questions we can examine with data. Describing a difference, predicting an outcome and identifying a cause are different goals; a regression line does not make them interchangeable."
+      },
+      "explanation": {
+        "zh": [
+          "描述性问题问“谁与谁不同”；预测性问题问“给定信息，怎样猜得更准”；因果性问题问“如果改变某件事，结果会怎样变化”。同一组教育和收入数据可以服务于这三个目标，但每个目标要求的论证不同。先明确要估计的对象，才知道该收集什么数据、使用什么方法。",
+          "横截面是在一个时点观察不同对象；时间序列是按时间观察一个对象或总体；面板是在多个时点跟踪同一批对象。数据结构决定哪些观测可能相关，也影响标准误与研究设计。把同一个人两年的记录当作两个完全独立的人，可能低估不确定性。",
+          "合理流程是：经济问题 → 目标参数 → 识别假设 → 数据 → 估计与推断 → 检查与解释。观测到的相关性既可能来自真实因果，也可能来自混杂或反向因果。统计方法帮助把假设写清楚，不能自动把所有假设变成事实。"
+        ],
+        "en": [
+          "A descriptive question asks who differs from whom. A predictive question asks how to forecast an outcome using available information. A causal question asks how an intervention would change the outcome. The same education and earnings data may be relevant to all three, but each requires a different argument. Define the target before choosing data and methods.",
+          "A cross section observes different units at one time. A time series observes a unit or aggregate across time. A panel follows the same units repeatedly. Data structure shapes dependence, inference and research design. Treating two observations of the same person as fully independent can understate uncertainty.",
+          "A useful sequence is question → target parameter → identification assumptions → data → estimation and inference → checks and interpretation. An association can reflect causation, confounding or reverse causality. Statistical methods clarify assumptions; they do not automatically establish them."
+        ]
+      },
+      "formula": "Question → Estimand → Assumptions → Data → Estimate → Interpretation",
+      "symbols": {
+        "zh": "Estimand 指“目标参数”；Estimate 指“样本给出的估计值”。因果目标必须说明干预、对象和比较状态。",
+        "en": "An estimand is the target quantity; an estimate is its sample-based value. A causal target must specify the intervention, units and comparison."
+      },
+      "example": {
+        "zh": "教学示例：教育与收入正相关，可能部分是因为家庭资源同时提高教育与收入。用教育预测收入也许有效，但把回归斜率叫作“教育的因果回报”，还需要能排除或处理混杂的设计。",
+        "en": "Illustration: family resources may raise both schooling and earnings. Schooling may predict earnings, but interpreting a regression slope as the causal return to schooling requires a design that addresses such confounding."
+      },
+      "pitfall": {
+        "zh": "预测准确不代表因果识别成功。控制变量越多，也不保证因果结论越可信；处理之后的变量或碰撞变量可能引入新的偏误。",
+        "en": "Accurate prediction does not establish causal identification. More controls do not automatically make a causal claim more credible; post-treatment or collider controls may introduce bias."
+      },
+      "quiz": {
+        "question": {
+          "zh": "“教育能很好预测收入”直接说明什么？",
+          "en": "What follows directly from “education predicts earnings well”?"
+        },
+        "options": [
+          {
+            "zh": "预测上存在有用信息",
+            "en": "Education contains useful predictive information"
+          },
+          {
+            "zh": "增加教育必然导致同幅度的收入增长",
+            "en": "More education necessarily causes the same earnings increase"
+          },
+          {
+            "zh": "所有混杂已经消除",
+            "en": "All confounding has been removed"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "预测结论本身只支持预测用途；因果解释需要额外的识别假设或研究设计。",
+          "en": "The statement supports a predictive use. Causal interpretation needs additional identification assumptions or a research design."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "1",
+          "section": "1.1 What Is Econometrics?; 1.3 The Structure of Economic Data; 1.4 Causality and the Notion of Ceteris Paribus"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": []
+    },
+    {
+      "id": "m00-c02",
+      "module": "m00",
+      "title": {
+        "zh": "计量模型的符号与参数",
+        "en": "Notation and parameters in econometric models"
+      },
+      "question": {
+        "zh": "y、x、β、u 和“帽子”，分别在说什么？",
+        "en": "What do y, x, β, u and a hat mean?"
+      },
+      "intuition": {
+        "zh": "把公式想成一张分工表：y 是要解释的结果，x 是观察到的信息，β 描述总体关系，u 容纳模型没有解释的部分。加上“帽子”通常表示由样本估计出来。",
+        "en": "Think of an equation as a cast list: y is the outcome, x is observed information, β describes a population relationship and u captures what is left out. A hat usually marks something estimated from a sample."
+      },
+      "explanation": {
+        "zh": [
+          "在 yᵢ = β₀ + β₁xᵢ + uᵢ 中，下标 i 指第 i 个观测。β₀ 是截距，β₁ 是 x 增加一单位时模型线性部分的变化，uᵢ 是总体误差。误差并不只是录入错误；它还包含未观测因素与无法用当前模型解释的变化。总体中的 β 通常未知，因此需要样本来估计。",
+          "用样本得到 β̂₀、β̂₁ 后，拟合值为 ŷᵢ = β̂₀ + β̂₁xᵢ，残差为 ûᵢ = yᵢ − ŷᵢ。残差可以算出来，总体误差通常不能直接观测。E 表示总体期望；E[u|x] = 0 是关于总体的条件均值假设，不是“算出的残差平均为零”的另一种写法。"
+        ],
+        "en": [
+          "In yᵢ = β₀ + β₁xᵢ + uᵢ, the subscript i indexes an observation. β₀ is the intercept, β₁ is the change in the model’s linear component for one additional unit of x and uᵢ is the population error. The error is not merely a recording mistake; it includes unobserved determinants and unexplained variation. Population coefficients are generally unknown and must be estimated.",
+          "After estimating β̂₀ and β̂₁, the fitted value is ŷᵢ = β̂₀ + β̂₁xᵢ and the residual is ûᵢ = yᵢ − ŷᵢ. Residuals are computable; population errors generally are not. E denotes population expectation. E[u|x] = 0 is a population conditional-mean assumption, not another way of saying that fitted residuals average to zero."
+        ]
+      },
+      "formula": "yᵢ = β₀ + β₁xᵢ + uᵢ\nŷᵢ = β̂₀ + β̂₁xᵢ\nûᵢ = yᵢ − ŷᵢ",
+      "symbols": {
+        "zh": "i：观测编号；β：未知总体参数；β̂：样本估计值；u：总体误差；û：样本残差；ŷ：拟合值。",
+        "en": "i: observation index; β: population coefficient; β̂: estimated coefficient; u: population error; û: residual; ŷ: fitted value."
+      },
+      "example": {
+        "zh": "教学示例：估计式为 ŷ = 2 + 0.5x。某个观测 x = 4、y = 5，则 ŷ = 4，残差是 1。这个 1 不能直接叫作真实总体误差，因为我们并不知道真正的 β。",
+        "en": "Illustration: the fitted equation is ŷ = 2 + 0.5x. For x = 4 and y = 5, ŷ = 4 and the residual is 1. This 1 is not necessarily the population error because the true coefficients are unknown."
+      },
+      "pitfall": {
+        "zh": "含截距 OLS 的残差和为零，是优化带来的样本代数性质；它并不能验证总体外生性 E[u|x] = 0。",
+        "en": "For OLS with an intercept, residuals sum to zero as a sample algebraic property. This does not verify population exogeneity E[u|x] = 0."
+      },
+      "quiz": {
+        "question": {
+          "zh": "实际值为 9，拟合值为 7，残差是多少？",
+          "en": "If the observed value is 9 and the fitted value is 7, what is the residual?"
+        },
+        "options": [
+          {
+            "zh": "−2",
+            "en": "−2"
+          },
+          {
+            "zh": "2",
+            "en": "2"
+          },
+          {
+            "zh": "无法计算，因为 β 未知",
+            "en": "It cannot be calculated because β is unknown"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "残差用拟合值计算：û = 9 − 7 = 2。未知 β 不妨碍计算样本残差。",
+          "en": "The residual uses the fitted value: û = 9 − 7 = 2. Unknown population coefficients do not prevent this calculation."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "2",
+          "section": "2.1 Definition of the Simple Regression Model; 2.3 Properties of OLS on Any Sample of Data"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m00-c01"
+      ]
+    },
+    {
+      "id": "m00-c03",
+      "module": "m00",
+      "title": {
+        "zh": "变化率、导数与边际效应",
+        "en": "Rates of change, derivatives, and marginal effects"
+      },
+      "question": {
+        "zh": "“x 多一点，y 怎么变”如何写成数学？",
+        "en": "How do we express “what happens to y when x changes”?"
+      },
+      "intuition": {
+        "zh": "斜率比较的是变化量，不是变量本身的比值。直线处处一样陡；曲线的陡峭程度则取决于你站在哪里。导数就是某一点附近的局部斜率。",
+        "en": "A slope compares changes, not the levels of the variables. A straight line has the same slope everywhere; a curve’s steepness depends on where you stand. A derivative is the local slope."
+      },
+      "explanation": {
+        "zh": [
+          "对 y = a + bx，x 改变 Δx 时，y 恰好改变 bΔx。这里 b 的单位是“y 的单位 / x 的单位”，a 只改变整条线的高度。对 y = a + bx + cx²，边际效应变成 b + 2cx。x² 并没有破坏“对参数线性”，因此这种模型仍可用普通最小二乘估计。",
+          "曲线上，用导数乘一个有限变化量一般只是近似。二次函数的精确变化还包含 c(Δx)²。多个解释变量时，偏导数 ∂y/∂x 表示把其他变量固定，仅改变 x。这个数学上的“固定”不自动意味着现实中能实行该干预；因果解释仍要研究设计支持。"
+        ],
+        "en": [
+          "For y = a + bx, a change Δx changes y by exactly bΔx. The units of b are y-units per x-unit, while a shifts the line vertically. For y = a + bx + cx², the marginal effect is b + 2cx. Including x² does not violate linearity in the parameters, so the model can still be estimated by OLS.",
+          "For a curve, multiplying the derivative by a finite change is generally an approximation. The exact quadratic change also contains c(Δx)². With multiple regressors, a partial derivative holds the other variables fixed. This mathematical operation does not by itself establish the effect of a feasible real-world intervention."
+        ]
+      },
+      "formula": "y = a + bx + cx²\ndy/dx = b + 2cx\nΔy = (b + 2cx)Δx + c(Δx)²",
+      "symbols": {
+        "zh": "Δx 是“新值减旧值”；dy/dx 是局部变化率；∂ 表示偏导数。x² 是 x 的平方。",
+        "en": "Δx means new value minus old value; dy/dx is the local rate of change; ∂ denotes a partial derivative. x² means x squared."
+      },
+      "example": {
+        "zh": "教学示例：y = 2 + 3x − 0.5x²。在 x = 2 处，导数为 1。x 增加 0.1 时，近似 Δy = 0.1，精确 Δy = 0.095。变化越小，导数近似通常越合适。",
+        "en": "Illustration: y = 2 + 3x − 0.5x² has derivative 1 at x = 2. Increasing x by 0.1 gives an approximate change of 0.1 and an exact change of 0.095. The local approximation typically improves for smaller changes."
+      },
+      "pitfall": {
+        "zh": "把二次项模型中的 b 单独当作所有人的边际效应，会漏掉 2cx；还应检查估计的转折点（极值点）是否落在数据支持的区间内。",
+        "en": "Treating b alone as everyone’s marginal effect in a quadratic model ignores 2cx. Also check whether an estimated turning point lies within the data-supported range."
+      },
+      "quiz": {
+        "question": {
+          "zh": "y = 1 + 4x − x²，在 x = 1 时的导数是多少？",
+          "en": "For y = 1 + 4x − x², what is the derivative at x = 1?"
+        },
+        "options": [
+          {
+            "zh": "4",
+            "en": "4"
+          },
+          {
+            "zh": "3",
+            "en": "3"
+          },
+          {
+            "zh": "2",
+            "en": "2"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "dy/dx = 4 − 2x。代入 x = 1 得 2，注意导数不是把 x 代入原函数的值。",
+          "en": "dy/dx = 4 − 2x, giving 2 at x = 1. This differs from evaluating the original function."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix A",
+          "section": "A.2 Properties of Linear Functions; A.4 Some Special Functions and Their Properties; A.5 Differential Calculus"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m00-c02"
+      ]
+    },
+    {
+      "id": "m00-c04",
+      "module": "m00",
+      "title": {
+        "zh": "百分比、百分点与自然对数",
+        "en": "Percentages, percentage points and logs"
+      },
+      "question": {
+        "zh": "为什么“增长 10%”和“增长 10 个百分点”不同？",
+        "en": "Why is a 10% rise different from a 10-percentage-point rise?"
+      },
+      "intuition": {
+        "zh": "百分比以原来的水平为分母；百分点直接比较两个百分率。对数把相乘的增长转成相加的差，方便描述相对变化，但对数的真数必须严格为正。",
+        "en": "A percentage change divides by the starting level; a percentage-point change subtracts two rates. Logs turn multiplicative growth into additive differences and describe relative changes, but their arguments must be strictly positive."
+      },
+      "explanation": {
+        "zh": [
+          "从 x₀ 增长到 x₁，百分比变化为 100(x₁−x₀)/x₀。就业率从 50% 到 55%，增加的是 5 个百分点，相对增长则是 10%。如果原值是零，普通增长率没有定义；不能随意继续套公式。计量经济学中未特别说明时，log 通常指自然对数 ln。",
+          "对正数 x，Δln(x) = ln(x₁/x₀)。当变化小时，100Δln(x) 近似百分比变化；精确百分比变化是 100[exp(Δln(x))−1]。自然对数满足 ln(ab)=ln(a)+ln(b)，但 ln(a+b) 不等于 ln(a)+ln(b)。改用 ln(1+x) 仍要求 x>−1，且会改变模型；不能把所得系数直接当成原变量的弹性。"
+        ],
+        "en": [
+          "From x₀ to x₁, the percentage change is 100(x₁−x₀)/x₀. An employment rate rising from 50% to 55% rises by 5 percentage points, or by 10% relative to its initial value. At a zero starting level, the ordinary growth rate is undefined. In econometrics, log generally means the natural logarithm unless stated otherwise.",
+          "For positive x, Δln(x) = ln(x₁/x₀). For small changes, 100Δln(x) approximates the percentage change; the exact value is 100[exp(Δln(x))−1]. While ln(ab)=ln(a)+ln(b), ln(a+b) does not equal ln(a)+ln(b). Using ln(1+x) still requires x>−1 and changes the model; its coefficients are not automatically elasticities of the original variable."
+        ]
+      },
+      "formula": "%Δx = 100 × (x₁ − x₀) / x₀\nΔln(x) = ln(x₁/x₀)\n%Δx = 100 × [exp(Δln(x)) − 1]",
+      "symbols": {
+        "zh": "ln：以 e 为底的自然对数；exp：自然对数的反函数；“≈”表示近似，不是严格相等。",
+        "en": "ln: natural logarithm, base e; exp: its inverse function; ≈ means approximately equal, not exactly equal."
+      },
+      "example": {
+        "zh": "教学示例：收入从 100 增长到 110，准确增长率是 10%，而 100ln(1.1) ≈ 9.53。对数变化 0.1 对应的准确增长率则是 100(e^0.1−1) ≈ 10.52%，并非恰好 10%。",
+        "en": "Illustration: earnings rising from 100 to 110 increase by exactly 10%, while 100ln(1.1) ≈ 9.53. A log change of 0.1 corresponds to approximately 10.52% growth, not exactly 10%."
+      },
+      "pitfall": {
+        "zh": "如果结果变量以 0–1 记录比例，线性模型系数 0.02 对应 2 个百分点，而不是笼统地说“增加 2%”。解释前先确认单位与函数形式。",
+        "en": "For an outcome recorded as a proportion from 0 to 1, a linear coefficient of 0.02 means 2 percentage points, not necessarily a 2% relative rise. Check units and functional form first."
+      },
+      "quiz": {
+        "question": {
+          "zh": "失业率从 4% 增到 6%，应如何描述？",
+          "en": "How should an unemployment rate rising from 4% to 6% be described?"
+        },
+        "options": [
+          {
+            "zh": "增加 2 个百分点，相对增长 50%",
+            "en": "Up 2 percentage points, a 50% relative increase"
+          },
+          {
+            "zh": "增加 2%，相对增长 2 个百分点",
+            "en": "Up 2%, a relative rise of 2 percentage points"
+          },
+          {
+            "zh": "增加 50 个百分点",
+            "en": "Up 50 percentage points"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "直接差是 6%−4%=2 个百分点；相对变化是 (6−4)/4=50%。",
+          "en": "The direct difference is 2 percentage points; the relative change is (6−4)/4 = 50%."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix A",
+          "section": "A.3 Proportions and Percentages; A.4 Some Special Functions and Their Properties"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m00-c03"
+      ]
+    },
+    {
+      "id": "m00-c05",
+      "module": "m00",
+      "title": {
+        "zh": "求和运算与描述统计",
+        "en": "Summation and descriptive statistics"
+      },
+      "question": {
+        "zh": "Σ 和 x̄ 为什么会反复出现在回归公式里？",
+        "en": "Why do Σ and x̄ appear throughout regression?"
+      },
+      "intuition": {
+        "zh": "Σ 不是新运算，而是“把这些数加起来”的缩写。把每个观测减去样本均值，可以把注意力从绝对水平转到“谁高于或低于平均”。",
+        "en": "Σ is shorthand for adding values. Subtracting the sample mean shifts attention from absolute levels to whether each observation is above or below average."
+      },
+      "explanation": {
+        "zh": [
+          "样本均值 x̄ = (1/n)Σᵢxᵢ。求和的 i 从 1 到 n，表示遍历全部观测。常数 a 在每一项中出现一次，因此 Σᵢa = na；但 Σᵢ(axᵢ)=aΣᵢxᵢ。去均值后有 Σᵢ(xᵢ−x̄)=0，这个恒等式不需要正态分布或随机抽样。",
+          "把偏差平方后相加得到 Σᵢ(xᵢ−x̄)²，它不会因正负抵消而消失，衡量样本中的总变异。通常定义样本方差 s² = Σᵢ(xᵢ−x̄)²/(n−1)。在独立同分布且有限方差下，n−1 使这个方差估计量无偏；描述数据时有时也使用分母 n，应说明采用的定义。"
+        ],
+        "en": [
+          "The sample mean is x̄ = (1/n)Σᵢxᵢ, where i runs from 1 to n. A constant a repeated in each term gives Σᵢa = na, while Σᵢ(axᵢ)=aΣᵢxᵢ. Demeaned values satisfy Σᵢ(xᵢ−x̄)=0. This algebraic identity requires neither normality nor random sampling.",
+          "Adding squared deviations gives Σᵢ(xᵢ−x̄)², a measure of total sample variation that avoids cancellation of positive and negative deviations. The usual sample variance divides this quantity by n−1. Under independent identically distributed sampling with finite variance, this yields an unbiased variance estimator. Descriptive conventions sometimes use n instead; state which definition is used."
+        ]
+      },
+      "formula": "x̄ = (1/n) Σᵢ₌₁ⁿ xᵢ\nΣᵢ₌₁ⁿ (xᵢ − x̄) = 0\ns² = [Σᵢ₌₁ⁿ (xᵢ − x̄)²] / (n − 1)",
+      "symbols": {
+        "zh": "Σ：求和；上标 n 与下标 i=1：求和范围；横杠：样本均值；s²：样本方差。要求 n > 1 才能使用最后一个公式。",
+        "en": "Σ: summation; i=1 and n: summation limits; a bar: sample mean; s²: sample variance. The last formula requires n > 1."
+      },
+      "example": {
+        "zh": "教学示例：数据为 1、2、3，均值是 2，偏差为 −1、0、1。偏差和为零，偏差平方和为 2，因此使用 n−1 分母的样本方差为 1。均值一样的两组数据仍然可能有完全不同的方差。",
+        "en": "Illustration: for 1, 2 and 3, the mean is 2 and deviations are −1, 0 and 1. Deviations sum to zero, squared deviations sum to 2, and the sample variance with denominator n−1 is 1. Two samples can have the same mean but different variances."
+      },
+      "pitfall": {
+        "zh": "“先平方再求和”与“先求和再平方”不同。Σxᵢ² 不等于 (Σxᵢ)²；后者包含交叉乘积。",
+        "en": "The sum of squares differs from the square of a sum: Σxᵢ² is not (Σxᵢ)², which also contains cross-products."
+      },
+      "quiz": {
+        "question": {
+          "zh": "数据 2、4 的平方和 Σxᵢ² 是多少？",
+          "en": "For data 2 and 4, what is Σxᵢ²?"
+        },
+        "options": [
+          {
+            "zh": "36",
+            "en": "36"
+          },
+          {
+            "zh": "20",
+            "en": "20"
+          },
+          {
+            "zh": "6",
+            "en": "6"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "先逐项平方再加总：2²+4²=20。36 是 (2+4)²。",
+          "en": "Square each term before adding: 2²+4²=20. The value 36 is the square of the sum."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix A",
+          "section": "A.1 The Summation Operator and Descriptive Statistics"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix C",
+          "section": "C.2 Finite Sample Properties of Estimators"
+        }
+      ],
+      "minutes": 8,
+      "prerequisites": [
+        "m00-c04"
+      ]
+    },
+    {
+      "id": "m00-c06",
+      "module": "m00",
+      "title": {
+        "zh": "矩阵记号与线性回归表示",
+        "en": "Matrix notation and linear regression representation"
+      },
+      "question": {
+        "zh": "为什么多元回归会写成 y = Xβ + u？",
+        "en": "Why is multiple regression written as y = Xβ + u?"
+      },
+      "intuition": {
+        "zh": "矩阵只是把很多行方程整齐排在一起。一行对应一个观测，一列对应一个解释变量。你可以先把它当作电子表格来读，再逐步学习运算。",
+        "en": "A matrix arranges many equations together. Each row is an observation and each column a regressor. Start by reading it as a spreadsheet before learning the algebra."
+      },
+      "explanation": {
+        "zh": [
+          "含截距、k 个解释变量、n 个观测时，X 有 n 行 k+1 列，第一列全为 1；β 是 k+1 行的参数向量，y 和 u 是 n 行向量。第 i 行的 Xβ 正好是 β₀+β₁xᵢ₁+…+βₖxᵢₖ。矩阵乘法要求相邻维度匹配，所以不能随意交换乘法次序。",
+          "X′ 表示转置，把行列互换。当 X 满列秩时，X′X 可逆，OLS 写成 β̂=(X′X)⁻¹X′y。满列秩要求没有完全线性相关的列，且 n≥k+1；仅有足够多观测并不保证这一条件。这个公式给出样本最小二乘解，并不会单独保证无偏或因果意义。",
+          "初学阶段，先记住“数据表 × 估计系数 = 拟合值”的结构即可。进入多元回归后，再回看转置、逆矩阵和秩。统计推断通常还需要正的残差自由度 n−k−1，以及与所用推断方法相匹配的随机误差假设。"
+        ],
+        "en": [
+          "With an intercept, k regressors and n observations, X has n rows and k+1 columns, with a column of ones first. β has k+1 entries; y and u have n. Row i of Xβ is β₀+β₁xᵢ₁+…+βₖxᵢₖ. Matrix multiplication requires compatible dimensions and generally cannot be reordered.",
+          "X′ denotes a transpose, interchanging rows and columns. If X has full column rank, X′X is invertible and OLS is β̂=(X′X)⁻¹X′y. Full column rank rules out exact linear dependence and requires n≥k+1; enough observations alone do not guarantee it. This is a least-squares solution, not a guarantee of unbiasedness or causality.",
+          "At first, remember the structure “data table × estimated coefficients = fitted values.” Return to transposes, inverses and rank after studying multiple regression. Conventional inference also requires positive residual degrees of freedom n−k−1 and assumptions appropriate for the inference method."
+        ]
+      },
+      "formula": "y = Xβ + u\nX: n × (k + 1)     β: (k + 1) × 1\nβ̂ = (X′X)⁻¹X′y    [rank(X) = k + 1]",
+      "symbols": {
+        "zh": "X′：转置；A⁻¹：逆矩阵（存在时）；rank：秩；n：样本量；k：不含截距的解释变量数量。",
+        "en": "X′: transpose; A⁻¹: inverse, when it exists; rank: matrix rank; n: sample size; k: the number of non-intercept regressors."
+      },
+      "example": {
+        "zh": "教学示例：三个人、一个解释变量时，X 的三行可写成 [1,2]、[1,4]、[1,6]，β 为 [β₀,β₁]′。第一行的拟合值是 β̂₀+2β̂₁。若再加入一列 2x，它与 x 完全共线，普通逆矩阵公式就不可用了。",
+        "en": "Illustration: with three people and one regressor, X may have rows [1,2], [1,4] and [1,6]. β is [β₀,β₁]′ and the first fitted value is β̂₀+2β̂₁. Adding a column equal to 2x creates exact collinearity, so the ordinary inverse formula no longer applies."
+      },
+      "pitfall": {
+        "zh": "有闭式公式不代表适合手动计算矩阵逆。实际软件常用更稳定的分解求解；学习重点是条件与结构。",
+        "en": "A closed-form expression does not mean one should explicitly invert matrices in computation. Software often uses more stable decompositions; focus on the structure and conditions."
+      },
+      "quiz": {
+        "question": {
+          "zh": "含截距与两个解释变量，10 个观测对应的 X 维度是？",
+          "en": "With an intercept, two regressors and 10 observations, what are the dimensions of X?"
+        },
+        "options": [
+          {
+            "zh": "10 × 2",
+            "en": "10 × 2"
+          },
+          {
+            "zh": "3 × 10",
+            "en": "3 × 10"
+          },
+          {
+            "zh": "10 × 3",
+            "en": "10 × 3"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "每个观测一行，截距和两个变量各占一列，所以是 10×3。",
+          "en": "Each observation is one row; the intercept and two regressors occupy three columns, giving 10×3."
+        }
+      },
+      "refs": [
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix D",
+          "section": "Summary of Matrix Algebra"
+        },
+        {
+          "book": "wooldridge-en",
+          "chapter": "Appendix E",
+          "section": "The Linear Regression Model in Matrix Form"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m00-c05"
+      ]
+    }
+  ]
+}

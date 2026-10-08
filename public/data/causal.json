@@ -1,0 +1,2453 @@
+{
+  "modules": [
+    {
+      "id": "m13",
+      "title": {
+        "zh": "潜在结果与随机化实验",
+        "en": "Potential outcomes and randomized experiments"
+      },
+      "description": {
+        "zh": "定义反事实与目标效应，理解随机分配、不遵从和推广边界。",
+        "en": "Define counterfactuals and targets; learn randomization, noncompliance, and generalizability."
+      },
+      "stage": 3,
+      "prerequisites": [
+        "m04",
+        "m05"
+      ]
+    },
+    {
+      "id": "m14",
+      "title": {
+        "zh": "回归调整、匹配与加权",
+        "en": "Regression adjustment, matching, and weighting"
+      },
+      "description": {
+        "zh": "理解控制变量、共同支持、未观测混杂与效应异质性。",
+        "en": "Understand controls, overlap, unobserved confounding, and heterogeneity."
+      },
+      "stage": 3,
+      "prerequisites": [
+        "m13",
+        "m04",
+        "m06"
+      ]
+    },
+    {
+      "id": "m15",
+      "title": {
+        "zh": "工具变量与局部平均处理效应",
+        "en": "Instrumental variables and local average treatment effects"
+      },
+      "description": {
+        "zh": "借助外生变化识别效果，理解有效性、两阶段估计、服从者与弱工具。",
+        "en": "Use exogenous variation; understand validity, 2SLS, compliers, and weak instruments."
+      },
+      "stage": 3,
+      "prerequisites": [
+        "m13",
+        "m14"
+      ]
+    },
+    {
+      "id": "m16",
+      "title": {
+        "zh": "双重差分与事件研究",
+        "en": "Difference-in-differences and event studies"
+      },
+      "description": {
+        "zh": "用组间变化构造反事实，审视平行趋势、政策时点和相关误差。",
+        "en": "Construct counterfactual trends and examine parallel trends, timing, and dependence."
+      },
+      "stage": 3,
+      "prerequisites": [
+        "m13",
+        "m10"
+      ]
+    },
+    {
+      "id": "m17",
+      "title": {
+        "zh": "断点回归设计",
+        "en": "Regression discontinuity designs"
+      },
+      "description": {
+        "zh": "理解阈值附近的因果比较、模糊断点、连续性、带宽和局部结论。",
+        "en": "Understand threshold comparisons, fuzzy RD, continuity, bandwidths, and local conclusions."
+      },
+      "stage": 3,
+      "prerequisites": [
+        "m13",
+        "m15"
+      ]
+    },
+    {
+      "id": "m18",
+      "title": {
+        "zh": "分位数回归与稳健推断",
+        "en": "Quantile regression and robust inference"
+      },
+      "description": {
+        "zh": "学习分位数、稳健与聚类标准误，最后把方法与研究问题对应起来。",
+        "en": "Learn quantiles, robust and clustered uncertainty, and match methods to research questions."
+      },
+      "stage": 3,
+      "prerequisites": [
+        "m14",
+        "m15",
+        "m16",
+        "m17"
+      ]
+    }
+  ],
+  "cards": [
+    {
+      "id": "m13-c01",
+      "module": "m13",
+      "title": {
+        "zh": "潜在结果框架",
+        "en": "The potential-outcomes framework"
+      },
+      "question": {
+        "zh": "为什么看不到同一个人接受与不接受培训的收入差？",
+        "en": "Why can we not observe one person’s earnings with and without training?"
+      },
+      "intuition": {
+        "zh": "因果问题比较同一个人的两个世界；数据通常只记录其中一个。",
+        "en": "A causal question compares two worlds for one person; data record only one."
+      },
+      "explanation": {
+        "zh": [
+          "用 Y(1) 表示接受培训时的收入，Y(0) 表示不接受培训时的收入。括号中的数字是干预状态，不是时间或不同的人。实际接受状态 D 决定哪一个结果被观察到。个体效应 Y(1)−Y(0) 可以定义，但通常不能直接从同一个人的记录中算出；培训前收入也不自动等于培训后的未培训反事实。",
+          "研究常转向平均效应。ATE 对目标总体平均，ATT 只对实际接受者平均；二者回答不同政策问题，存在异质性与选择时可能不同。还要把处理定义清楚，例如培训时长与内容，并说明一个人的处理是否影响他人的结果。若存在同伴溢出，仅用自己的 D 描述结果可能不够。明确研究对象、处理版本与结果时间，是开始识别之前的工作。"
+        ],
+        "en": [
+          "Y(1) denotes earnings under training and Y(0) earnings without it. These indices are intervention states, not dates or different people. Actual treatment D determines which outcome is observed. The individual effect Y(1)−Y(0) is defined conceptually but usually cannot be calculated from one person’s record. Earlier earnings are not automatically the later untreated counterfactual.",
+          "Researchers often target averages. ATE averages over a target population; ATT averages over those actually treated. They answer different policy questions and may differ with heterogeneous effects and selection. Define treatment precisely, including duration and content, and consider interference. With peer spillovers, indexing outcomes only by one’s own D may be inadequate. Specify population, treatment versions, and outcome timing before identification."
+        ]
+      },
+      "formula": "Y = D·Y(1) + (1−D)·Y(0)\nATE = E[Y(1)−Y(0)]\nATT = E[Y(1)−Y(0) | D=1]",
+      "symbols": {
+        "zh": "D：是否接受处理；Y(d)：状态 d 下的潜在结果；E：总体平均；竖线表示条件。",
+        "en": "D: treatment status; Y(d): potential outcome under d; E: population average; | means conditional on."
+      },
+      "example": {
+        "zh": "教学假设：甲受训可赚 6000 元，未受训可赚 5000 元，个体效应为 1000 元。现实只看到一种结果，不能直接用乙的 5000 元补上甲的缺失反事实。",
+        "en": "Teaching example: A would earn 6,000 with training and 5,000 without, an effect of 1,000. Only one outcome is observed; B’s 5,000 cannot simply fill A’s missing counterfactual."
+      },
+      "pitfall": {
+        "zh": "把前后变化当作个体因果效应，会把经济环境、年龄等变化也算进去；ATE 与 ATT 不能任意互换。",
+        "en": "Before–after changes also include economic conditions and aging; ATE and ATT are not interchangeable."
+      },
+      "quiz": {
+        "question": {
+          "zh": "ATT 对谁取平均？",
+          "en": "Who is averaged over in ATT?"
+        },
+        "options": [
+          {
+            "zh": "实际接受处理的人",
+            "en": "Those actually treated"
+          },
+          {
+            "zh": "全部目标人群",
+            "en": "Everyone in the target population"
+          },
+          {
+            "zh": "只对工具变量响应的人",
+            "en": "Only IV compliers"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "条件 D=1 限定了实际处理者，尚未涉及工具变量中的服从者。",
+          "en": "D=1 restricts ATT to those treated, not IV compliers."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "2",
+          "section": "2.1 The Selection Problem",
+          "pdfPage": 31
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": []
+    },
+    {
+      "id": "m13-c02",
+      "module": "m13",
+      "title": {
+        "zh": "选择偏差与因果效应",
+        "en": "Selection bias and causal effects"
+      },
+      "question": {
+        "zh": "受训者收入更低，为什么不能证明培训有害？",
+        "en": "Why do lower trainee earnings not prove that training is harmful?"
+      },
+      "intuition": {
+        "zh": "参加项目的人可能原本就更困难；结果差异混合了项目效果与起点差异。",
+        "en": "Participants may have worse prospects initially; observed differences mix effects and selection."
+      },
+      "explanation": {
+        "zh": [
+          "在两组观察到的均值差中，加上再减去处理组未接受处理时的平均结果，可得到“ATT 加选择偏差”的恒等式。选择偏差比较两组在都不接受处理时的潜在结果，不是抽样误差，也不是简单的处理前收入差。它可以正、负或为零，方向取决于进入项目的机制。",
+          "如果培训招收就业困难者，处理组的未培训收入可能比对照组更低，即使培训有效，观察到的收入差仍可能为负。识别策略的任务是说明如何合理重建缺失的反事实。扩大同类样本只会更精确地估计混合差异，不能消除系统性选择。控制可观察特征是否足够，还取决于未观察因素，而不能只看回归拟合优度。"
+        ],
+        "en": [
+          "Adding and subtracting the treated group’s mean untreated potential outcome gives the identity ‘ATT plus selection bias.’ Selection bias compares the two groups’ potential outcomes if neither were treated. It is neither sampling noise nor simply the observed pretreatment gap. Its sign depends on participation mechanisms.",
+          "If training targets disadvantaged workers, their untreated earnings may be lower than controls’ earnings. Training can help even when the observed gap is negative. Identification requires a credible reconstruction of the missing counterfactual. More data estimate the mixed gap more precisely without removing systematic selection. Whether observed controls suffice depends on unobserved factors, not just goodness of fit."
+        ]
+      },
+      "formula": "E[Y|D=1]−E[Y|D=0]\n= ATT + {E[Y(0)|D=1]−E[Y(0)|D=0]}",
+      "symbols": {
+        "zh": "花括号：未处理潜在结果的组间差，即选择偏差；等式使用观察结果与潜在结果的一致性。",
+        "en": "Braces: the group difference in untreated potential outcomes, or selection bias. The identity uses consistency."
+      },
+      "example": {
+        "zh": "假设受训者未受训会赚 3000 元，培训提升 800 元；未受训者赚 4500 元。观察差为 −700 元，等于 800−1500，并非培训降低收入。",
+        "en": "Suppose trainees would earn 3,000 without training and gain 800; controls earn 4,500. The observed −700 gap equals 800−1,500 despite a positive effect."
+      },
+      "pitfall": {
+        "zh": "“样本够大就能解决偏差”混淆了精度与识别；相关变量也不必然是足够的混杂控制。",
+        "en": "A large sample does not solve identification; a correlated control need not remove all confounding."
+      },
+      "quiz": {
+        "question": {
+          "zh": "例子中的 ATT 是多少？",
+          "en": "What is ATT in the example?"
+        },
+        "options": [
+          {
+            "zh": "−1500 元",
+            "en": "−1,500"
+          },
+          {
+            "zh": "800 元",
+            "en": "800"
+          },
+          {
+            "zh": "−700 元",
+            "en": "−700"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "800 是接受者的反事实效果，−700 是可观察的组间差。",
+          "en": "800 is the treated group’s counterfactual effect; −700 is the observed gap."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "2",
+          "section": "2.1 The Selection Problem",
+          "pdfPage": 31
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c01"
+      ]
+    },
+    {
+      "id": "m13-c03",
+      "module": "m13",
+      "title": {
+        "zh": "随机分配与实验识别",
+        "en": "Random assignment and experimental identification"
+      },
+      "question": {
+        "zh": "随机分配为什么能识别平均因果效应？",
+        "en": "Why can random assignment identify average causal effects?"
+      },
+      "intuition": {
+        "zh": "抽签使处理状态不再由原有能力或困难程度决定，从而在平均意义上提供对照。",
+        "en": "A lottery disconnects treatment from prior ability or disadvantage, providing a comparison in expectation."
+      },
+      "explanation": {
+        "zh": [
+          "若处理 D 与两个潜在结果独立，且处理与对照都有正的分配概率，则处理组的平均 Y(1) 代表实验总体的平均 Y(1)，对照组的平均 Y(0) 也一样。在实施完整、结果可观察且满足适当的无干扰等条件下，两组均值差识别实验总体的 ATE。独立是分配机制的性质，不要求每次实验的两组特征都恰好相同。",
+          "有限样本仍可能偶然不平衡，因此估计值需要标准误和置信区间。实验前协变量可帮助检查执行并提高精度，但平衡检验不能证明随机化无误。若失访同时受处理和潜在结果影响，或者处理污染对照组，比较可能失效。整班随机时分配单位是班级，推断也应考虑班内相关；增加班内人数不能替代增加独立班级。"
+        ],
+        "en": [
+          "If D is independent of both potential outcomes and both assignment states have positive probability, treated mean Y(1) and control mean Y(0) represent their experimental population means. With full implementation, observed outcomes, and appropriate no-interference conditions, the group difference identifies experimental ATE. Independence is a property of assignment; it does not require identical characteristics in every realized sample.",
+          "Chance imbalance remains, so estimates need standard errors and confidence intervals. Baseline covariates can check execution and improve precision, but balance tests cannot prove valid randomization. Selective attrition or contamination may undermine comparison. If classes are randomized, assignment is at class level and inference must account for within-class dependence; more pupils cannot substitute for more independent classes."
+        ]
+      },
+      "formula": "D ⟂ {Y(1),Y(0)};  0 < P(D=1) < 1\nE[Y|D=1]−E[Y|D=0] = ATE",
+      "symbols": {
+        "zh": "⟂：统计独立；此处假设完全遵从，随机分配与实际接受相同。",
+        "en": "⟂: statistical independence; full compliance is assumed, so assignment equals actual treatment."
+      },
+      "example": {
+        "zh": "将 200 名学生随机分到两种班级，观察分数差为 3 分。这是效应的样本估计，仍可能因抽签运气而偏离总体效应。",
+        "en": "Assign 200 pupils randomly to two class formats. An observed 3-point difference estimates the effect but varies with the draw."
+      },
+      "pitfall": {
+        "zh": "随机分配不同于随机抽样；前者支持组间因果比较，后者涉及样本对总体的代表性。",
+        "en": "Random assignment supports causal comparison; random sampling concerns population representativeness."
+      },
+      "quiz": {
+        "question": {
+          "zh": "两组基线均值略有不同，必然意味着什么？",
+          "en": "What follows from a small baseline imbalance?"
+        },
+        "options": [
+          {
+            "zh": "随机分配一定失败",
+            "en": "Randomization certainly failed"
+          },
+          {
+            "zh": "必须删除不平衡个体",
+            "en": "Imbalanced individuals must be removed"
+          },
+          {
+            "zh": "可能只是有限样本偶然波动",
+            "en": "It may be finite-sample chance"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "随机化不保证每一次抽签都产生完全相等的组均值。",
+          "en": "Randomization does not guarantee identical sample means in every draw."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "2",
+          "section": "2.2 Random Assignment Solves the Selection Problem",
+          "pdfPage": 34
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "2",
+          "section": "2.3 Regression Analysis of Experiments",
+          "pdfPage": 41
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c02"
+      ]
+    },
+    {
+      "id": "m13-c04",
+      "module": "m13",
+      "title": {
+        "zh": "处理不遵从与意向处理效应",
+        "en": "Treatment noncompliance and intention-to-treat effects"
+      },
+      "question": {
+        "zh": "抽到名额却没有参加，分析时应放在哪组？",
+        "en": "If an offered participant does not attend, which analysis group should they enter?"
+      },
+      "intuition": {
+        "zh": "按抽签分组回答提供机会的效果；按实际参加分组可能重新引入自我选择。",
+        "en": "Lottery groups estimate an offer’s effect; attendance groups can reintroduce self-selection."
+      },
+      "explanation": {
+        "zh": [
+          "用 Z 表示随机提供名额，D 表示实际参加。意向处理效应 ITT 比较 Z=1 与 Z=0 的结果，无论是否遵从安排。只要随机分配与结果追踪保持有效，就能识别提供机会的因果效应。参加本身可能取决于动机或时间，直接比较参加者与未参加者通常破坏原来的可比性。",
+          "若目标是实际培训的效应，还需要工具变量假设：名额只通过参加影响结果，分配独立于潜在结果与响应类型，名额改变参加概率，且没有反向响应者。此时 ITT 除以参加率差识别服从者的 LATE，并非自动得到总体 ATE。对提供名额的 ITT 本身，无须为了识别该效应而要求名额只经实际培训产生作用；两种效应要区分。"
+        ],
+        "en": [
+          "Let Z denote a randomized offer and D actual attendance. ITT compares outcomes by Z regardless of compliance. Valid randomization and follow-up identify the effect of the offer. Attendance may depend on motivation or time constraints, so comparing participants with nonparticipants usually breaks comparability.",
+          "The effect of actual training requires IV assumptions: the offer works only through attendance, assignment is independent of potential outcomes and response types, attendance responds to the offer, and no one responds in the opposite direction. ITT divided by the attendance-rate difference then identifies complier LATE, not population ATE automatically. Identification of the offer’s own ITT does not require exclusion of its other causal channels."
+        ]
+      },
+      "formula": "ITT = E[Y|Z=1]−E[Y|Z=0]\nFirst stage = E[D|Z=1]−E[D|Z=0]\nLATE = ITT / First stage  (under IV assumptions)",
+      "symbols": {
+        "zh": "Z：随机名额；D：实际参加；第一阶段为参加率变化；ITT 是提供名额的效应。",
+        "en": "Z: randomized offer; D: attendance; first stage: attendance-rate change; ITT: effect of the offer."
+      },
+      "example": {
+        "zh": "名额使收入上升 300 元，参加率由 10% 升至 60%。在 IV 假设下，服从者培训效应为 300/0.5=600 元。",
+        "en": "An offer raises earnings by 300 and attendance from 10% to 60%. Under IV assumptions, complier effect is 300/0.5=600."
+      },
+      "pitfall": {
+        "zh": "删去拒绝参加者会按处理后的选择重新筛样本，不能再称为保持原随机化的 ITT。",
+        "en": "Dropping offer refusers selects on post-assignment behavior and is not the original ITT analysis."
+      },
+      "quiz": {
+        "question": {
+          "zh": "ITT 如何处理拒绝名额者？",
+          "en": "How does ITT handle offer refusers?"
+        },
+        "options": [
+          {
+            "zh": "保留在原分配组",
+            "en": "Keep original assignment"
+          },
+          {
+            "zh": "移到对照组",
+            "en": "Move them to controls"
+          },
+          {
+            "zh": "删除",
+            "en": "Delete them"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "ITT 依据随机机会 Z 分组，不依据实际参加 D 重新分组。",
+          "en": "ITT uses offer Z, not regrouping by attendance D."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.4.3 IV in Randomized Trials",
+          "pdfPage": 180
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c03"
+      ]
+    },
+    {
+      "id": "m13-c05",
+      "module": "m13",
+      "title": {
+        "zh": "内部效度与外部效度",
+        "en": "Internal and external validity"
+      },
+      "question": {
+        "zh": "为什么好的实验也不能自动推广到所有人？",
+        "en": "Why can even a good experiment fail to generalize?"
+      },
+      "intuition": {
+        "zh": "先问这次比较是否可信，再问另一批人与另一种实施方式会不会有同样效果。",
+        "en": "First assess credibility, then whether other people and implementations respond similarly."
+      },
+      "explanation": {
+        "zh": [
+          "内部效度关注设计能否识别所研究人群的因果效应，外部效度关注结论对其他人群、地点、时期或政策规模是否有解释力。随机分配主要解决前者，不会使志愿参与者自动代表所有居民。若效果随年龄、能力或参与成本变化，改变人群构成也可能改变平均效应。",
+          "推广之前应明确目标总体，比较其与研究样本的处理前特征，并解释实施强度、制度环境和溢出。可观察特征重新加权只处理可观察构成差异，还依赖条件效应可迁移与共同支持等额外假设。小规模试点扩展后，价格、拥挤或供给条件也可能变化。因此结论应明确对谁、在哪里、何时有效，而非只留下一个脱离语境的系数。"
+        ],
+        "en": [
+          "Internal validity concerns causal identification for the studied population. External validity concerns other populations, places, periods, or scales. Random assignment mainly addresses the former; it does not make volunteers representative of all residents. If effects vary with age, ability, or costs, a changed population composition can change the average effect.",
+          "Define the target population, compare baseline characteristics, and examine implementation, institutions, and spillovers. Reweighting observable characteristics addresses only observable composition differences and requires additional transportability and support assumptions. Scaling a pilot may change prices, congestion, or supply. State whom, where, and when the result concerns rather than reporting a context-free coefficient."
+        ]
+      },
+      "formula": "ATE_sample = E[τ(X)|sample]\nATE_target = E[τ(X)|target]  (if conditional effects transport)",
+      "symbols": {
+        "zh": "τ(X)：特征为 X 的条件平均效应；sample 与 target 为研究样本与目标总体。",
+        "en": "τ(X): conditional average effect at X; sample and target are the study and target populations."
+      },
+      "example": {
+        "zh": "假设培训对初学者增收 1000 元，对熟练者增收 200 元。各半时 ATE=600；初学者占 80% 时，在条件效果可迁移的前提下 ATE=840。",
+        "en": "Effects of 1,000 for novices and 200 for experienced workers give ATE=600 in a half-and-half sample, but 840 in an 80% novice target if conditional effects transport."
+      },
+      "pitfall": {
+        "zh": "外推公式中的效果可迁移是额外假设，不能从随机分配推导；内部可信与能够推广也不能互相替代。",
+        "en": "Transportability is an extra assumption, not a consequence of randomization; internal and external validity do not substitute for each other."
+      },
+      "quiz": {
+        "question": {
+          "zh": "随机分配直接强化哪一方面？",
+          "en": "What does random assignment directly strengthen?"
+        },
+        "options": [
+          {
+            "zh": "样本的代表性",
+            "en": "Sample representativeness"
+          },
+          {
+            "zh": "研究人群内的内部效度",
+            "en": "Internal validity in the study population"
+          },
+          {
+            "zh": "所有国家的外部效度",
+            "en": "External validity to all countries"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "随机化使分配组可比，但并未改变谁进入研究。",
+          "en": "Randomization makes assignment groups comparable without changing who enters the study."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.4 IV with Heterogeneous Potential Outcomes",
+          "pdfPage": 169
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c03"
+      ]
+    },
+    {
+      "id": "m14-c01",
+      "module": "m14",
+      "title": {
+        "zh": "条件均值与线性投影",
+        "en": "Conditional means and linear projections"
+      },
+      "question": {
+        "zh": "回归直线究竟在逼近什么？",
+        "en": "What does a regression line approximate?"
+      },
+      "intuition": {
+        "zh": "条件均值描述每类人的平均结果；线性投影用最合适的直线概括这些平均关系。",
+        "en": "Conditional means describe average outcomes at each X; a linear projection summarizes them with a best-fitting line."
+      },
+      "explanation": {
+        "zh": [
+          "条件期望函数 m(X)=E[Y|X] 给出每个 X 对应的平均结果。将 Y 分成 m(X) 与误差 ε 后，E[ε|X]=0 是定义保证的性质。这并不说明干预 X 会不会改变 Y，也没有把 X 随机化。描述性的条件均值关系与政策干预的因果关系，需要额外假设才能连接。",
+          "总体线性投影选择系数，使预测误差的总体均方最小。在相关矩存在、解释变量无完全共线性时，它使误差与解释变量正交，但一般不保证误差在每个 X 条件下均值为零。即使真实条件均值非线性，回归仍有线性近似意义。把斜率解释为因果效应，则需另行论证混杂控制、函数形式及异质性，不能从最小二乘计算过程直接推出。"
+        ],
+        "en": [
+          "The conditional expectation function m(X)=E[Y|X] gives the mean outcome at each X. Writing Y=m(X)+ε ensures E[ε|X]=0 by definition. This neither establishes effects of intervening on X nor randomizes X. Additional assumptions are needed to connect descriptive conditional means to intervention effects.",
+          "The population linear projection minimizes mean squared prediction error. With finite relevant moments and no perfect collinearity, residuals are orthogonal to regressors, but need not have zero conditional mean at every X. Regression remains a linear approximation when the true conditional mean is nonlinear. Causal interpretation needs separate arguments about confounding, functional form, and heterogeneity."
+        ]
+      },
+      "formula": "m(X)=E[Y|X];  E[Y−m(X)|X]=0\nβ*=argmin_b E[(Y−X′b)²]\nE[X(Y−X′β*)]=0",
+      "symbols": {
+        "zh": "X 包含常数；β* 为总体投影系数，尚未赋予因果含义。",
+        "en": "X includes an intercept; β* is a population projection coefficient, not inherently causal."
+      },
+      "example": {
+        "zh": "工资随年龄先升后降时，直线仍可概括某一年龄范围。改变样本年龄范围可能改变斜率，却不表示生命周期机制发生变化。",
+        "en": "A line can summarize wages over an age range even if wages rise then fall. A changed age range can change the slope without changing the mechanism."
+      },
+      "pitfall": {
+        "zh": "投影误差与 X 不相关弱于 E[u|X]=0；计算产生的正交性不是没有遗漏混杂的证据。",
+        "en": "Projection orthogonality is weaker than E[u|X]=0 and is not evidence of no confounding."
+      },
+      "quiz": {
+        "question": {
+          "zh": "线性投影必然保证什么？",
+          "en": "What does a linear projection ensure?"
+        },
+        "options": [
+          {
+            "zh": "斜率都是因果效应",
+            "en": "All slopes are causal"
+          },
+          {
+            "zh": "条件均值是直线",
+            "en": "The conditional mean is linear"
+          },
+          {
+            "zh": "误差与所用解释变量正交",
+            "en": "Residual orthogonality to included regressors"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "正交条件来自最小化；因果性和条件均值线性不是计算保证的。",
+          "en": "Orthogonality follows from minimization; causality and linear conditional means do not."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "3",
+          "section": "3.1.2 Linear Regression and the CEF",
+          "pdfPage": 53
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": []
+    },
+    {
+      "id": "m14-c02",
+      "module": "m14",
+      "title": {
+        "zh": "条件独立与共同支持",
+        "en": "Conditional independence and overlap"
+      },
+      "question": {
+        "zh": "比较相似背景的人，何时可以识别因果效应？",
+        "en": "When can comparing similar people identify causal effects?"
+      },
+      "intuition": {
+        "zh": "观察特征要足以消除选择，每类人还要有处理与未处理对象可比较。",
+        "en": "Observed characteristics must remove selection, with both treatment states represented for each relevant type."
+      },
+      "explanation": {
+        "zh": [
+          "条件独立要求给定处理前 X 后，处理与潜在结果独立，即同样 X 的人是否接受处理不再携带与潜在结果有关的信息。在一致性和适当无干扰条件下，组内观察均值差识别条件平均处理效应。对总体的 X 分布平均得到 ATE，对处理者的 X 分布平均得到 ATT；平均对象也是识别问题的一部分。",
+          "共同支持要求相关 X 上两种处理状态都有正概率。若某类人全部受训，就无法直接观察同类人的未受训反事实；回归数值可能依赖函数外推。条件独立涉及缺失的潜在结果，无法用平衡表直接验证。应由参与机制论证控制是否充分，同时检查重叠；剔除无重叠样本后，必须重新说明结论适用于哪些人。"
+        ],
+        "en": [
+          "Conditional independence means that treatment carries no information about potential outcomes after conditioning on pretreatment X. With consistency and appropriate no interference, observed within-X mean differences identify conditional average effects. Averaging over population X yields ATE; averaging over treated X yields ATT. The averaging population is part of the identification question.",
+          "Overlap requires positive probabilities of both treatment states at relevant X. If all people of one type are treated, their untreated counterfactual is not observed among the same type; regression may extrapolate. Balance tables cannot verify independence of missing potential outcomes. Justify sufficient controls through participation mechanisms, inspect overlap, and redefine the target after removing unsupported observations."
+        ]
+      },
+      "formula": "{Y(1),Y(0)} ⟂ D | X\n0 < p(X)=P(D=1|X) < 1\nATE=E_X[E(Y|D=1,X)−E(Y|D=0,X)]",
+      "symbols": {
+        "zh": "p(X)：倾向得分；外层 E_X 按目标总体特征分布平均；所列为 ATE 识别的充分条件。",
+        "en": "p(X): propensity score; outer E_X uses target covariate distribution; these are sufficient conditions for ATE identification."
+      },
+      "example": {
+        "zh": "若所有博士都受训，样本中没有未受训博士可匹配。用本科生作对照需要额外假设，不能声称已完成博士组内比较。",
+        "en": "If all PhD holders are trained, there is no untrained PhD match. Using college graduates requires extra assumptions."
+      },
+      "pitfall": {
+        "zh": "观察协变量平衡不能排除未测动机、健康或家庭支持造成的混杂。",
+        "en": "Observed balance cannot rule out confounding by unmeasured motivation, health, or family support."
+      },
+      "quiz": {
+        "question": {
+          "zh": "某类人的 p(X)=1 直接违反什么？",
+          "en": "What does p(X)=1 directly violate?"
+        },
+        "options": [
+          {
+            "zh": "共同支持",
+            "en": "Overlap"
+          },
+          {
+            "zh": "结果连续性",
+            "en": "Outcome continuity"
+          },
+          {
+            "zh": "效应必须为零",
+            "en": "A zero-effect requirement"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "该类人没有未处理比较对象，不能靠同类观察补足反事实。",
+          "en": "That type has no untreated comparison."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "3",
+          "section": "3.2.1 The Conditional Independence Assumption",
+          "pdfPage": 71
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "3",
+          "section": "3.3.1 Regression Meets Matching",
+          "pdfPage": 88
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c02",
+        "m14-c01"
+      ]
+    },
+    {
+      "id": "m14-c03",
+      "module": "m14",
+      "title": {
+        "zh": "控制变量选择与处理后偏差",
+        "en": "Control-variable selection and post-treatment bias"
+      },
+      "question": {
+        "zh": "控制变量越多，因果结论就越可靠吗？",
+        "en": "Do more controls always improve causal credibility?"
+      },
+      "intuition": {
+        "zh": "控制造成可比性问题的因素；控制处理造成的变量可能堵住效应路径或引入选择。",
+        "en": "Control appropriate confounders; controlling treatment consequences can block effects or induce selection."
+      },
+      "explanation": {
+        "zh": [
+          "研究教育对收入的总效应时，教育可能先改变职业，再改变收入。控制毕业后的职业，会固定这一传导渠道，问题已不再是原来的总效应。职业也可能受能力等因素影响，在同一职业中比较不同教育者会筛出不同类型的人；即便教育本身随机分配，这种处理后选择也可能带来偏差。",
+          "控制变量应由时间顺序和因果机制决定，而非只凭与 Y 相关、提高 R² 或使关键系数显著。处理前变量也不是一律安全：若它是其他变量的共同结果，条件化仍可能诱导关联。若研究目标就是直接效应，应明确提出中介分析问题，并说明额外假设；普通回归加入中介变量，并不会自动识别所需的直接效应。"
+        ],
+        "en": [
+          "For education’s total effect on earnings, occupation may mediate part of the effect. Controlling later occupation fixes that channel and changes the question. Occupation may also depend on ability; comparing education levels within occupation can select different types of people even when education was randomized.",
+          "Choose controls using timing and causal mechanisms, not correlation with Y, R², or desired significance. Pretreatment status alone does not guarantee safety: conditioning on a common consequence of other variables can create association. Direct effects require an explicit mediation question and additional assumptions; adding a mediator to regression does not automatically identify them."
+        ]
+      },
+      "formula": "Total-effect path: D → M → Y\nPossible selection path: D → M ← U → Y",
+      "symbols": {
+        "zh": "D：教育；M：职业；U：未观察能力；箭头是所假设的因果方向，不是检验结论。",
+        "en": "D: education; M: occupation; U: unobserved ability; arrows posit causal directions, not test conclusions."
+      },
+      "example": {
+        "zh": "大学帮助人进入高薪职业时，控制职业会排除部分教育收益。白领毕业生与白领非毕业生还可能有不同的能力构成。",
+        "en": "If college opens high-paying occupations, controlling occupation removes part of its benefit; graduates and nongraduates within white-collar work may differ in ability."
+      },
+      "pitfall": {
+        "zh": "“在处理前测量”是重要检查但不是充分准则；仍应分析变量在因果结构中的作用。",
+        "en": "Pretreatment measurement is useful but insufficient; causal role still matters."
+      },
+      "quiz": {
+        "question": {
+          "zh": "估计培训总效应时，控制培训带来的技能提升有何风险？",
+          "en": "What is risky about controlling training-induced skills when estimating a total effect?"
+        },
+        "options": [
+          {
+            "zh": "一定提高外部效度",
+            "en": "Guaranteeing external validity"
+          },
+          {
+            "zh": "阻断部分效应并可能引入选择",
+            "en": "Blocking effects and possibly inducing selection"
+          },
+          {
+            "zh": "一定去除所有混杂",
+            "en": "Removing all confounding"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "技能是可能的中介，控制它改变问题，也不自动识别直接效应。",
+          "en": "Skills may mediate the effect; conditioning changes the question without automatically identifying a direct effect."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "3",
+          "section": "3.2.3 Bad Control",
+          "pdfPage": 83
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m14-c02"
+      ]
+    },
+    {
+      "id": "m14-c04",
+      "module": "m14",
+      "title": {
+        "zh": "匹配、倾向得分与加权",
+        "en": "Matching, propensity scores, and weighting"
+      },
+      "question": {
+        "zh": "背景变量很多时，如何构造可比组？",
+        "en": "How can we construct comparable groups with many covariates?"
+      },
+      "intuition": {
+        "zh": "匹配寻找相似对象；加权改变代表份额；二者都依赖观察特征足够这一前提。",
+        "en": "Matching finds similar people; weighting changes representation; both require sufficient observed characteristics."
+      },
+      "explanation": {
+        "zh": [
+          "倾向得分 p(X) 是给定处理前 X 的处理概率。若给定 X 的条件独立成立，则给定真实 p(X) 也具有所需独立性。这个降维结论不意味着随便拟合一个概率模型就消除了混杂。实践中必须估计得分，再检查匹配或加权后的协变量平衡、共同支持与极端权重，而不能只检查预测准确率。",
+          "逆概率加权对较少见的处理状态赋予较大权重：处理者用 1/p(X)，对照者用 1/[1−p(X)]，在所需假设下其总体差识别 ATE。概率接近零或一时，少数观测可能主导结果，使估计不稳定。截尾或限样本可能改善稳定性，但也会改变目标或引入偏差。匹配与回归都不能凭方法名称解决未观测混杂，关键仍是研究设计与模型质量。"
+        ],
+        "en": [
+          "The propensity score p(X) is treatment probability given pretreatment X. Independence given X implies the required independence given the true p(X). This dimension reduction does not mean any fitted probability model removes confounding. After estimation, inspect balance, overlap, and extreme weights rather than only classification accuracy.",
+          "IPW gives greater weight to uncommon treatment states: 1/p(X) for treated units and 1/[1−p(X)] for controls. Under the assumptions, the population contrast identifies ATE. Probabilities near boundaries allow a few observations to dominate. Trimming or restriction may improve stability while changing targets or introducing bias. Neither matching nor regression inherently solves unobserved confounding."
+        ]
+      },
+      "formula": "p(X)=P(D=1|X)\nATE=E[D·Y/p(X)−(1−D)·Y/(1−p(X))]",
+      "symbols": {
+        "zh": "总体恒等式需条件独立、一致性和重叠；样本实现还需可靠估计 p(X)。",
+        "en": "The identity needs independence, consistency, and overlap; implementation needs reliable propensity estimates."
+      },
+      "example": {
+        "zh": "受训概率为 0.1 的处理者权重为 10；若概率被误估为 0.01，权重变成 100，少数人的测量误差也会被明显放大。",
+        "en": "A treated person with p=0.1 gets weight 10; estimating p=0.01 gives weight 100, amplifying that observation’s errors."
+      },
+      "pitfall": {
+        "zh": "高分类准确率不是目标；几乎完全预测处理状态可能提示共同支持不足。",
+        "en": "High classification accuracy is not the goal; nearly perfect treatment prediction can signal poor overlap."
+      },
+      "quiz": {
+        "question": {
+          "zh": "p(X)=0.2 的处理者，其 ATE 逆概率权重是多少？",
+          "en": "What is the ATE IPW weight of a treated person with p=0.2?"
+        },
+        "options": [
+          {
+            "zh": "0.2",
+            "en": "0.2"
+          },
+          {
+            "zh": "1.25",
+            "en": "1.25"
+          },
+          {
+            "zh": "5",
+            "en": "5"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "处理者用 1/0.2=5；1/0.8 是同类对照者的权重。",
+          "en": "The treated weight is 1/0.2=5; 1/0.8 is the control weight."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "3",
+          "section": "3.3.2 Control for Covariates Using the Propensity Score",
+          "pdfPage": 99
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m14-c02"
+      ]
+    },
+    {
+      "id": "m14-c05",
+      "module": "m14",
+      "title": {
+        "zh": "处理效应异质性与估计权重",
+        "en": "Treatment-effect heterogeneity and estimation weights"
+      },
+      "question": {
+        "zh": "为什么回归、ATE 和 ATT 可能给出不同数字？",
+        "en": "Why can regression, ATE, and ATT differ?"
+      },
+      "intuition": {
+        "zh": "效果因人而异时，对相同的局部效果使用不同权重，就会得到不同的平均。",
+        "en": "Different weights on heterogeneous local effects produce different averages."
+      },
+      "explanation": {
+        "zh": [
+          "考虑二元处理、离散协变量的完全饱和控制以及条件独立。含统一处理系数的总体 OLS 可以看作条件效应的加权平均。权重既取决于各组人口份额，也取决于组内处理方差 p(X)[1−p(X)]。相对于规模相同的组，处理与对照都较充足的组会获得较多权重。",
+          "ATE 按总体人口份额平均，ATT 按处理者特征分布平均，通常不同于回归的权重。所有人效应相同时，权重差异不影响答案；效应异质时差异就有实质意义。这种干净的加权解释依赖二元处理与饱和控制，不能机械推广到任意线性控制模型。比较结果之前，应核对目标人群、共同支持与实际权重，而非认定不同答案必有一个算错。"
+        ],
+        "en": [
+          "With binary treatment, saturated discrete controls, and conditional independence, population OLS with a common treatment coefficient averages conditional effects. Weights depend on population shares and treatment variance p(X)[1−p(X)]. Among equally sized types, those with substantial treated and control representation get more weight.",
+          "ATE uses population shares; ATT uses treated covariate shares. Neither generally equals regression weighting. Constant effects make these differences irrelevant, whereas heterogeneous effects can generate substantively different results. The clean interpretation depends on binary treatment and saturated controls, not arbitrary linear adjustment. Compare populations, support, and weights before declaring divergent estimates mistaken."
+        ]
+      },
+      "formula": "δ_OLS=E[p(X)(1−p(X))·τ(X)] / E[p(X)(1−p(X))]\nτ(X)=E[Y(1)−Y(0)|X]",
+      "symbols": {
+        "zh": "公式限于二元处理、饱和协变量控制及所需因果假设；τ(X) 为条件效应。",
+        "en": "The formula requires binary treatment, saturated controls, and causal assumptions; τ(X) is the conditional effect."
+      },
+      "example": {
+        "zh": "两组人口各半，效应为 2 与 10，处理概率为 0.5 与 0.9。ATE=6，回归权重与 0.25、0.09 成比例，因此 OLS 约为 4.12。",
+        "en": "Equal-sized types have effects 2 and 10, probabilities 0.5 and 0.9. ATE=6; regression weights proportional to 0.25 and 0.09 give about 4.12."
+      },
+      "pitfall": {
+        "zh": "经过控制的回归系数不能一律叫作 ATE；先确认其平均对象及函数形式假设。",
+        "en": "An adjusted regression coefficient is not automatically ATE; establish its target and functional form."
+      },
+      "quiz": {
+        "question": {
+          "zh": "何时不同有效权重仍给出相同平均效应？",
+          "en": "When do different valid weights give the same average effect?"
+        },
+        "options": [
+          {
+            "zh": "处理效应相同",
+            "en": "Effects are constant"
+          },
+          {
+            "zh": "处理概率接近零",
+            "en": "Treatment probabilities approach zero"
+          },
+          {
+            "zh": "样本很小",
+            "en": "The sample is small"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "相同常数的归一化加权平均不变；异质性使权重具有实质意义。",
+          "en": "Any normalized average of the same constant is unchanged."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "3",
+          "section": "3.3.1 Regression Meets Matching",
+          "pdfPage": 88
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m14-c01",
+        "m14-c04"
+      ]
+    },
+    {
+      "id": "m15-c01",
+      "module": "m15",
+      "title": {
+        "zh": "内生性与工具变量识别",
+        "en": "Endogeneity and instrumental-variable identification"
+      },
+      "question": {
+        "zh": "当处理与看不见的因素相关时，如何寻找可信变化？",
+        "en": "How can we find credible variation when treatment correlates with unobservables?"
+      },
+      "intuition": {
+        "zh": "工具变量寻找处理变化中由外部来源推动的部分，再用这部分变化比较结果。",
+        "en": "IV uses the part of treatment variation induced by an external source."
+      },
+      "explanation": {
+        "zh": [
+          "在结构关系 Y=α+βD+u 中，u 包含影响结果但未单独建模的因素。若 D 与 u 相关，OLS 会把处理作用与这些因素混合。遗漏能力、反向因果、测量误差都可能导致内生性，但每种机制需要分别分析，不能仅凭系数看起来反常就断定存在内生性。",
+          "工具变量 Z 要能推动 D，又不能携带与结果误差相关的变化。在无控制、常数效应的线性模型中，取与 Z 的协方差可得到 IV 比率。这个运算展示识别逻辑：结果随 Z 的变化，除以处理随 Z 的变化。存在异质效应时比率的目标需要重新说明，往往是局部效应。寻找工具的关键是制度与分配机制，不能靠在大量变量中搜到显著相关者完成。"
+        ],
+        "en": [
+          "In Y=α+βD+u, u contains determinants of outcomes not separately modeled. Correlation between D and u mixes treatment effects with these factors in OLS. Omitted ability, reverse causality, and measurement error can each cause endogeneity, but require separate analysis; a surprising coefficient is not enough to diagnose it.",
+          "An instrument Z must shift D without bringing variation correlated with the outcome error. In a constant-effect linear model without controls, taking covariances with Z gives the IV ratio. Outcome variation induced by Z is divided by treatment variation induced by Z. With heterogeneous effects, the target must be reconsidered and is often local. Institutional and assignment mechanisms justify instruments, not a search for significant correlations."
+        ]
+      },
+      "formula": "Y=α+βD+u\nplim β̂_OLS=β+Cov(D,u)/Var(D)\nβ_IV=Cov(Z,Y)/Cov(Z,D)  if Cov(Z,u)=0 and Cov(Z,D)≠0",
+      "symbols": {
+        "zh": "u：结构误差；Z：工具变量；plim：大样本概率极限；所示比率为单一工具的常数效应线性情形。",
+        "en": "u: structural error; Z: instrument; plim: probability limit; this is the single-instrument constant-effect linear case."
+      },
+      "example": {
+        "zh": "教育与能力相关时，工资对教育的 OLS 可能混合二者。某项规则若只通过教育影响工资，才可能提供工具；规则本身必须有可信的制度论证。",
+        "en": "If schooling correlates with ability, OLS may mix their effects. A rule can serve as an instrument only if its variation satisfies the required mechanism and validity assumptions."
+      },
+      "pitfall": {
+        "zh": "有效工具可以通过 D 与 Y 相关，需排除其他因果渠道；但若处理效应为零，简化式也可为零，这不自动否定工具。",
+        "en": "A valid instrument may be associated with Y through D, with other causal channels excluded. If the treatment effect is zero, the reduced form can also be zero without invalidating the instrument."
+      },
+      "quiz": {
+        "question": {
+          "zh": "有效工具对结果的因果影响（如果存在）应经过哪个渠道？",
+          "en": "Through which channel may a valid instrument causally affect the outcome?"
+        },
+        "options": [
+          {
+            "zh": "任何显著相关都足够",
+            "en": "Any significant correlation suffices"
+          },
+          {
+            "zh": "通过所研究的处理渠道",
+            "en": "Through the treatment being studied"
+          },
+          {
+            "zh": "必须与结果毫无关系",
+            "en": "It must have no relationship with outcomes"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "排除限制只允许工具经由 D 影响 Y；若处理效应为零，工具对 Y 的简化式效应也可能为零。",
+          "en": "Exclusion permits effects on Y only through D. A zero treatment effect can therefore produce a zero reduced-form effect."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.1 IV and Causality",
+          "pdfPage": 134
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m14-c02"
+      ]
+    },
+    {
+      "id": "m15-c02",
+      "module": "m15",
+      "title": {
+        "zh": "工具变量的有效性条件",
+        "en": "Instrument validity conditions"
+      },
+      "question": {
+        "zh": "相关性、独立性和排除限制分别说什么？",
+        "en": "What do relevance, independence, and exclusion each mean?"
+      },
+      "intuition": {
+        "zh": "先问是否推动处理，再问是否像外生分配，最后问是否只经处理影响结果。",
+        "en": "Ask whether Z shifts treatment, is externally assigned, and affects outcomes only through treatment."
+      },
+      "explanation": {
+        "zh": [
+          "相关性要求 Z 改变接受处理的概率或程度，可以用第一阶段观察。独立性要求 Z 的分配与潜在结果及潜在处理响应无关，或在给定适当处理前 X 后无关。排除限制则要求固定实际处理 D 时，改变 Z 不会改变结果。独立与排除是两个不同主张：即使工具随机分配，也可能通过额外渠道影响结果。",
+          "把三个条件分开，有助于设计证据。第一阶段较强能支持相关性，但不能证明排除限制。基线平衡、制度背景和替代渠道检查可增强可信度，却不能从有限检验中证明所有有效性假设。多个工具的过度识别检验也不是通行证：它检验一组联合限制，拒绝时不直接指出哪个工具有问题，不拒绝也不保证工具有效。"
+        ],
+        "en": [
+          "Relevance requires Z to shift treatment probability or intensity, examined through the first stage. Independence requires assignment of Z to be unrelated to potential outcomes and treatment responses, possibly conditional on appropriate baseline X. Exclusion says that changing Z while holding D fixed does not change outcomes. Random assignment alone does not ensure exclusion.",
+          "Separating these claims clarifies evidence. A strong first stage supports relevance, not exclusion. Baseline balance, institutions, and checks of alternative channels can support credibility but cannot prove all validity assumptions. Overidentification tests are not a validity certificate: rejection concerns joint restrictions and does not identify the faulty instrument; nonrejection does not establish validity."
+        ]
+      },
+      "formula": "Relevance: E[D|Z=1]≠E[D|Z=0]\nIndependence: Z ⟂ {Y(d),D(0),D(1)}\nExclusion: Y(d,1)=Y(d,0)",
+      "symbols": {
+        "zh": "D(z)：工具状态 z 下的潜在处理；Y(d,z)：处理 d、工具 z 下的潜在结果；独立式以排除后的 Y(d) 表示。",
+        "en": "D(z): potential treatment under instrument z; Y(d,z): outcome under d and z; independence is written using exclusion-defined Y(d)."
+      },
+      "example": {
+        "zh": "随机提供培训交通补贴可能提高参加率；若补贴还能直接增加可支配收入并影响结果，即使抽签完全随机，用它识别培训本身的效应也可能违反排除限制。",
+        "en": "A randomized travel subsidy may increase attendance, but if it also directly affects disposable income and the measured outcome, exclusion for training itself may fail."
+      },
+      "pitfall": {
+        "zh": "不要把“工具与误差不相关”当作无需解释的口号；应具体说明分配来源及可能的替代作用渠道。",
+        "en": "Do not merely assert zero instrument–error correlation; explain assignment and possible alternative channels."
+      },
+      "quiz": {
+        "question": {
+          "zh": "随机工具直接影响 Y 的另一渠道，主要威胁什么？",
+          "en": "What is threatened by a randomized instrument’s additional direct effect on Y?"
+        },
+        "options": [
+          {
+            "zh": "第一阶段必定为零",
+            "en": "A necessarily zero first stage"
+          },
+          {
+            "zh": "随机化必定不存在",
+            "en": "The existence of randomization"
+          },
+          {
+            "zh": "排除限制",
+            "en": "Exclusion"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "随机化可能仍然有效，但工具不再仅通过 D 影响 Y。",
+          "en": "Randomization can remain valid while the instrument affects Y through another channel."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.4.1 Local Average Treatment Effects",
+          "pdfPage": 170
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m15-c01"
+      ]
+    },
+    {
+      "id": "m15-c03",
+      "module": "m15",
+      "title": {
+        "zh": "两阶段最小二乘法",
+        "en": "Two-stage least squares"
+      },
+      "question": {
+        "zh": "2SLS 的两阶段分别做什么？",
+        "en": "What does each stage of 2SLS do?"
+      },
+      "intuition": {
+        "zh": "先提取工具能够预测的处理变化，再用这部分变化估计结果反应。",
+        "en": "First isolate instrument-predicted treatment variation, then use it to estimate outcome responses."
+      },
+      "explanation": {
+        "zh": [
+          "第一阶段用所有排除工具 Z 和第二阶段中的外生控制 X 回归内生处理 D，得到拟合值 D̂。第二阶段用 D̂ 和同样的 X 回归 Y，得到 2SLS 的系数。若有多个内生解释变量，每个都要对完整工具集合投影；工具数量满足阶条件只是必要条件，还须有足够独立的相关变化满足秩条件。",
+          "把两步手工 OLS 当作直觉说明即可，实际推断应使用正式 IV 程序。第二步普通 OLS 的默认标准误没有正确处理原结构误差，通常不能直接使用；正式估计应按研究设计选择异方差稳健或聚类协方差。报告时给出第一阶段、简化式、工具有效性论证和第二阶段结果，帮助读者看清数字来自哪部分处理变化。"
+        ],
+        "en": [
+          "The first stage regresses endogenous treatment D on all excluded instruments Z and the exogenous controls X used in the outcome equation. The second stage regresses Y on fitted D and the same X. Multiple endogenous regressors each require projection on the full instrument set. Enough instruments is only an order condition; independently relevant variation must satisfy the rank condition.",
+          "Manual two-step OLS is useful for intuition, but use a formal IV routine for inference. Default second-step OLS standard errors generally do not use the appropriate structural residuals. Choose heteroskedasticity-robust or clustered covariance estimation according to design. Report the first stage, reduced form, validity arguments, and second-stage results to expose the identifying variation."
+        ]
+      },
+      "formula": "Stage 1: D=Zπ+Xγ+v  →  D̂\nStage 2: Y=βD̂+Xδ+residual\nOne binary Z, no X: β̂_IV=(Ȳ₁−Ȳ₀)/(D̄₁−D̄₀)",
+      "symbols": {
+        "zh": "X 含常数与有效外生控制；Z 是排除工具；横杠为按工具组计算的样本均值。",
+        "en": "X includes an intercept and valid exogenous controls; Z contains excluded instruments; bars are sample means by instrument group."
+      },
+      "example": {
+        "zh": "若工具组收入均值差为 240 元，参加率差为 0.4，单工具 IV 为 600 元。分子是简化式，分母是第一阶段，两者必须按同一比较口径计算。",
+        "en": "An instrument-group earnings gap of 240 and attendance gap of 0.4 give IV=600. Numerator and denominator must use consistent comparisons."
+      },
+      "pitfall": {
+        "zh": "不能第一阶段加控制、第二阶段随意删去；也不能把手工第二步 OLS 默认标准误直接当作 IV 标准误。",
+        "en": "Do not arbitrarily change controls between stages or report default manual second-stage OLS standard errors as IV inference."
+      },
+      "quiz": {
+        "question": {
+          "zh": "第一阶段通常应包括哪些变量？",
+          "en": "What normally belongs in the first stage?"
+        },
+        "options": [
+          {
+            "zh": "排除工具及第二阶段外生控制",
+            "en": "Excluded instruments and second-stage exogenous controls"
+          },
+          {
+            "zh": "只包括结果 Y",
+            "en": "Only outcome Y"
+          },
+          {
+            "zh": "只包括显著的工具且删去全部控制",
+            "en": "Only significant instruments and no controls"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "2SLS 将内生变量投影到完整有效工具空间，其中也包含外生控制。",
+          "en": "2SLS projects endogenous regressors onto the full valid instrument space, including exogenous controls."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.1.1 Two-Stage Least Squares",
+          "pdfPage": 140
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.2 Asymptotic 2SLS Inference",
+          "pdfPage": 157
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m15-c02"
+      ]
+    },
+    {
+      "id": "m15-c04",
+      "module": "m15",
+      "title": {
+        "zh": "局部平均处理效应与单调性",
+        "en": "Local average treatment effects and monotonicity"
+      },
+      "question": {
+        "zh": "工具变量估计的是谁的处理效应？",
+        "en": "Whose treatment effect does IV estimate?"
+      },
+      "intuition": {
+        "zh": "二元工具常识别被该工具推动而改变选择的那群人的效应。",
+        "en": "A binary instrument often identifies effects for people whose treatment choice it changes."
+      },
+      "explanation": {
+        "zh": [
+          "对每个人定义 D(1) 与 D(0)，分别表示工具打开和关闭时的处理状态。服从者满足 D(1)=1、D(0)=0；总是接受者与从不接受者不改变选择；反向者则反方向变化。单调性 D(1)≥D(0) 排除反向者，允许前面三类同时存在，不要求每个人都被工具推动。",
+          "在独立性、排除限制、非零第一阶段和单调性下，Wald 比率识别服从者的平均处理效应 LATE。工具不能提供总是接受者的未处理结果，也不能提供从不接受者的处理结果，所以一般无法识别全体 ATE。更换工具可能改变服从者人群，因而有效工具得出不同数字未必矛盾。LATE 的局部性应通过制度背景与人群特征解释。"
+        ],
+        "en": [
+          "D(1) and D(0) are treatment choices with the instrument on and off. Compliers have D(1)=1 and D(0)=0; always-takers and never-takers do not change; defiers change oppositely. Monotonicity D(1)≥D(0) excludes defiers while allowing all three other types. It does not require everyone to respond.",
+          "Under independence, exclusion, a nonzero first stage, and monotonicity, the Wald ratio identifies complier LATE. The instrument does not reveal untreated outcomes for always-takers or treated outcomes for never-takers, so population ATE is generally unavailable. Different valid instruments can identify different complier populations and produce different effects without contradiction. Explain this locality through institutions and population characteristics."
+        ]
+      },
+      "formula": "LATE=E[Y(1)−Y(0)|D(1)>D(0)]\n= {E[Y|Z=1]−E[Y|Z=0]} / {E[D|Z=1]−E[D|Z=0]}\nMonotonicity: D(1)≥D(0) for every unit",
+      "symbols": {
+        "zh": "Z：二元工具；D(z)：潜在处理；服从者由两个潜在选择共同定义，通常不能逐人识别。",
+        "en": "Z: binary instrument; D(z): potential treatment; complier status uses two potential choices and is usually not individually observed."
+      },
+      "example": {
+        "zh": "培训名额只让时间安排灵活的人参加时，工具识别的可能是这类被名额推动者的平均收益，不能直接推断从不愿参加者的收益。",
+        "en": "If offers induce attendance mainly among people with flexible schedules, IV concerns those induced participants, not necessarily people who would never attend."
+      },
+      "pitfall": {
+        "zh": "第一阶段平均为正不能证明每个人的反应都不为负；单调性是个体层面的额外假设。",
+        "en": "A positive average first stage does not prove every individual responds nonnegatively; monotonicity is an additional individual-level assumption."
+      },
+      "quiz": {
+        "question": {
+          "zh": "单调性允许哪些人存在？",
+          "en": "Whom does monotonicity permit?"
+        },
+        "options": [
+          {
+            "zh": "必须同时有服从者和反向者",
+            "en": "Both compliers and defiers must exist"
+          },
+          {
+            "zh": "服从者、总是接受者和从不接受者",
+            "en": "Compliers, always-takers, and never-takers"
+          },
+          {
+            "zh": "只能有服从者",
+            "en": "Only compliers"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "它只排除指定方向上的反向响应，不要求全体都改变处理状态。",
+          "en": "It excludes opposite-direction response, not nonresponse."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.4.1 Local Average Treatment Effects",
+          "pdfPage": 170
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m15-c02",
+        "m13-c04"
+      ]
+    },
+    {
+      "id": "m15-c05",
+      "module": "m15",
+      "title": {
+        "zh": "弱工具变量与推断风险",
+        "en": "Weak instruments and inference risks"
+      },
+      "question": {
+        "zh": "工具有一点相关性，为什么仍可能不够用？",
+        "en": "Why can a small amount of relevance be insufficient?"
+      },
+      "intuition": {
+        "zh": "用很小且估计不准的处理变化作分母，会把结果中的噪声大幅放大。",
+        "en": "Dividing by a small, imprecisely estimated treatment change magnifies noise."
+      },
+      "explanation": {
+        "zh": [
+          "相关性要求第一阶段在总体中不为零，但有限样本还需要足够信息来准确估计它。工具很弱时，IV 比率可能极不稳定，常规大样本正态近似和 t 检验也可能失真。多个弱工具还会过度拟合第一阶段噪声，传统多工具 2SLS 在某些情形下向 OLS 的概率极限偏移；不能把这一方向结论机械用于所有单工具情形。",
+          "应报告排除工具在控制其他变量后的第一阶段强度，以及所用诊断适用的误差结构和内生变量数量。常见的 F 大于 10 只是特定设置下的经验提示，不是普遍充分条件，也不能检验排除限制。出现弱工具风险时，需考虑适用的弱识别稳健推断、改进研究设计或诚实报告信息不足。增加无用工具并不会自动增加可信识别信息。"
+        ],
+        "en": [
+          "Population relevance means a nonzero first stage, but a sample also needs enough information to estimate it accurately. Weak instruments can make IV unstable and invalidate conventional normal approximations and t tests. Many weak instruments can overfit first-stage noise, pulling conventional overidentified 2SLS toward the OLS probability limit in some settings; do not generalize that direction mechanically to every just-identified case.",
+          "Report excluded-instrument strength conditional on controls, along with the error structure and number of endogenous variables to which diagnostics apply. The familiar F>10 heuristic is not a universal sufficient condition and says nothing about exclusion. Weak-identification risks call for suitable robust inference, improved design, or an honest statement of limited information. Adding useless instruments does not automatically add identifying information."
+        ]
+      },
+      "formula": "Wald ratio = reduced form / first stage\nSmall first stage + sampling noise → unstable ratio",
+      "symbols": {
+        "zh": "第一阶段指排除工具对内生变量的有效预测变化；弱工具讨论的是识别强度，不等同于工具是否外生。",
+        "en": "First stage means excluded-instrument predictive variation in the endogenous regressor; strength differs from exogeneity."
+      },
+      "example": {
+        "zh": "简化式估计为 0.2，第一阶段为 0.01，则比率为 20；第一阶段若因抽样波动变为 0.005，比率就变为 40，方向和区间都可能很不稳定。",
+        "en": "A reduced form of 0.2 and first stage of 0.01 give 20; a first stage of 0.005 gives 40. Sampling noise can produce unstable estimates and intervals."
+      },
+      "pitfall": {
+        "zh": "第一阶段显著或 F 超过某阈值，既不保证所有弱工具问题消失，更不保证工具有效。",
+        "en": "First-stage significance or a threshold does not settle every weak-IV concern and cannot establish validity."
+      },
+      "quiz": {
+        "question": {
+          "zh": "增加许多无预测力的工具一定改善 2SLS 吗？",
+          "en": "Does adding many uninformative instruments necessarily improve 2SLS?"
+        },
+        "options": [
+          {
+            "zh": "会，工具越多越好",
+            "en": "Yes; more is always better"
+          },
+          {
+            "zh": "会自动满足排除限制",
+            "en": "It automatically ensures exclusion"
+          },
+          {
+            "zh": "不会，可能加重有限样本问题",
+            "en": "No; it can worsen finite-sample problems"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "数量不能替代有效的外生预测变化，无用工具还可能拟合噪声。",
+          "en": "Instrument count cannot replace relevant exogenous variation; useless instruments can fit noise."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "4",
+          "section": "4.6.4 The Bias of 2SLS",
+          "pdfPage": 224
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m15-c03",
+        "m15-c04"
+      ]
+    },
+    {
+      "id": "m16-c01",
+      "module": "m16",
+      "title": {
+        "zh": "两组两期双重差分",
+        "en": "Two-group, two-period difference-in-differences"
+      },
+      "question": {
+        "zh": "为什么要做两次差分？",
+        "en": "Why take two differences?"
+      },
+      "intuition": {
+        "zh": "先去掉各组不变的水平差异，再用对照组的变化扣除共同时间冲击。",
+        "en": "First remove fixed group-level differences, then subtract a common time change."
+      },
+      "explanation": {
+        "zh": [
+          "设一组在第二期开始接受政策，另一组始终未接受。只比较政策后两组水平会混入原有差异；只比较处理组前后又会混入共同时间变化。DID 用处理组的变化减去对照组变化，相当于以对照组变化预测处理组没有政策时会如何变化。处理组与对照组不必从相同水平出发。",
+          "因果解释需平行趋势、无提前反应、适当的无溢出及一致性等条件：没有政策时，两组的平均变化应相同。此时两组两期 DID 识别处理组政策后 ATT。DID 可以使用同一对象的面板，也可用重复截面；后一种情况还要关注抽样总体与构成变化是否破坏比较。做出两次差分只是算术，假设才提供识别。若处理影响邻近对照组，或两组样本构成出现不同变化，两次差分也不能自动消除这些问题。"
+        ],
+        "en": [
+          "Suppose one group starts treatment in period 1 and the other stays untreated. A post-treatment level comparison includes preexisting differences; a treated-group before–after comparison includes common time changes. DiD subtracts the control change from the treated change, using controls to predict how treated outcomes would have changed without policy. Initial outcome levels need not match.",
+          "A causal interpretation needs parallel trends, no anticipation, suitable no-spillover conditions, and consistency. Without treatment, average changes must be equal. The two-by-two contrast then identifies post-treatment ATT. DiD can use panels or repeated cross-sections; the latter additionally require attention to stable populations and composition. Differencing supplies arithmetic; assumptions supply identification. Spillovers into nearby controls or different changes in group composition are not automatically removed by differencing."
+        ]
+      },
+      "formula": "DiD=(Ȳ_T,post−Ȳ_T,pre)−(Ȳ_C,post−Ȳ_C,pre)\nY_it=α+γT_i+λPost_t+δ(T_i·Post_t)+u_it",
+      "symbols": {
+        "zh": "T：处理组；C：对照组；Post：政策后；δ 为无其他控制的两组两期回归 DID 系数。",
+        "en": "T: treated group; C: controls; Post: post period; δ is the unadjusted two-by-two regression DiD coefficient."
+      },
+      "example": {
+        "zh": "处理组就业从 50 升到 58，对照组从 40 升到 45。DID=(58−50)−(45−40)=3；平行趋势下处理组反事实为 55，实际比它高 3。",
+        "en": "Employment rises 50→58 for treated units and 40→45 for controls. DiD=3; under parallel trends the treated counterfactual is 55."
+      },
+      "pitfall": {
+        "zh": "两组政策前水平不同不会自动否定 DID；真正关键是未处理潜在结果的变化是否可比。",
+        "en": "Different initial levels do not automatically invalidate DiD; comparability of untreated changes matters."
+      },
+      "quiz": {
+        "question": {
+          "zh": "上述 DID 等于多少？",
+          "en": "What is DiD in the example?"
+        },
+        "options": [
+          {
+            "zh": "3",
+            "en": "3"
+          },
+          {
+            "zh": "8",
+            "en": "8"
+          },
+          {
+            "zh": "13",
+            "en": "13"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "处理组变化 8，扣除对照组变化 5，得到 3。",
+          "en": "Subtract the control change of 5 from the treated change of 8."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.2 Differences-in-Differences: Pre and Post, Treatment and Control",
+          "pdfPage": 246
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c02"
+      ]
+    },
+    {
+      "id": "m16-c02",
+      "module": "m16",
+      "title": {
+        "zh": "平行趋势与提前反应",
+        "en": "Parallel trends and anticipation"
+      },
+      "question": {
+        "zh": "政策前走势相近，能证明平行趋势吗？",
+        "en": "Can similar pretreatment trends prove parallel trends?"
+      },
+      "intuition": {
+        "zh": "需要相信的是政策后的未处理反事实趋势；它恰好是处理组没有被观察到的部分。",
+        "en": "The needed comparison concerns untreated post-treatment trends, which are unobserved for treated units."
+      },
+      "explanation": {
+        "zh": [
+          "平行趋势假设说：若处理组没有受到政策，两组在研究期间的平均未处理结果变化相同。它允许固定水平差异，却排除只影响处理组的同时冲击。政策前多期轨迹可帮助判断假设是否合理，但不能观察政策后的处理组未处理结果，因此无法直接证明所需反事实趋势。",
+          "无提前反应要求政策实施之前，单位尚未因预知政策改变结果。如果企业提前招聘，名义上的基线期可能已被处理影响。应结合公告时间、执行时间和行为机制决定基线，并寻找合适的比较组。预趋势检验不显著可能是样本太小或区间太宽，不等于趋势相同；明显差异也应先检查数据构成、测量方式和制度变化。"
+        ],
+        "en": [
+          "Parallel trends says that, without treatment, average untreated changes would be the same across groups. Fixed level differences are allowed; group-specific concurrent shocks are not. Multiple pretreatment periods help assess plausibility but cannot reveal treated units’ missing untreated outcomes after policy, so they cannot prove the required counterfactual trend.",
+          "No anticipation requires outcomes before treatment not to respond to an expected policy. If firms hire in advance, the nominal baseline may already be affected. Choose baseline and comparison groups using announcement dates, implementation, and behavior. An insignificant pretrend test can reflect weak power or wide intervals, not equal trends. Investigate composition, measurement, and institutional changes when differences appear."
+        ]
+      },
+      "formula": "E[Y_post(0)−Y_pre(0)|T=1]\n=E[Y_post(0)−Y_pre(0)|T=0]\nNo anticipation: Y_pre(1)=Y_pre(0)  (for the specified treatment regime)",
+      "symbols": {
+        "zh": "Y_t(0)：时点 t 未处理潜在结果；T：最终处理组；等式关心平均变化，不要求个体轨迹相同。",
+        "en": "Y_t(0): untreated potential outcome at t; T: eventual treatment group; equality concerns average changes, not identical individual paths."
+      },
+      "example": {
+        "zh": "政策与处理城市的另一项产业补贴同年出台，若对照城市未获补贴，DID 可能混合两个政策。加入年份固定效应只能去掉共同冲击，不能自动去掉这项城市特有变化。",
+        "en": "A simultaneous subsidy in treated cities can contaminate DiD. Year effects remove common shocks, not a shock specific to treated cities."
+      },
+      "pitfall": {
+        "zh": "不要把 p>0.05 写成“证实平行趋势”；报告估计区间、可识别的偏离幅度与制度证据更有信息。",
+        "en": "Do not describe p>0.05 as proof of parallel trends; intervals, detectable deviations, and institutional evidence are more informative."
+      },
+      "quiz": {
+        "question": {
+          "zh": "政策前趋势检验不显著，最稳妥的解释是什么？",
+          "en": "What is the cautious interpretation of an insignificant pretrend test?"
+        },
+        "options": [
+          {
+            "zh": "任何后续差异都是政策造成的",
+            "en": "All later differences must be causal"
+          },
+          {
+            "zh": "没有检测到差异，但不能证明相同",
+            "en": "No difference was detected, but equality is unproven"
+          },
+          {
+            "zh": "平行趋势已得到证明",
+            "en": "Parallel trends is proven"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "检验可能功效不足，且它不能直接观察政策后的未处理反事实。",
+          "en": "The test can lack power and does not observe the post-treatment counterfactual."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.2 Differences-in-Differences: Pre and Post, Treatment and Control",
+          "pdfPage": 246
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.2.1 Regression DD",
+          "pdfPage": 252
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m16-c01"
+      ]
+    },
+    {
+      "id": "m16-c03",
+      "module": "m16",
+      "title": {
+        "zh": "事件研究与动态处理效应",
+        "en": "Event studies and dynamic treatment effects"
+      },
+      "question": {
+        "zh": "如何区分政策立即生效、缓慢生效与提前反应？",
+        "en": "How can we distinguish immediate, gradual, and anticipatory responses?"
+      },
+      "intuition": {
+        "zh": "把时间改写成距政策实施还有几年或已经几年，再估计每个相对时点的组间变化。",
+        "en": "Index time by years before or after treatment and estimate changes at each relative period."
+      },
+      "explanation": {
+        "zh": [
+          "在共同处理时点、有未处理对照的简单设计中，将一个处理前时期设为基准，为其他相对时期建立处理组指示变量。单位与时间固定效应控制不变水平和共同冲击，各系数比较相对于基准的处理组额外变化。政策后系数描述动态效应，但因果解释仍依赖各时期合适的平行趋势和无提前反应。",
+          "政策前系数用于观察是否存在先行差异，不是给研究盖上有效印章。应同时展示估计值、区间、基准期和有效样本覆盖，远端时期可能只剩少量样本。多个单独置信区间也不等于整条路径的同时覆盖。若各组分期实施、效果异质，朴素双向固定效应事件研究可能混合不恰当比较，需结合下一张教材外补充选择合适估计方法。"
+        ],
+        "en": [
+          "In a simple common-adoption design with untreated controls, choose a pretreatment reference period and interact treated-group status with indicators for other relative periods. Unit and time effects remove fixed levels and common shocks. Each coefficient measures an extra treated-group change relative to the reference. Post coefficients describe dynamics, with causal interpretation still requiring appropriate parallel trends and no anticipation.",
+          "Lead coefficients reveal possible prior differences but do not certify validity. Display estimates, intervals, reference period, and sample coverage; distant periods may use few observations. Separate pointwise intervals do not guarantee simultaneous coverage of a whole path. With staggered adoption and heterogeneous effects, naive TWFE event studies can mix inappropriate comparisons; consult the next supplementary card."
+        ]
+      },
+      "formula": "Y_it=α_i+λ_t+Σ_(k≠−1) β_k·T_i·1[t−t₀=k]+u_it\nReference period: k=−1",
+      "symbols": {
+        "zh": "t₀：共同政策时点；k：相对时间；β_k：相对基准期的差分；公式用于共同处理时点的简单设计。",
+        "en": "t₀: common policy date; k: event time; β_k: difference relative to the reference; formula describes common adoption."
+      },
+      "example": {
+        "zh": "若基准为实施前一年，β₀=1、β₁=3，可理解为处理组相对对照组的额外变化逐步增加；只有在识别假设下才能称为动态因果效果。",
+        "en": "With the year before treatment as reference, β₀=1 and β₁=3 indicate increasing relative changes; causal labels require the identification assumptions."
+      },
+      "pitfall": {
+        "zh": "不要把省略的基准期当成估计得到的零效应；它是回归归一化的一部分。",
+        "en": "The omitted reference period is a normalization, not an estimated zero effect."
+      },
+      "quiz": {
+        "question": {
+          "zh": "基准期被省略，意味着什么？",
+          "en": "What does omitting a reference period mean?"
+        },
+        "options": [
+          {
+            "zh": "已证明该期没有任何效应",
+            "en": "Its zero effect has been proven"
+          },
+          {
+            "zh": "应删除所有该期观测",
+            "en": "All observations in that period must be dropped"
+          },
+          {
+            "zh": "其他系数都相对于它解释",
+            "en": "Other coefficients are relative to it"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "省略一个指标定义比较尺度，并不要求删掉基准期数据。",
+          "en": "Omitting an indicator defines the reference scale; it does not delete reference-period observations."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.2.1 Regression DD",
+          "pdfPage": 252
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m16-c02"
+      ]
+    },
+    {
+      "id": "m16-c04",
+      "module": "m16",
+      "title": {
+        "zh": "分期双重差分与比较组（教材外补充）",
+        "en": "Staggered difference-in-differences and comparison groups (supplement)"
+      },
+      "question": {
+        "zh": "各地在不同年份实施政策，还能直接读 TWFE 系数吗？",
+        "en": "Can a TWFE coefficient be read directly when adoption is staggered?"
+      },
+      "intuition": {
+        "zh": "已处理组的结果也可能继续受到政策影响，把它当作对照会混入已有政策的动态变化。",
+        "en": "Already-treated outcomes may still be changing because of treatment, contaminating their use as controls."
+      },
+      "explanation": {
+        "zh": [
+          "本卡是教材出版后的方法补充，讨论各组一旦开始处理便持续处理的分期实施设计；退出或反复进入处理需要另行设计比较。传统两向固定效应（TWFE）在分期实施时，会组合多个两组两期比较，其中可能包含以早处理组作为晚处理组对照的比较。若政策效果随处理持续时间改变，早处理组的变化不再只代表未处理时间趋势；即使无处理趋势平行，总系数也未必等于想要的平均政策效应。",
+          "较透明的做法是先定义首次处理组 g 与时期 t 的 ATT(g,t)，在相应识别假设下使用从未处理组或当期尚未处理组作比较，再用明确的非负权重汇总。并非任意选择尚未处理组都自动有效：仍需相应平行趋势、无提前反应和足够支持。报告目标群体、比较组、事件时间覆盖与汇总权重，不能仅靠更换软件命令保证可信。"
+        ],
+        "en": [
+          "This card supplements the books with later methods for staggered adoption in which treatment continues once adopted. Exits or repeated treatment require a different comparison design. Under staggered adoption, traditional TWFE combines several two-by-two comparisons, potentially using early-treated units as controls for late-treated units. If effects change with exposure duration, early-treated changes no longer represent untreated trends. Parallel untreated trends alone need not make the coefficient the desired average effect.",
+          "A transparent approach defines group-time ATT(g,t), uses never-treated or not-yet-treated comparisons under the corresponding assumptions, and aggregates with explicit nonnegative weights. Not-yet-treated controls are not automatically valid: appropriate parallel trends, no anticipation, and support still matter. Report target groups, comparisons, event-time coverage, and aggregation weights."
+        ]
+      },
+      "formula": "ATT(g,t)=E[Y_t(g)−Y_t(∞)|G=g],  t≥g\nTarget aggregate=Σ_(g,t) w_gt·ATT(g,t)\nw_gt≥0;  Σ_(g,t) w_gt=1",
+      "symbols": {
+        "zh": "G：首次处理时期；Y_t(g)：从 g 期开始持续处理时 t 期的潜在结果；Y_t(∞)：一直未处理的潜在结果；权重由目标决定。",
+        "en": "G: first treatment period; Y_t(g): potential outcome at t under treatment from g onward; Y_t(∞): potential outcome if never treated; weights reflect the target."
+      },
+      "example": {
+        "zh": "甲地第一年实施，乙地第三年实施。若甲地效果在第三年仍上升，用甲地第三年的变化作乙地对照，会扣除甲地正在增长的政策收益。",
+        "en": "A adopts in year 1 and B in year 3. If A’s effect continues growing, using A’s year-3 change as B’s control subtracts that growth."
+      },
+      "pitfall": {
+        "zh": "本卡属于现代补充，不是把后来的分期 DID 结论归于 2009 年教材；异质性需进入目标与比较设计。",
+        "en": "This is a later supplement, not a claim about the 2009 textbook; heterogeneity must inform targets and comparisons."
+      },
+      "quiz": {
+        "question": {
+          "zh": "为什么早处理组可能不是干净的对照？",
+          "en": "Why may early-treated units be unsuitable controls?"
+        },
+        "options": [
+          {
+            "zh": "其结果变化包含已有处理效应的变化",
+            "en": "Their outcome changes can contain evolving treatment effects"
+          },
+          {
+            "zh": "它们的样本量必定小",
+            "en": "They necessarily have small samples"
+          },
+          {
+            "zh": "固定效应不能计算",
+            "en": "Fixed effects cannot be computed"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "已处理组的动态效应可能污染用于构造反事实的变化。",
+          "en": "Evolving effects in treated controls can contaminate counterfactual changes."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "5",
+          "section": "5.2 Differences-in-Differences: Pre and Post, Treatment and Control",
+          "pdfPage": 246
+        },
+        {
+          "book": "Goodman-Bacon (2021) — supplementary",
+          "chapter": "2021",
+          "section": "Goodman-Bacon: Difference-in-Differences with Variation in Treatment Timing",
+          "url": "https://www.nber.org/papers/w25018"
+        },
+        {
+          "book": "Callaway & Sant’Anna (2021) — supplementary",
+          "chapter": "2021",
+          "section": "Callaway & Sant’Anna: Difference-in-Differences with Multiple Time Periods",
+          "url": "https://arxiv.org/abs/1803.09015"
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m16-c03"
+      ]
+    },
+    {
+      "id": "m16-c05",
+      "module": "m16",
+      "title": {
+        "zh": "双重差分的聚类推断",
+        "en": "Clustered inference for difference-in-differences"
+      },
+      "question": {
+        "zh": "几万名居民的数据，为什么可能只有很少独立信息？",
+        "en": "Why might thousands of people supply little independent policy information?"
+      },
+      "intuition": {
+        "zh": "同一地区的人共享政策与冲击，跨年份也可能持续相关；人数多不等于独立政策实验多。",
+        "en": "People in one region share policy and shocks, often persistently over time; many people do not imply many independent policy experiments."
+      },
+      "explanation": {
+        "zh": [
+          "地区政策可能同时影响该地所有居民，地区景气、行政执行和测量误差也会使残差组内相关。普通异方差稳健标准误仍把不同观测间协方差当作零，无法处理这种依赖。若同一地区冲击跨年持续，只按地区—年份聚类也可能遗漏序列相关，地区层面聚类允许其内部跨个体、跨时间相关。",
+          "聚类层级应由分配机制、抽样机制与误差相关结构共同决定，通常要认真考虑政策变化的层级。单位固定效应去掉不变均值，并不会自动消除剩余冲击的序列相关。聚类推断还依赖足够多的近似独立簇；仅两个政策地区时，不能因为居民很多就声称常规聚类渐近近似可靠。少簇问题需要额外方法与诚实呈现不确定性。"
+        ],
+        "en": [
+          "Regional policy affects many residents, while regional conditions, implementation, and measurement create correlated residuals. Heteroskedasticity-robust standard errors alone set covariance between observations to zero and miss this dependence. If regional shocks persist, clustering by region-year may still omit serial correlation; clustering by region permits dependence across people and time within a region.",
+          "Choose clustering using assignment, sampling, and error dependence, carefully considering the policy level. Unit effects remove fixed means, not necessarily residual serial correlation. Cluster inference also requires enough approximately independent clusters. Two policy regions do not become a reliable many-cluster setting merely because they contain many residents. Few clusters require additional methods and honest uncertainty."
+        ]
+      },
+      "formula": "Region-level cluster: allow Cov(u_it,u_js)≠0 within the same region\nIndependent information depends on clusters G, not only people N",
+      "symbols": {
+        "zh": "u：控制协变量后的误差；i、j 为居民；t、s 为时期；G 为近似独立簇数量。",
+        "en": "u: adjusted error; i,j: people; t,s: periods; G: approximately independent clusters."
+      },
+      "example": {
+        "zh": "20 个省各追踪 5000 人 10 年，政策在省级变化，信息不是 100 万次独立政策比较。省级持续冲击要求考虑省内跨年相关和只有 20 个簇的限制。",
+        "en": "Twenty provinces with 5,000 people over 10 years do not provide a million independent policy comparisons; persistent provincial shocks and only 20 clusters matter."
+      },
+      "pitfall": {
+        "zh": "聚类标准误处理不确定性，不会修复平行趋势违反、政策溢出或对照组选择错误。",
+        "en": "Clustered standard errors address uncertainty, not failed parallel trends, spillovers, or invalid controls."
+      },
+      "quiz": {
+        "question": {
+          "zh": "单位固定效应能自动消除残差序列相关吗？",
+          "en": "Do unit effects automatically eliminate serial correlation?"
+        },
+        "options": [
+          {
+            "zh": "只要 R² 高就能",
+            "en": "Yes if R² is high"
+          },
+          {
+            "zh": "不能，时变冲击仍可持续",
+            "en": "No; time-varying shocks can persist"
+          },
+          {
+            "zh": "能，所有组内相关都会消失",
+            "en": "Yes; all within-unit dependence disappears"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "去掉固定均值后，剩余冲击仍可能在相邻时期相关。",
+          "en": "Removing a fixed mean can leave correlated shocks across periods."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "8",
+          "section": "8.2.2 Serial Correlation in Panels",
+          "pdfPage": 334
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "8",
+          "section": "8.2.3 Fewer than 42 Clusters",
+          "pdfPage": 338
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m16-c01"
+      ]
+    },
+    {
+      "id": "m17-c01",
+      "module": "m17",
+      "title": {
+        "zh": "精确断点回归",
+        "en": "Sharp regression discontinuity"
+      },
+      "question": {
+        "zh": "分数线两侧的结果差，什么时候代表处理效应？",
+        "en": "When does an outcome jump at a cutoff represent a treatment effect?"
+      },
+      "intuition": {
+        "zh": "分数很接近的人通常平滑地不同，但资格可能在阈值处突然改变。",
+        "en": "People with nearby scores may differ smoothly, while eligibility changes abruptly at the cutoff."
+      },
+      "explanation": {
+        "zh": [
+          "精确断点中，运行变量 R 与阈值 c 完全决定处理：R≥c 就接受，R<c 就不接受。识别依靠两种潜在结果的条件均值在阈值处连续：如果没有处理切换，结果不应恰好在此跳跃。观察结果条件均值的右极限减左极限，因此识别阈值处的平均效应，而不是全体受益者的平均效应。",
+          "给定 R 后处理是确定的，所以这并非同一分数上同时观察处理与对照的匹配设计。它借助连续性，把阈值两边足够近的结果连接起来。阈值附近差异小不意味着实际分配就是抽签，也不保证有限宽度窗口内完全随机。需要了解评分规则、其他阈值政策、测量精度与操纵空间，才能判断连续性的制度依据。"
+        ],
+        "en": [
+          "In sharp RD, running variable R and cutoff c determine treatment: treated above the cutoff and untreated below. Identification requires conditional means of both potential outcomes to be continuous at c. Without treatment switching, the outcome should not jump precisely there. The difference between right and left limits of observed conditional means identifies the average effect at the cutoff, not for all beneficiaries.",
+          "Treatment is deterministic given R, so this is not matching with both treatment states at the same score. Continuity connects observations arbitrarily close on opposite sides. Nearby scores do not mean actual lottery assignment or exact randomization in a finite window. Examine scoring rules, other cutoff policies, measurement, and manipulation to justify continuity."
+        ]
+      },
+      "formula": "D=1[R≥c]\nτ_RD=lim_(r→c+) E[Y|R=r]−lim_(r→c−) E[Y|R=r]\n=E[Y(1)−Y(0)|R=c]  (under continuity)",
+      "symbols": {
+        "zh": "R：运行变量；c：阈值；c+ 与 c− 表示分别从右侧与左侧趋近；1[·] 是指示函数。",
+        "en": "R: running variable; c: cutoff; c+ and c− are right and left limits; 1[·] is an indicator."
+      },
+      "example": {
+        "zh": "奖学金线为 80 分，假设跨线就实际获得奖学金，未跨线者均不获得。若升学率在阈值处跳升，满足连续性等条件时可解释为阈值处的奖学金效应；若跨线只改变领取概率，应改用模糊 RD。",
+        "en": "Suppose everyone scoring at least 80 receives a scholarship and nobody below 80 does. An enrollment jump identifies its cutoff effect under continuity and the other assumptions. If crossing only changes receipt probability, use fuzzy RD instead."
+      },
+      "pitfall": {
+        "zh": "看到跳跃不够：同一阈值若同时触发另一项政策，单项处理效应可能无法分离。",
+        "en": "An outcome jump alone is insufficient if another policy changes at the same cutoff."
+      },
+      "quiz": {
+        "question": {
+          "zh": "标准精确 RD 主要识别哪里的效应？",
+          "en": "Where does standard sharp RD identify an effect?"
+        },
+        "options": [
+          {
+            "zh": "全部高分者",
+            "en": "All high-score individuals"
+          },
+          {
+            "zh": "整个总体",
+            "en": "The entire population"
+          },
+          {
+            "zh": "阈值处",
+            "en": "At the cutoff"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "连续性把阈值两侧连接起来，直接支持的是局部效应。",
+          "en": "Continuity connects the two sides at the cutoff and directly supports a local effect."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "6",
+          "section": "6.1 Sharp RD",
+          "pdfPage": 270
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c01"
+      ]
+    },
+    {
+      "id": "m17-c02",
+      "module": "m17",
+      "title": {
+        "zh": "模糊断点回归与工具变量",
+        "en": "Fuzzy regression discontinuity and instrumental variables"
+      },
+      "question": {
+        "zh": "跨过阈值只提高参加概率，怎么办？",
+        "en": "What if crossing the cutoff only raises treatment probability?"
+      },
+      "intuition": {
+        "zh": "把资格阈值当作工具，用结果跳跃除以实际处理概率的跳跃。",
+        "en": "Use cutoff eligibility as an instrument and divide the outcome jump by the treatment-probability jump."
+      },
+      "explanation": {
+        "zh": [
+          "模糊断点中，阈值两侧都可能有人接受或不接受处理，但接受概率在 c 处发生非零跳跃。资格指示 Z=1[R≥c] 充当局部工具。分子为结果在阈值处的跳跃，分母为实际处理概率跳跃；这个局部 Wald 比率把资格带来的结果变化换算成实际处理的效应。",
+          "要解释为局部服从者效应，需要潜在结果和处理响应的适当连续性、排除限制及局部单调性等条件。阈值资格不能在实际处理之外另行影响结果，且不能同时让某些人更可能、另一些人更不可能接受处理而破坏单调性。若第一阶段跳跃很小，同样会有弱工具问题。所得结论同时局限于阈值附近和被资格改变了处理状态的人。"
+        ],
+        "en": [
+          "In fuzzy RD, both treatment states can occur on either side, but treatment probability jumps at c. Eligibility Z=1[R≥c] serves as a local instrument. The outcome jump divided by the treatment-probability jump converts eligibility-induced outcome changes into an effect of actual treatment.",
+          "A local complier interpretation requires appropriate continuity of potential outcomes and treatment responses, exclusion, and local monotonicity. Eligibility cannot affect outcomes through another channel, and opposite-direction responses cannot violate monotonicity. A tiny treatment jump creates weak-IV concerns. The result is local both to the cutoff and to people whose treatment choice responds to eligibility."
+        ]
+      },
+      "formula": "τ_FRD = Δ_c E[Y|R] / Δ_c E[D|R]\nΔ_c E[V|R] = lim_(r→c+)E[V|R=r]−lim_(r→c−)E[V|R=r]",
+      "symbols": {
+        "zh": "Δ_c：阈值右极限减左极限；D：实际处理；分母必须非零；V 是任意被检查的变量。",
+        "en": "Δ_c: right-minus-left limit at c; D: actual treatment; denominator must be nonzero; V denotes a generic variable."
+      },
+      "example": {
+        "zh": "跨线使培训参加率从 20% 跳到 60%，收入跳升 240 元。若所需局部 IV 假设成立，服从者效应为 240/0.4=600 元。",
+        "en": "Crossing raises attendance from 20% to 60% and earnings by 240. Under local IV assumptions, the complier effect is 240/0.4=600."
+      },
+      "pitfall": {
+        "zh": "结果跳跃是资格的局部简化式；不除以参加率跳跃，不能把它直接称为实际培训的效应。",
+        "en": "The outcome jump is a local reduced form for eligibility; it is not the actual-training effect without scaling by the treatment jump."
+      },
+      "quiz": {
+        "question": {
+          "zh": "若结果跳跃为 6、参加率跳跃为 0.3，局部 Wald 比率是多少？",
+          "en": "If the outcome jump is 6 and treatment jump 0.3, what is the local Wald ratio?"
+        },
+        "options": [
+          {
+            "zh": "20",
+            "en": "20"
+          },
+          {
+            "zh": "1.8",
+            "en": "1.8"
+          },
+          {
+            "zh": "6.3",
+            "en": "6.3"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "6/0.3=20；因果解释仍要满足局部工具变量假设。",
+          "en": "6/0.3=20; causal interpretation still requires local IV assumptions."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "6",
+          "section": "6.2 Fuzzy RD Is IV",
+          "pdfPage": 278
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m17-c01",
+        "m15-c04"
+      ]
+    },
+    {
+      "id": "m17-c03",
+      "module": "m17",
+      "title": {
+        "zh": "断点设计的连续性与操纵检验",
+        "en": "Continuity and manipulation assessment in RD designs"
+      },
+      "question": {
+        "zh": "阈值附近看起来相似，为什么还要检查分数操纵？",
+        "en": "Why investigate manipulation when scores near the cutoff look similar?"
+      },
+      "intuition": {
+        "zh": "若某些人能精准地把自己移到阈值另一侧，边界两边可能已经不是可比人群。",
+        "en": "Precise sorting across the threshold can create different populations on its two sides."
+      },
+      "explanation": {
+        "zh": [
+          "RD 需要未处理潜在结果等在阈值处保持合适连续性。如果更有资源的人能精准调整成绩或申报值，使自己刚好跨线，阈值两侧的能力、资源或需求构成可能突然变化，观察结果跳跃就可能混合选择。关键不在于人们是否努力提高分数，而在于能否以破坏连续性的方式精准排序。",
+          "可检查运行变量的分布密度、处理前协变量和历史结果在阈值处是否跳跃，并调查复核规则、评分裁量和申报行为。这些检查提供支持或反证，不能证明所有未观测因素连续。密度异常也要结合取整、离散刻度和数据记录解释；没有明显异常也不意味着没有操纵。若分数高度离散，不能无条件套用“无限接近阈值”的连续变量直觉。"
+        ],
+        "en": [
+          "RD needs suitable continuity of untreated potential outcomes and related quantities at the cutoff. If better-resourced people can precisely adjust scores or reports to cross it, ability, resources, or need may change discontinuously. Outcome jumps can then mix treatment and selection. The issue is not effort to improve scores per se, but precise sorting that undermines continuity.",
+          "Inspect running-variable density, baseline covariates, and prior outcomes, and investigate review rules, discretion, and reporting. These checks can support or challenge the design without proving continuity of all unobservables. Density irregularities need interpretation in light of rounding and recording; absence of a visible irregularity does not prove no manipulation. Highly discrete scores also limit the intuition of arbitrarily close observations."
+        ]
+      },
+      "formula": "Continuity condition: lim_(r→c−)E[Y(d)|R=r]\n=E[Y(d)|R=c]=lim_(r→c+)E[Y(d)|R=r],  d∈{0,1}",
+      "symbols": {
+        "zh": "连续性针对潜在结果，不要求观察结果连续；观察结果正是可能因处理切换而跳跃。",
+        "en": "Continuity concerns potential outcomes, not observed outcomes, which may jump because treatment changes."
+      },
+      "example": {
+        "zh": "补贴资格要求申报收入低于某线，若企业可精确调低申报收入，线下堆积可能反映策略排序。应检查制度与原始记录，不能只画一条漂亮的拟合线。",
+        "en": "If subsidy eligibility uses reported income and firms can precisely underreport, bunching may reflect strategic sorting; institutional and recording evidence matter."
+      },
+      "pitfall": {
+        "zh": "密度检验不拒绝不是无操纵的证明；也不能因一个基线变量偶然显著就忽略多重检查与制度背景。",
+        "en": "A nonrejected density test is not proof of no manipulation; one significant covariate also needs multiple-testing and institutional context."
+      },
+      "quiz": {
+        "question": {
+          "zh": "RD 连续性主要要求哪项在阈值处平滑？",
+          "en": "What chiefly must be smooth at the cutoff?"
+        },
+        "options": [
+          {
+            "zh": "处理概率必须没有跳跃",
+            "en": "Treatment probability must not jump"
+          },
+          {
+            "zh": "潜在结果的条件均值",
+            "en": "Conditional means of potential outcomes"
+          },
+          {
+            "zh": "观察结果必须没有跳跃",
+            "en": "Observed outcomes must not jump"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "处理导致的观察结果跳跃可用于识别，反事实本身的跳跃才是关键威胁。",
+          "en": "A treatment-induced outcome jump identifies effects; a counterfactual jump threatens identification."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "6",
+          "section": "6.1 Sharp RD",
+          "pdfPage": 270
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m17-c01"
+      ]
+    },
+    {
+      "id": "m17-c04",
+      "module": "m17",
+      "title": {
+        "zh": "带宽、局部线性与偏差",
+        "en": "Bandwidths, local linear fits, and bias"
+      },
+      "question": {
+        "zh": "为何不能只选最显著的窗口和多项式？",
+        "en": "Why not choose the window and polynomial with the strongest significance?"
+      },
+      "intuition": {
+        "zh": "窗口越窄，比较越局部但数据越少；窗口越宽，精度可能提高但函数形状更难近似。",
+        "en": "Narrow windows are more local but use fewer data; wider windows can improve precision while increasing approximation demands."
+      },
+      "explanation": {
+        "zh": [
+          "带宽 h 决定使用距离阈值多远的观测。局部线性回归在阈值两侧分别拟合直线，并可对更近的点赋予更高权重。运行变量以 c 为中心后，处理指示系数直接对应阈值处两条线的截距差。允许两侧不同斜率，避免把平滑趋势的变化误当成处理跳跃。",
+          "较小 h 通常减少局部近似偏差，却增加方差；较大 h 增加信息，也可能引入远处曲线形状造成的偏差。多项式阶数并非越高越可靠，高阶拟合可能对边界和异常点敏感。应有合理的带宽选择与推断方案，并展示有意义的敏感性分析。根据显著性挑窗口会扭曲推断；局部估计的区间也必须考虑近似偏差，而非只报告机械 OLS 标准误。"
+        ],
+        "en": [
+          "Bandwidth h selects observations near the cutoff. Local linear regression fits separate lines on each side, possibly weighting nearby points more heavily. Centering R at c makes the treatment coefficient the intercept difference at the cutoff. Separate slopes avoid mistaking smooth trend differences for a jump.",
+          "A smaller h generally reduces local approximation bias but increases variance; a larger h adds data while exposing the fit to more distant curvature. Higher polynomial order is not automatically more reliable and can be sensitive at boundaries. Use defensible bandwidth and inference choices and meaningful sensitivity checks. Choosing a window for significance distorts inference, and intervals must address approximation bias rather than mechanically use ordinary OLS uncertainty."
+        ]
+      },
+      "formula": "For |R−c|≤h:\nY=α+τD+β₀(R−c)+β₁D(R−c)+u\nLeft slope=β₀; right slope=β₀+β₁",
+      "symbols": {
+        "zh": "h：带宽；D=1[R≥c]；τ：局部模型的阈值跳跃；β₁ 允许两侧斜率不同。",
+        "en": "h: bandwidth; D=1[R≥c]; τ: fitted cutoff jump; β₁ permits different slopes."
+      },
+      "example": {
+        "zh": "先看阈值前后 5 分，再看 3 分与 7 分内的合理结果变化。较窄窗口区间变宽是信息减少的表现，不能把不显著自动解释为没有效应。",
+        "en": "Compare defensible windows of ±5, ±3, and ±7 score points. Wider intervals in narrower windows reflect less information, not necessarily no effect."
+      },
+      "pitfall": {
+        "zh": "画图分箱宽度与估计带宽是不同选择；图上箱均值好看不等于正式 RD 推断可靠。",
+        "en": "Plot-bin width and estimation bandwidth differ; attractive binned means do not guarantee valid RD inference."
+      },
+      "quiz": {
+        "question": {
+          "zh": "缩小带宽通常带来哪种权衡？",
+          "en": "What tradeoff usually follows a smaller bandwidth?"
+        },
+        "options": [
+          {
+            "zh": "偏差和方差一定同时归零",
+            "en": "Both bias and variance become zero"
+          },
+          {
+            "zh": "自动保证显著",
+            "en": "Guaranteed significance"
+          },
+          {
+            "zh": "较少近似偏差但更大方差",
+            "en": "Less approximation bias but greater variance"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "更局部的比较减少函数近似要求，却牺牲可用样本信息。",
+          "en": "More local comparison eases approximation while sacrificing data."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "6",
+          "section": "6.1 Sharp RD",
+          "pdfPage": 270
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m17-c01"
+      ]
+    },
+    {
+      "id": "m17-c05",
+      "module": "m17",
+      "title": {
+        "zh": "断点设计的证据与外部效度",
+        "en": "Evidence and external validity in RD designs"
+      },
+      "question": {
+        "zh": "一个可信的断点结论，应该怎样报告？",
+        "en": "How should a credible RD conclusion be reported?"
+      },
+      "intuition": {
+        "zh": "同时展示规则、跳跃、识别检查与局部人群，让读者知道结论从哪里来、适用于谁。",
+        "en": "Show rules, jumps, checks, and the local population so readers can assess the evidence and its target."
+      },
+      "explanation": {
+        "zh": [
+          "完整报告应说明运行变量、阈值和真实分配规则，展示结果与处理概率图，列出阈值附近有效样本、带宽及拟合方式。检查处理前协变量和历史结果、运行变量密度、其他同时触发的政策及合理的伪阈值。伪阈值通常不应出现类似跳跃，但这些诊断都是对设计的检验性证据，并非因果假设的数学证明。",
+          "精确 RD 识别阈值处平均效应，模糊 RD 还局限于阈值附近的服从者。要预测远离阈值的人或改变门槛后的政策效果，需要额外的效应同质性、结构或迁移假设。结果对合理窗口有多敏感、置信区间是否排除重要效果，也应与点估计一起报告。可信研究可以得到不精确的结果；精确数字也可能依赖脆弱的设计。"
+        ],
+        "en": [
+          "Report the running variable, cutoff, assignment rules, outcome and treatment-probability plots, local sample sizes, bandwidths, and fits. Examine baseline covariates, prior outcomes, density, concurrent threshold policies, and sensible placebo cutoffs. Similar jumps at placebo cutoffs can be concerning, but all these diagnostics provide evidence rather than mathematical proof of assumptions.",
+          "Sharp RD targets the cutoff; fuzzy RD additionally targets local compliers. Predicting effects far from the threshold or after changing eligibility requires extra homogeneity, structural, or transportability assumptions. Report sensitivity across defensible windows and whether intervals exclude substantively important effects. A credible design can be imprecise, while a precise estimate can rely on fragile identification."
+        ]
+      },
+      "formula": "Sharp RD target: E[Y(1)−Y(0)|R=c]\nFuzzy RD target: E[Y(1)−Y(0)|R=c, complier]",
+      "symbols": {
+        "zh": "两个目标都局部于 R=c；服从者还由阈值资格对处理选择的影响定义。",
+        "en": "Both targets are local to R=c; compliers are additionally defined by treatment response to eligibility."
+      },
+      "example": {
+        "zh": "80 分奖学金门槛附近估计出升学率提高 4 个百分点，并不直接说明把门槛降到 60 分也有相同收益；60 分附近学生可能面临不同约束。",
+        "en": "A 4-percentage-point enrollment effect near an 80-point cutoff does not establish the same effect from lowering the cutoff to 60."
+      },
+      "pitfall": {
+        "zh": "不要把多个安慰剂检验通过写成“证明 RD 有效”；也不要把阈值效应不加说明地外推为总体 ATE。",
+        "en": "Passing placebos does not prove validity; a cutoff effect is not automatically population ATE."
+      },
+      "quiz": {
+        "question": {
+          "zh": "将阈值处效应推广到远离阈值者，需要什么？",
+          "en": "What is needed to generalize far from the cutoff?"
+        },
+        "options": [
+          {
+            "zh": "额外的可迁移或结构假设",
+            "en": "Additional transportability or structural assumptions"
+          },
+          {
+            "zh": "只要样本量大即可",
+            "en": "Only a large sample"
+          },
+          {
+            "zh": "无需任何额外条件",
+            "en": "No additional conditions"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "RD 的识别来源是阈值附近比较，远处人群并未获得相同反事实支持。",
+          "en": "RD identification comes from local comparisons, not equivalent counterfactual evidence far away."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "6",
+          "section": "6.1 Sharp RD",
+          "pdfPage": 270
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "6",
+          "section": "6.2 Fuzzy RD Is IV",
+          "pdfPage": 278
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m17-c02",
+        "m17-c03",
+        "m17-c04"
+      ]
+    },
+    {
+      "id": "m18-c01",
+      "module": "m18",
+      "title": {
+        "zh": "分位数回归模型",
+        "en": "Quantile regression models"
+      },
+      "question": {
+        "zh": "平均工资相同，收入分布还能有什么不同？",
+        "en": "How can earnings distributions differ even with the same mean?"
+      },
+      "intuition": {
+        "zh": "均值只给出一个中心；分位数描述同类人收入分布的不同位置。",
+        "en": "A mean gives one center; quantiles describe different positions in an outcome distribution."
+      },
+      "explanation": {
+        "zh": [
+          "条件分位数 Qτ(Y|X) 是给定 X 后，分布中累计概率首次达到或超过 τ 的位置。τ=0.5 对应条件中位数，τ=0.1 描述条件分布较低端。线性分位数回归用 X′βτ 描述或近似这一关系，不同 τ 的系数可以不同。它不是先按观察收入把人分组，再分别做普通最小二乘。",
+          "估计通过最小化非对称绝对损失完成：正残差权重为 τ，负残差绝对值权重为 1−τ；在中位数时两边对称。若线性条件分位数模型不精确，系数仍是所选损失下的近似，不能任意当作真实条件分位数导数。和均值回归一样，统计模型本身不产生因果性；是否能解释政策改变分布，仍取决于处理分配与混杂假设。"
+        ],
+        "en": [
+          "The conditional quantile Qτ(Y|X) is the smallest outcome threshold where conditional cumulative probability is at least τ. At τ=0.5 it is the median; τ=0.1 describes the lower conditional distribution. Linear quantile regression represents or approximates it by X′βτ, allowing coefficients to vary across τ. It does not sort people by observed earnings and run separate OLS regressions.",
+          "Estimation minimizes asymmetric absolute loss: positive residuals receive weight τ and negative absolute residuals weight 1−τ. Median regression weights both sides equally. With an imperfect linear conditional-quantile model, coefficients remain loss-based approximations, not automatically derivatives of the true quantile function. As with mean regression, causality requires assignment and confounding assumptions."
+        ]
+      },
+      "formula": "Qτ(Y|X)=inf{y: P(Y≤y|X)≥τ}\nQτ(Y|X)=X′βτ  (when correctly specified)\nβ̂τ=argmin_b Σ_i ρτ(Y_i−X_i′b)\nρτ(u)=u·[τ−1(u<0)]",
+      "symbols": {
+        "zh": "inf：满足条件的最小边界；τ：分位水平，0<τ<1；ρτ：检查损失；u：预测残差；中位数损失为 |u|/2。",
+        "en": "inf: lowest threshold satisfying the condition; τ: quantile level; ρτ: check loss; u: prediction residual; median loss is |u|/2."
+      },
+      "example": {
+        "zh": "某政策可能不改变平均工资，却使低端分位数上升、高端分位数下降。均值回归难以完整描述这种分布压缩，分位数分析能提供不同位置的信息。",
+        "en": "A policy may leave mean wages unchanged while raising lower and reducing upper quantiles. Quantile analysis can reveal compression hidden by the mean."
+      },
+      "pitfall": {
+        "zh": "条件分位数不是总体无条件分位数；通常不能把条件分位数简单平均来得到总体分位数。",
+        "en": "Conditional quantiles are not unconditional quantiles; averaging them generally does not yield population quantiles."
+      },
+      "quiz": {
+        "question": {
+          "zh": "τ=0.5 的分位数回归最小化什么？",
+          "en": "What does quantile regression minimize at τ=0.5?"
+        },
+        "options": [
+          {
+            "zh": "只保留收入最高者的误差",
+            "en": "Errors only for the highest earners"
+          },
+          {
+            "zh": "绝对残差和的正比例形式",
+            "en": "A positive multiple of absolute residual sums"
+          },
+          {
+            "zh": "残差平方和",
+            "en": "Squared residual sums"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "中位数的检查损失为 |u|/2，与最小绝对偏差有相同最优解。",
+          "en": "Median check loss is |u|/2, giving the same minimizer as least absolute deviations."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "7",
+          "section": "7.1 The Quantile Regression Model",
+          "pdfPage": 289
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m14-c01"
+      ]
+    },
+    {
+      "id": "m18-c02",
+      "module": "m18",
+      "title": {
+        "zh": "分位数处理效应与个体效应",
+        "en": "Quantile treatment effects and individual effects"
+      },
+      "question": {
+        "zh": "低分位收入提高，是否表示原来的穷人都受益？",
+        "en": "Does a higher lower quantile mean the originally poor all benefit?"
+      },
+      "intuition": {
+        "zh": "分位数比较两种政策状态下的分布位置；占据那个位置的人可能已经变了。",
+        "en": "A quantile compares positions in two outcome distributions; the people occupying those positions can change."
+      },
+      "explanation": {
+        "zh": [
+          "分位数处理效应 QTE(τ)=Qτ[Y(1)]−Qτ[Y(0)] 比较两个潜在结果分布的同一分位位置。即使随机实验识别了两种边际分布，也通常没有观察同一个人的两个结果，因而不能识别个体效应分布，更不能断言处在原分布低端的每个人都获得该分位数差额。",
+          "要将分位数差解释为同一个排名个体的效应，需要额外的排名保持等强假设：政策不能改变人与人的结果排序。这个假设不由随机分配保证。还应区分条件 QTE 与无条件 QTE；控制协变量后的分位数系数，不能直接当作整个总体收入分布的变化。写结论时说清楚是“分布的第 10 百分位数（τ=0.1）提高”，还是在额外假设下讨论某一类人的效应。"
+        ],
+        "en": [
+          "QTE(τ)=Qτ[Y(1)]−Qτ[Y(0)] compares the same quantile in two potential-outcome distributions. Even when randomization identifies both marginal distributions, it usually does not reveal both outcomes for any person. The distribution of individual effects remains unidentified, and the originally poor need not each gain the quantile difference.",
+          "Interpreting the contrast as an effect for the same ranked person requires an additional strong rank-preservation assumption: treatment must not change outcome rankings. Randomization does not guarantee this. Conditional and unconditional QTEs also differ; adjusted quantile coefficients cannot directly be read as changes in the whole population distribution. State whether the claim concerns a distributional position, such as the 10th percentile (τ=0.1), or individuals under extra assumptions."
+        ]
+      },
+      "formula": "QTE(τ)=Qτ[Y(1)]−Qτ[Y(0)]\nGenerally: QTE(τ) ≠ Qτ[Y(1)−Y(0)]",
+      "symbols": {
+        "zh": "左边：两个边际分布的分位数差；右边：个体处理效应分布的分位数，两者一般不同。",
+        "en": "Left: difference of marginal quantiles; right: quantile of individual treatment effects; they generally differ."
+      },
+      "example": {
+        "zh": "两人未处理收入为 10、20，处理后分别为 20、10。两种状态的分布完全相同，所以各分位数差为零；但个人效应分别为 +10 与 −10，排名已互换。",
+        "en": "Two people earn 10 and 20 untreated, then 20 and 10 treated. Marginal distributions and quantiles are unchanged, but individual effects are +10 and −10 and ranks swap."
+      },
+      "pitfall": {
+        "zh": "不能把 τ=0.1 系数直接说成“最穷的原来那 10% 人的平均效应”；分布位置不是固定身份。",
+        "en": "A τ=0.1 coefficient is not automatically the average effect on the originally poorest 10%; positions are not fixed identities."
+      },
+      "quiz": {
+        "question": {
+          "zh": "分位数处理效应一般是哪一个？",
+          "en": "What is a quantile treatment effect generally?"
+        },
+        "options": [
+          {
+            "zh": "个体效应分布的分位数",
+            "en": "A quantile of individual effects"
+          },
+          {
+            "zh": "最低收入组的 OLS 系数",
+            "en": "An OLS coefficient for the lowest-income group"
+          },
+          {
+            "zh": "两种潜在结果分布的同分位数差",
+            "en": "A same-quantile difference between potential-outcome distributions"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "定义比较边际分布位置，不需要假装同一人始终占据该位置。",
+          "en": "The definition compares marginal distributional positions without assuming the same person occupies each."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "7",
+          "section": "7.1.3 Tricky Points",
+          "pdfPage": 300
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m18-c01",
+        "m13-c01"
+      ]
+    },
+    {
+      "id": "m18-c03",
+      "module": "m18",
+      "title": {
+        "zh": "异方差稳健与聚类标准误",
+        "en": "Heteroskedasticity-robust and clustered standard errors"
+      },
+      "question": {
+        "zh": "robust 与 cluster 到底在修正什么？",
+        "en": "What do robust and clustered standard errors adjust?"
+      },
+      "intuition": {
+        "zh": "它们改变对估计不确定性的计算；不自动改变研究的因果识别。",
+        "en": "They change estimated uncertainty, not automatically the causal identification."
+      },
+      "explanation": {
+        "zh": [
+          "异方差稳健协方差允许不同观测有不同误差方差，但常用版本仍依赖观测间不相关或相应独立抽样条件。聚类协方差允许同一簇内观测的误差相关，通常依赖簇之间近似独立及足够多簇。标准误由协方差矩阵对角元开方得到；处理的不是“残差必须正态”，而是方差与依赖结构。",
+          "切换到稳健或聚类标准误通常保留同一回归的系数，只改变置信区间与检验。聚类标准误并非必定比普通标准误大，方向取决于协方差结构。选择应基于抽样、分配与误差机制，不应为了得到显著性而挑选最小者。无论哪种标准误，都无法修复遗漏混杂、反向因果或错误比较对象；也都需注意小样本近似的可靠性。"
+        ],
+        "en": [
+          "Heteroskedasticity-robust covariance permits unequal error variances but conventional versions still rely on cross-observation uncorrelatedness or suitable independent sampling. Cluster covariance allows within-cluster dependence, usually requiring approximately independent clusters and enough of them. Standard errors are square roots of covariance diagonal entries; the issue is variance and dependence, not a requirement that residuals be normal.",
+          "Switching covariance estimators normally leaves regression coefficients unchanged while altering intervals and tests. Clustered errors are not necessarily larger; covariance structure determines the change. Choose by sampling, assignment, and error mechanisms, not desired significance. Neither method fixes confounding, reverse causality, or invalid comparisons, and both require attention to finite-sample reliability."
+        ]
+      },
+      "formula": "V̂_cluster ≈ (X′X)⁻¹[Σ_g S_g S_g′](X′X)⁻¹\nS_g=Σ_(i∈g) x_i û_i;  SE(β̂_j)=√V̂_jj",
+      "symbols": {
+        "zh": "S_g：簇内回归得分之和；公式省略有限样本修正；每个观测单独成簇时对应 HC0 形式。",
+        "en": "S_g: cluster sum of regression scores; finite-sample corrections are omitted; singleton clusters yield the HC0 form."
+      },
+      "example": {
+        "zh": "同一学校学生共享教师冲击。只允许每个学生方差不同的 robust 不能处理同校相关；按学校聚类可允许该相关，但还要关注独立学校的数量。",
+        "en": "Students share school-level teacher shocks. Robust errors allow unequal individual variances but not school dependence; school clustering allows that dependence, subject to enough schools."
+      },
+      "pitfall": {
+        "zh": "稳健标准误中的“稳健”只针对规定的方差条件，不代表回归模型、识别假设和外推结论都稳健。",
+        "en": "Robustness applies to specified variance assumptions, not every modeling, identification, or generalization claim."
+      },
+      "quiz": {
+        "question": {
+          "zh": "改用聚类标准误通常直接改变什么？",
+          "en": "What normally changes directly when using cluster standard errors?"
+        },
+        "options": [
+          {
+            "zh": "系数的不确定性估计",
+            "en": "Estimated uncertainty of coefficients"
+          },
+          {
+            "zh": "样本中的处理分配",
+            "en": "Treatment assignment in the sample"
+          },
+          {
+            "zh": "遗漏变量的真实取值",
+            "en": "True values of omitted variables"
+          }
+        ],
+        "correct": 0,
+        "explanation": {
+          "zh": "对同一系数估计，协方差估计变化影响区间和检验，不会补齐遗漏数据。",
+          "en": "A new covariance estimate changes intervals and tests, not missing information."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "8",
+          "section": "8.1 The Bias of Robust Standard Error Estimates",
+          "pdfPage": 313
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "8",
+          "section": "8.2.1 Clustering and the Moulton Factor",
+          "pdfPage": 327
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m16-c05"
+      ]
+    },
+    {
+      "id": "m18-c04",
+      "module": "m18",
+      "title": {
+        "zh": "少量聚类下的统计推断",
+        "en": "Statistical inference with few clusters"
+      },
+      "question": {
+        "zh": "只有少数学校或地区，聚类后就安全了吗？",
+        "en": "Is cluster adjustment enough with only a few schools or regions?"
+      },
+      "intuition": {
+        "zh": "估计组间冲击需要足够多独立组；一个组内再多记录也不能创造新的独立冲击。",
+        "en": "Estimating variation in group shocks needs independent groups; more records within a group do not create new shocks."
+      },
+      "explanation": {
+        "zh": [
+          "常规聚类协方差依靠簇数量增加的大样本近似。簇少时，组内相关的估计、杠杆值与自由度都会影响推断，常规检验可能过度拒绝原假设。问题不仅是簇总数，还包括簇大小不均衡、处理簇是否很少、处理变化集中在哪里。教材标题中的 42 是幽默化表达，不能当作普遍可靠与不可靠的严格分界。",
+          "可考虑与设计相适合的小样本修正、参考分布或保留簇内依赖的重抽样方法，但这些方法各有条件，不存在只勾选一个选项就普遍可靠的保证。若独立政策变化极少，应直接报告限制并降低结论强度。聚合到组均值有时能让信息来源更透明，但可能改变估计目标或损失必要的时间变化，不能作为所有面板研究的通用修复。"
+        ],
+        "en": [
+          "Conventional cluster covariance relies on an increasing number of clusters. With few clusters, dependence estimation, leverage, and degrees of freedom affect inference, and tests can overreject. Cluster count is not the only issue: unequal cluster sizes, few treated clusters, and concentrated treatment variation also matter. The textbook’s ‘42’ heading is humorous, not a universal validity boundary.",
+          "Design-appropriate finite-sample corrections, reference distributions, or resampling that preserves within-cluster dependence may help, but each has conditions. No universal checkbox guarantees reliability. If independent policy variation is scarce, state the limitation and temper conclusions. Group means can clarify information sources but may change targets or remove necessary time variation, so aggregation is not a universal panel fix."
+        ]
+      },
+      "formula": "Large N within clusters does not imply large G\nConventional cluster asymptotics rely on G growing",
+      "symbols": {
+        "zh": "N：观测数；G：近似独立簇数；可用的独立处理变化也影响推断可靠性。",
+        "en": "N: observations; G: approximately independent clusters; available independent treatment variation also matters."
+      },
+      "example": {
+        "zh": "4 所学校各有 1000 名学生，随机分配学校而非学生。把每校增加到 2000 人可以改善校均值测量，却仍只有 4 次学校层面的分配单位，不能按 8000 个独立实验推断。",
+        "en": "Four schools with 1,000 pupils each remain four assignment units even if doubled to 2,000 pupils per school. Better school means do not create 8,000 independent experiments."
+      },
+      "pitfall": {
+        "zh": "不要机械使用 G−1 自由度就宣布少簇问题已解决；合适自由度与修正取决于设计与估计方式。",
+        "en": "Using G−1 degrees of freedom mechanically does not settle few-cluster problems; appropriate corrections are design-dependent."
+      },
+      "quiz": {
+        "question": {
+          "zh": "4 所学校各增加很多学生，哪一项没有自动增加？",
+          "en": "What does adding many pupils to four schools not automatically increase?"
+        },
+        "options": [
+          {
+            "zh": "可用于计算学校均值的人数",
+            "en": "The pupils contributing to school means"
+          },
+          {
+            "zh": "独立学校簇数",
+            "en": "The number of independent school clusters"
+          },
+          {
+            "zh": "观测记录数",
+            "en": "The number of records"
+          }
+        ],
+        "correct": 1,
+        "explanation": {
+          "zh": "记录更多可提高组内信息，但独立组仍为 4 个。",
+          "en": "More records improve within-group information, but there are still four independent groups."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "8",
+          "section": "8.2.3 Fewer than 42 Clusters",
+          "pdfPage": 338
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m18-c03"
+      ]
+    },
+    {
+      "id": "m18-c05",
+      "module": "m18",
+      "title": {
+        "zh": "因果识别策略与方法选择",
+        "en": "Causal identification strategies and method selection"
+      },
+      "question": {
+        "zh": "面对一份新数据，应该先运行哪种模型？",
+        "en": "Which model should you run first on a new dataset?"
+      },
+      "intuition": {
+        "zh": "先确定要比较的两个世界，再寻找能支持这个比较的设计；模型服务于比较。",
+        "en": "Define the two worlds to compare, then find a design that supports that comparison."
+      },
+      "explanation": {
+        "zh": [
+          "先写清人群、处理版本、结果、时间范围和目标效应，例如受训者一年后的 ATT，而不是笼统的“培训有用吗”。再问理想实验如何分配，现实数据中有什么机制能替代它。随机分配利用抽签；调整与匹配依赖条件独立和重叠；IV 依赖有效外生工具；DID 依赖未处理平行趋势；RD 依赖阈值附近连续性。",
+          "每种方法都要交代比较对象、不可直接检验的假设和效应适用人群。写出估计公式，检查数据与设计一致，再选择与抽样和依赖结构匹配的推断。最后报告估计量、单位、区间、实质意义与敏感性，不将显著性等同于重要性。多个方法只有在目标相同且假设可比较时才构成交叉证据；方法名称更多并不会自动让结论更可信。"
+        ],
+        "en": [
+          "Specify population, treatment version, outcome, timing, and target, such as trainees’ one-year ATT. Describe the ideal experiment and ask what real mechanism could approximate it. Randomization uses assignment; adjustment and matching require conditional independence and overlap; IV requires valid external instruments; DiD requires untreated parallel trends; RD requires local continuity.",
+          "For every method, identify comparisons, assumptions not directly testable, and the population whose effect is identified. Write the estimand, check consistency between data and design, and choose inference for sampling and dependence. Report estimates, units, intervals, substantive importance, and sensitivity rather than equating significance with importance. Multiple methods cross-check one another only when targets and assumptions are comparable; more method names do not automatically add credibility."
+        ]
+      },
+      "formula": "Question → Target estimand → Assignment/comparison design\n→ Identifying assumptions → Estimator → Inference → Interpretation",
+      "symbols": {
+        "zh": "estimand：希望知道的总体量；estimator：用样本计算该量的规则；二者必须与研究设计对应。",
+        "en": "Estimand: target population quantity; estimator: sample rule for estimating it; both must align with the design."
+      },
+      "example": {
+        "zh": "若培训名额抽签但参加自愿，先报告名额的 ITT；若另要实际培训效应，再说明 IV 假设与服从者 LATE。不能为了一个显著系数直接按参加与否做回归。",
+        "en": "With randomized offers and voluntary attendance, first report offer ITT. For actual-training effects, state IV assumptions and complier LATE rather than selecting an attendance regression for significance."
+      },
+      "pitfall": {
+        "zh": "高 R²、很小的 p 值、复杂模型或多个稳健性表格，都不能替代清楚的反事实与识别论证。",
+        "en": "High R², small p-values, complex models, and many robustness tables cannot replace counterfactual and identification arguments."
+      },
+      "quiz": {
+        "question": {
+          "zh": "选择方法之前最应明确什么？",
+          "en": "What should be clarified before choosing a method?"
+        },
+        "options": [
+          {
+            "zh": "哪个模型最容易显著",
+            "en": "Which model most easily produces significance"
+          },
+          {
+            "zh": "哪个软件命令最复杂",
+            "en": "Which software command is most complex"
+          },
+          {
+            "zh": "目标效应及可信比较来源",
+            "en": "The target effect and credible comparison source"
+          }
+        ],
+        "correct": 2,
+        "explanation": {
+          "zh": "设计从问题与反事实出发，估计和推断随后服务于该目标。",
+          "en": "Design starts from the question and counterfactual; estimation and inference serve that target."
+        }
+      },
+      "refs": [
+        {
+          "book": "mhe-en",
+          "chapter": "1",
+          "section": "1 Questions about Questions",
+          "pdfPage": 22
+        },
+        {
+          "book": "mhe-en",
+          "chapter": "2",
+          "section": "2.1 The Selection Problem",
+          "pdfPage": 31
+        }
+      ],
+      "minutes": 10,
+      "prerequisites": [
+        "m13-c04",
+        "m14-c02",
+        "m15-c04",
+        "m16-c02",
+        "m17-c01"
+      ]
+    }
+  ]
+}

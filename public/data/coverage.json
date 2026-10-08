@@ -1,0 +1,1691 @@
+{
+  "checkedAt": "2026-10-08",
+  "baselineCards": 96,
+  "chapters": [
+    {
+      "book": "wooldridge-en",
+      "chapter": "1",
+      "title": "The Nature of Econometrics and Economic Data",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "1.1 What Is Econometrics?",
+          "status": "substantive",
+          "cards": [
+            "m00-c01"
+          ]
+        },
+        {
+          "section": "1.2 Steps in Empirical Economic Analysis",
+          "status": "substantive",
+          "cards": [
+            "m00-c01",
+            "m12-c01",
+            "m12-c02",
+            "m12-c05"
+          ]
+        },
+        {
+          "section": "1.3 The Structure of Economic Data",
+          "status": "substantive",
+          "cards": [
+            "m01-c01"
+          ]
+        },
+        {
+          "section": "1.4 Causality and the Notion of Ceteris Paribus in Econometric Analysis",
+          "status": "substantive",
+          "cards": [
+            "m00-c01",
+            "m03-c01",
+            "m13-c01",
+            "m13-c02"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "2",
+      "title": "The Simple Regression Model",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "2.1 Definition of the Simple Regression Model",
+          "status": "substantive",
+          "cards": [
+            "m03-c01"
+          ]
+        },
+        {
+          "section": "2.2 Deriving the Ordinary Least Squares Estimates",
+          "status": "substantive",
+          "cards": [
+            "m03-c02"
+          ]
+        },
+        {
+          "section": "2.3 Properties of OLS on Any Sample of Data",
+          "status": "substantive",
+          "cards": [
+            "m03-c03"
+          ]
+        },
+        {
+          "section": "2.4 Units of Measurement and Functional Form",
+          "status": "substantive",
+          "cards": [
+            "m03-c04",
+            "m06-c01"
+          ]
+        },
+        {
+          "section": "2.5 Expected Values and Variances of the OLS Estimators",
+          "status": "substantive",
+          "cards": [
+            "m03-c05",
+            "m05-c01"
+          ]
+        },
+        {
+          "section": "2.6 Regression through the Origin and Regression on a Constant",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "3",
+      "title": "Multiple Regression Analysis: Estimation",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "3.1 Motivation for Multiple Regression",
+          "status": "substantive",
+          "cards": [
+            "m04-c01"
+          ]
+        },
+        {
+          "section": "3.2 Mechanics and Interpretation of Ordinary Least Squares",
+          "status": "substantive",
+          "cards": [
+            "m04-c01",
+            "m04-c02"
+          ]
+        },
+        {
+          "section": "3.3 The Expected Value of the OLS Estimators",
+          "status": "substantive",
+          "cards": [
+            "m04-c03",
+            "m04-c05"
+          ]
+        },
+        {
+          "section": "3.4 The Variance of the OLS Estimators",
+          "status": "substantive",
+          "cards": [
+            "m04-c04",
+            "m05-c01"
+          ]
+        },
+        {
+          "section": "3.5 Efficiency of OLS: The Gauss-Markov Theorem",
+          "status": "substantive",
+          "cards": [
+            "m04-c05"
+          ]
+        },
+        {
+          "section": "3.6 Some Comments on the Language of Multiple Regression Analysis",
+          "status": "substantive",
+          "cards": [
+            "m04-c01",
+            "m14-c01"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "4",
+      "title": "Multiple Regression Analysis: Inference",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "4.1 Sampling Distributions of the OLS Estimators",
+          "status": "substantive",
+          "cards": [
+            "m05-c01"
+          ]
+        },
+        {
+          "section": "4.2 Testing Hypotheses about a Single Population Parameter: The t Test",
+          "status": "substantive",
+          "cards": [
+            "m02-c05",
+            "m05-c01",
+            "m05-c04"
+          ]
+        },
+        {
+          "section": "4.3 Confidence Intervals",
+          "status": "substantive",
+          "cards": [
+            "m05-c02"
+          ]
+        },
+        {
+          "section": "4.4 Testing Hypotheses about a Single Linear Combination of the Parameters",
+          "status": "substantive",
+          "cards": [
+            "m05-c02"
+          ]
+        },
+        {
+          "section": "4.5 Testing Multiple Linear Restrictions: The F Test",
+          "status": "substantive",
+          "cards": [
+            "m05-c03"
+          ]
+        },
+        {
+          "section": "4.6 Reporting Regression Results",
+          "status": "substantive",
+          "cards": [
+            "m05-c04",
+            "m12-c04",
+            "m12-c05"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "5",
+      "title": "Multiple Regression Analysis: OLS Asymptotics",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "5.1 Consistency",
+          "status": "substantive",
+          "cards": [
+            "m02-c03",
+            "m05-c05"
+          ]
+        },
+        {
+          "section": "5.2 Asymptotic Normality and Large Sample Inference",
+          "status": "substantive",
+          "cards": [
+            "m05-c05"
+          ]
+        },
+        {
+          "section": "5.2 — Other Large Sample Tests: The Lagrange Multiplier Statistic",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "5.3 Asymptotic Efficiency of OLS",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "6",
+      "title": "Multiple Regression Analysis: Further Issues",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "6.1 Effects of Data Scaling on OLS Statistics",
+          "status": "substantive",
+          "cards": [
+            "m03-c04"
+          ]
+        },
+        {
+          "section": "6.2 More on Functional Form",
+          "status": "substantive",
+          "cards": [
+            "m06-c01",
+            "m06-c02",
+            "m06-c03"
+          ]
+        },
+        {
+          "section": "6.3 More on Goodness-of-Fit and Selection of Regressors",
+          "status": "mentioned",
+          "cards": [
+            "m03-c03",
+            "m12-c03",
+            "m14-c03"
+          ]
+        },
+        {
+          "section": "6.4 Prediction and Residual Analysis",
+          "status": "substantive",
+          "cards": [
+            "m06-c05",
+            "m07-c05"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "7",
+      "title": "Multiple Regression Analysis with Qualitative Information: Binary (or Dummy) Variables",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "7.1 Describing Qualitative Information",
+          "status": "substantive",
+          "cards": [
+            "m06-c04"
+          ]
+        },
+        {
+          "section": "7.2 A Single Dummy Independent Variable",
+          "status": "substantive",
+          "cards": [
+            "m06-c04",
+            "m06-c01"
+          ]
+        },
+        {
+          "section": "7.3 Using Dummy Variables for Multiple Categories",
+          "status": "substantive",
+          "cards": [
+            "m06-c04"
+          ]
+        },
+        {
+          "section": "7.4 Interactions Involving Dummy Variables",
+          "status": "substantive",
+          "cards": [
+            "m06-c03",
+            "m06-c04"
+          ]
+        },
+        {
+          "section": "7.4 — Testing for Differences in Regression Functions across Groups",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "7.5 A Binary Dependent Variable: The Linear Probability Model",
+          "status": "substantive",
+          "cards": [
+            "m11-c01"
+          ]
+        },
+        {
+          "section": "7.6 More on Policy Analysis and Program Evaluation",
+          "status": "substantive",
+          "cards": [
+            "m13-c01",
+            "m13-c02",
+            "m13-c03",
+            "m14-c02"
+          ]
+        },
+        {
+          "section": "7.7 Interpreting Regression Results with Discrete Dependent Variables",
+          "status": "substantive",
+          "cards": [
+            "m11-c01",
+            "m11-c04"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "8",
+      "title": "Heteroskedasticity",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "8.1 Consequences of Heteroskedasticity for OLS",
+          "status": "substantive",
+          "cards": [
+            "m07-c01"
+          ]
+        },
+        {
+          "section": "8.2 Heteroskedasticity-Robust Inference after OLS Estimation",
+          "status": "substantive",
+          "cards": [
+            "m07-c01",
+            "m18-c03"
+          ]
+        },
+        {
+          "section": "8.3 Testing for Heteroskedasticity",
+          "status": "mentioned",
+          "cards": [
+            "m07-c01"
+          ]
+        },
+        {
+          "section": "8.4 Weighted Least Squares Estimation",
+          "status": "substantive",
+          "cards": [
+            "m07-c02"
+          ]
+        },
+        {
+          "section": "8.4 — Prediction and Prediction Intervals with Heteroskedasticity",
+          "status": "mentioned",
+          "cards": [
+            "m06-c05"
+          ]
+        },
+        {
+          "section": "8.5 The Linear Probability Model Revisited",
+          "status": "substantive",
+          "cards": [
+            "m11-c01"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "9",
+      "title": "More on Specification and Data Issues",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "9.1 Functional Form Misspecification",
+          "status": "substantive",
+          "cards": [
+            "m07-c03"
+          ]
+        },
+        {
+          "section": "9.2 Using Proxy Variables for Unobserved Explanatory Variables",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "9.2 — Using Lagged Dependent Variables as Proxy Variables",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "9.3 Models with Random Slopes",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "9.4 Properties of OLS under Measurement Error",
+          "status": "substantive",
+          "cards": [
+            "m07-c04"
+          ]
+        },
+        {
+          "section": "9.5 Missing Data, Nonrandom Samples, and Outlying Observations",
+          "status": "substantive",
+          "cards": [
+            "m07-c04",
+            "m07-c05"
+          ]
+        },
+        {
+          "section": "9.6 Least Absolute Deviations Estimation",
+          "status": "substantive",
+          "cards": [
+            "m18-c01",
+            "m07-c05"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "Appendix A",
+      "title": "Basic Mathematical Tools",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "A.1 The Summation Operator and Descriptive Statistics",
+          "status": "substantive",
+          "cards": [
+            "m00-c05",
+            "m01-c02",
+            "m01-c03"
+          ]
+        },
+        {
+          "section": "A.2 Properties of Linear Functions",
+          "status": "substantive",
+          "cards": [
+            "m00-c03",
+            "m03-c04"
+          ]
+        },
+        {
+          "section": "A.3 Proportions and Percentages",
+          "status": "substantive",
+          "cards": [
+            "m00-c04",
+            "m03-c04"
+          ]
+        },
+        {
+          "section": "A.4 Some Special Functions and Their Properties",
+          "status": "substantive",
+          "cards": [
+            "m00-c03",
+            "m00-c04",
+            "m06-c01",
+            "m06-c02"
+          ]
+        },
+        {
+          "section": "A.5 Differential Calculus",
+          "status": "mentioned",
+          "cards": [
+            "m00-c03",
+            "m06-c02",
+            "m06-c03"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "Appendix B",
+      "title": "Fundamentals of Probability",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "B.1 Random Variables and Their Probability Distributions",
+          "status": "substantive",
+          "cards": [
+            "m01-c01",
+            "m01-c04"
+          ]
+        },
+        {
+          "section": "B.2 Joint Distributions, Conditional Distributions, and Independence",
+          "status": "mentioned",
+          "cards": [
+            "m01-c05",
+            "m01-c03"
+          ]
+        },
+        {
+          "section": "B.3 Features of Probability Distributions",
+          "status": "substantive",
+          "cards": [
+            "m01-c02",
+            "m01-c03"
+          ]
+        },
+        {
+          "section": "B.4 Features of Joint and Conditional Distributions",
+          "status": "substantive",
+          "cards": [
+            "m01-c03",
+            "m01-c05",
+            "m05-c02"
+          ]
+        },
+        {
+          "section": "B.5 The Normal and Related Distributions",
+          "status": "mentioned",
+          "cards": [
+            "m01-c04",
+            "m05-c01",
+            "m05-c03"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "Appendix C",
+      "title": "Fundamentals of Mathematical Statistics",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "C.1 Populations, Parameters, and Random Sampling",
+          "status": "substantive",
+          "cards": [
+            "m02-c01"
+          ]
+        },
+        {
+          "section": "C.2 Finite Sample Properties of Estimators",
+          "status": "substantive",
+          "cards": [
+            "m02-c02",
+            "m04-c05"
+          ]
+        },
+        {
+          "section": "C.3 Asymptotic or Large Sample Properties of Estimators",
+          "status": "substantive",
+          "cards": [
+            "m02-c03",
+            "m05-c05"
+          ]
+        },
+        {
+          "section": "C.4 General Approaches to Parameter Estimation — Method of Moments",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "C.4 General Approaches to Parameter Estimation — Maximum Likelihood",
+          "status": "mentioned",
+          "cards": [
+            "m11-c02",
+            "m11-c04"
+          ]
+        },
+        {
+          "section": "C.4 General Approaches to Parameter Estimation — Least Squares",
+          "status": "substantive",
+          "cards": [
+            "m03-c02"
+          ]
+        },
+        {
+          "section": "C.5 Interval Estimation and Confidence Intervals",
+          "status": "substantive",
+          "cards": [
+            "m02-c04"
+          ]
+        },
+        {
+          "section": "C.6 Hypothesis Testing",
+          "status": "substantive",
+          "cards": [
+            "m02-c05",
+            "m05-c01"
+          ]
+        },
+        {
+          "section": "C.7 Remarks on Notation",
+          "status": "substantive",
+          "cards": [
+            "m00-c02",
+            "m02-c02"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "Appendix D",
+      "title": "Summary of Matrix Algebra",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "D.1 Basic Definitions",
+          "status": "mentioned",
+          "cards": [
+            "m00-c06"
+          ]
+        },
+        {
+          "section": "D.2 Matrix Operations",
+          "status": "mentioned",
+          "cards": [
+            "m00-c06"
+          ]
+        },
+        {
+          "section": "D.3 Linear Independence and Rank of a Matrix",
+          "status": "mentioned",
+          "cards": [
+            "m00-c06",
+            "m04-c04"
+          ]
+        },
+        {
+          "section": "D.4 Quadratic Forms and Positive Definite Matrices",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "D.5 Idempotent Matrices",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "D.6 Differentiation of Linear and Quadratic Forms",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "D.7 Moments and Distributions of Random Vectors",
+          "status": "mentioned",
+          "cards": [
+            "m04-c05",
+            "m07-c01"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "Appendix E",
+      "title": "The Linear Regression Model in Matrix Form",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "E.1 The Model and Ordinary Least Squares Estimation",
+          "status": "mentioned",
+          "cards": [
+            "m00-c06",
+            "m04-c05"
+          ]
+        },
+        {
+          "section": "E.2 Finite Sample Properties of OLS",
+          "status": "mentioned",
+          "cards": [
+            "m04-c05"
+          ]
+        },
+        {
+          "section": "E.3 Statistical Inference",
+          "status": "mentioned",
+          "cards": [
+            "m05-c01",
+            "m05-c03"
+          ]
+        },
+        {
+          "section": "E.4 Some Asymptotic Analysis",
+          "status": "mentioned",
+          "cards": [
+            "m05-c05",
+            "m07-c01"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-zh",
+      "chapter": "2",
+      "title": "简单回归模型（第六版）",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "2.2 普通最小二乘法的推导：回归斜率与相关系数",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "2.6 过原点回归及对常数回归",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-zh",
+      "chapter": "3",
+      "title": "多元回归分析：估计（第六版）",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "3.2 普通最小二乘法的操作和解释：缺失值导致模型样本改变时的R²比较",
+          "status": "mentioned",
+          "cards": [
+            "m03-c03",
+            "m05-c03",
+            "m12-c03"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-zh",
+      "chapter": "6",
+      "title": "多元回归分析：深入专题（第六版）",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "6.2 对函数形式的进一步讨论 — 6-2d 计算平均偏效应",
+          "status": "mentioned",
+          "cards": [
+            "m06-c02",
+            "m06-c03",
+            "m11-c02"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-zh",
+      "chapter": "8",
+      "title": "异方差性（第六版）",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "8.2 OLS估计后的异方差—稳健推断：组间模型比较",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "8.4 加权最小二乘估计：估计权重",
+          "status": "mentioned",
+          "cards": [
+            "m07-c02"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-zh",
+      "chapter": "9",
+      "title": "模型设定和数据问题的深入探讨（第六版）",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "9.5 数据缺失、非随机样本和异常观测：缺失指示变量法",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "9.5 数据缺失、非随机样本和异常观测：MCAR与MAR",
+          "status": "mentioned",
+          "cards": [
+            "m07-c04"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "10",
+      "title": "Basic Regression Analysis with Time Series Data",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "10.1 The Nature of Time Series Data",
+          "status": "covered",
+          "cards": [
+            "m08-c01"
+          ]
+        },
+        {
+          "section": "10.2 Examples of Time Series Regression Models",
+          "status": "covered",
+          "cards": [
+            "m08-c05",
+            "m09-c04"
+          ]
+        },
+        {
+          "section": "10.3 Finite Sample Properties of OLS under Classical Assumptions",
+          "status": "mentioned",
+          "cards": [
+            "m09-c05",
+            "m08-c04"
+          ]
+        },
+        {
+          "section": "10.4 Functional Form, Dummy Variables, and Index Numbers",
+          "status": "mentioned",
+          "cards": [
+            "m06-c01",
+            "m08-c01",
+            "m08-c03"
+          ]
+        },
+        {
+          "section": "10.5 Trends and Seasonality",
+          "status": "covered",
+          "cards": [
+            "m08-c03"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "11",
+      "title": "Further Issues in Using OLS with Time Series Data",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "11.1 Stationary and Weakly Dependent Time Series",
+          "status": "covered",
+          "cards": [
+            "m08-c02"
+          ]
+        },
+        {
+          "section": "11.2 Asymptotic Properties of OLS",
+          "status": "mentioned",
+          "cards": [
+            "m05-c05",
+            "m08-c02"
+          ]
+        },
+        {
+          "section": "11.3 Using Highly Persistent Time Series in Regression Analysis",
+          "status": "covered",
+          "cards": [
+            "m09-c01"
+          ]
+        },
+        {
+          "section": "11.4 Dynamically Complete Models and the Absence of Serial Correlation",
+          "status": "covered",
+          "cards": [
+            "m08-c05",
+            "m09-c05"
+          ]
+        },
+        {
+          "section": "11.5 The Homoskedasticity Assumption for Time Series Models",
+          "status": "mentioned",
+          "cards": [
+            "m08-c04"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "12",
+      "title": "Serial Correlation and Heteroskedasticity in Time Series Regressions",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "12.1 Properties of OLS with Serially Correlated Errors",
+          "status": "covered",
+          "cards": [
+            "m08-c04"
+          ]
+        },
+        {
+          "section": "12.2 Testing for Serial Correlation",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "12.3 Correcting for Serial Correlation with Strictly Exogenous Regressors",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "12.4 Differencing and Serial Correlation",
+          "status": "mentioned",
+          "cards": [
+            "m10-c02"
+          ]
+        },
+        {
+          "section": "12.5 Serial Correlation-Robust Inference after OLS",
+          "status": "covered",
+          "cards": [
+            "m08-c04"
+          ]
+        },
+        {
+          "section": "12.6 Heteroskedasticity in Time Series Regressions",
+          "status": "mentioned",
+          "cards": [
+            "m08-c04"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "13",
+      "title": "Pooling Cross Sections Across Time: Simple Panel Data Methods",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "13.1 Pooling Independent Cross Sections across Time",
+          "status": "covered",
+          "cards": [
+            "m10-c01"
+          ]
+        },
+        {
+          "section": "13.2 Policy Analysis with Pooled Cross Sections",
+          "status": "covered",
+          "cards": [
+            "m16-c01",
+            "m16-c02"
+          ]
+        },
+        {
+          "section": "13.3 Two-Period Panel Data Analysis",
+          "status": "covered",
+          "cards": [
+            "m10-c01",
+            "m10-c02"
+          ]
+        },
+        {
+          "section": "13.4 Policy Analysis with Two-Period Panel Data",
+          "status": "covered",
+          "cards": [
+            "m10-c02",
+            "m16-c01"
+          ]
+        },
+        {
+          "section": "13.5 Differencing with More Than Two Time Periods",
+          "status": "mentioned",
+          "cards": [
+            "m10-c02"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "14",
+      "title": "Advanced Panel Data Methods",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "14.1 Fixed Effects Estimation",
+          "status": "covered",
+          "cards": [
+            "m10-c03"
+          ]
+        },
+        {
+          "section": "14.2 Random Effects Models",
+          "status": "covered",
+          "cards": [
+            "m10-c04"
+          ]
+        },
+        {
+          "section": "14.3 The Correlated Random Effects Approach",
+          "status": "covered",
+          "cards": [
+            "m10-c05"
+          ]
+        },
+        {
+          "section": "14.4 Applying Panel Data Methods to Other Data Structures",
+          "status": "mentioned",
+          "cards": [
+            "m18-c03",
+            "m18-c04"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "15",
+      "title": "Instrumental Variables Estimation and Two Stage Least Squares",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "15.1 Motivation: Omitted Variables in a Simple Regression Model",
+          "status": "covered",
+          "cards": [
+            "m15-c01",
+            "m15-c02",
+            "m15-c05"
+          ]
+        },
+        {
+          "section": "15.2 IV Estimation of the Multiple Regression Model",
+          "status": "covered",
+          "cards": [
+            "m15-c03"
+          ]
+        },
+        {
+          "section": "15.3 Two Stage Least Squares",
+          "status": "covered",
+          "cards": [
+            "m15-c03",
+            "m11-c05"
+          ]
+        },
+        {
+          "section": "15.4 IV Solutions to Errors-in-Variables Problems",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "15.5 Testing for Endogeneity and Testing Overidentifying Restrictions",
+          "status": "mentioned",
+          "cards": [
+            "m15-c02"
+          ]
+        },
+        {
+          "section": "15.6 2SLS with Heteroskedasticity",
+          "status": "mentioned",
+          "cards": [
+            "m15-c03"
+          ]
+        },
+        {
+          "section": "15.7 Applying 2SLS to Time Series Equations",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "15.8 Applying 2SLS to Pooled Cross Sections and Panel Data",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "16",
+      "title": "Simultaneous Equations Models",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "16.1 The Nature of Simultaneous Equations Models",
+          "status": "covered",
+          "cards": [
+            "m11-c05"
+          ]
+        },
+        {
+          "section": "16.2 Simultaneity Bias in OLS",
+          "status": "mentioned",
+          "cards": [
+            "m11-c05",
+            "m15-c01"
+          ]
+        },
+        {
+          "section": "16.3 Identifying and Estimating a Structural Equation",
+          "status": "covered",
+          "cards": [
+            "m11-c05",
+            "m15-c03"
+          ]
+        },
+        {
+          "section": "16.4 Systems with More Than Two Equations",
+          "status": "mentioned",
+          "cards": [
+            "m11-c05"
+          ]
+        },
+        {
+          "section": "16.5 Simultaneous Equations Models with Time Series",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "16.6 Simultaneous Equations Models with Panel Data",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "17",
+      "title": "Limited Dependent Variable Models and Sample Selection Corrections",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "17.1 Logit and Probit Models for Binary Response",
+          "status": "covered",
+          "cards": [
+            "m11-c02"
+          ]
+        },
+        {
+          "section": "17.2 The Tobit Model for Corner Solution Responses",
+          "status": "covered",
+          "cards": [
+            "m11-c03"
+          ]
+        },
+        {
+          "section": "17.3 The Poisson Regression Model",
+          "status": "covered",
+          "cards": [
+            "m11-c04"
+          ]
+        },
+        {
+          "section": "17.4 Censored and Truncated Regression Models",
+          "status": "mentioned",
+          "cards": [
+            "m11-c03"
+          ]
+        },
+        {
+          "section": "17.5 Sample Selection Corrections",
+          "status": "missing",
+          "cards": [
+            "m07-c04"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "18",
+      "title": "Advanced Time Series Topics",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "18.1 Infinite Distributed Lag Models",
+          "status": "mentioned",
+          "cards": [
+            "m08-c05",
+            "m09-c04"
+          ]
+        },
+        {
+          "section": "18.2 Testing for Unit Roots",
+          "status": "covered",
+          "cards": [
+            "m09-c01"
+          ]
+        },
+        {
+          "section": "18.3 Spurious Regression",
+          "status": "covered",
+          "cards": [
+            "m08-c03"
+          ]
+        },
+        {
+          "section": "18.4 Cointegration and Error Correction Models",
+          "status": "covered",
+          "cards": [
+            "m09-c02"
+          ]
+        },
+        {
+          "section": "18.5 Forecasting",
+          "status": "mentioned",
+          "cards": [
+            "m09-c03"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-en",
+      "chapter": "19",
+      "title": "Carrying Out an Empirical Project",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "19.1 Posing a Question",
+          "status": "covered",
+          "cards": [
+            "m12-c01"
+          ]
+        },
+        {
+          "section": "19.2 Literature Review",
+          "status": "mentioned",
+          "cards": [
+            "m12-c01"
+          ]
+        },
+        {
+          "section": "19.3 Data Collection",
+          "status": "covered",
+          "cards": [
+            "m12-c02"
+          ]
+        },
+        {
+          "section": "19.4 Econometric Analysis",
+          "status": "covered",
+          "cards": [
+            "m12-c03",
+            "m12-c04"
+          ]
+        },
+        {
+          "section": "19.5 Writing an Empirical Paper",
+          "status": "covered",
+          "cards": [
+            "m12-c05"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "wooldridge-zh",
+      "chapter": "10–19 / edition comparison",
+      "title": "中文第六版与英文第五版的结构及增补核验",
+      "coverage": "partial",
+      "sections": []
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "1",
+      "title": "Questions about Questions",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "Chapter 1",
+          "status": "substantive",
+          "cards": [
+            "m00-c01",
+            "m12-c01",
+            "m18-c05"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "2",
+      "title": "The Experimental Ideal",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "2.1 The Selection Problem",
+          "status": "substantive",
+          "cards": [
+            "m13-c01",
+            "m13-c02"
+          ]
+        },
+        {
+          "section": "2.2 Random Assignment Solves the Selection Problem",
+          "status": "substantive",
+          "cards": [
+            "m13-c03"
+          ]
+        },
+        {
+          "section": "2.3 Regression Analysis of Experiments",
+          "status": "mention",
+          "cards": [
+            "m13-c03"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "3",
+      "title": "Making Regression Make Sense",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "3.1.1 Economic Relationships and the Conditional Expectation Function",
+          "status": "substantive",
+          "cards": [
+            "m01-c05",
+            "m14-c01"
+          ]
+        },
+        {
+          "section": "3.1.2 Linear Regression and the CEF",
+          "status": "substantive",
+          "cards": [
+            "m03-c02",
+            "m14-c01"
+          ]
+        },
+        {
+          "section": "3.1.3 Asymptotic OLS Inference",
+          "status": "substantive",
+          "cards": [
+            "m05-c05",
+            "m18-c03"
+          ]
+        },
+        {
+          "section": "3.1.4 Saturated Models, Main Effects, and Other Regression Talk",
+          "status": "mention",
+          "cards": [
+            "m14-c05",
+            "m06-c03",
+            "m06-c04"
+          ]
+        },
+        {
+          "section": "3.2.1–3.2.3 CIA, OVB, Bad Control",
+          "status": "substantive",
+          "cards": [
+            "m14-c02",
+            "m04-c03",
+            "m14-c03"
+          ]
+        },
+        {
+          "section": "3.3.1 Regression Meets Matching",
+          "status": "partial",
+          "cards": [
+            "m14-c02",
+            "m14-c05"
+          ]
+        },
+        {
+          "section": "3.3.2 Control for Covariates Using the Propensity Score",
+          "status": "substantive",
+          "cards": [
+            "m14-c04"
+          ]
+        },
+        {
+          "section": "3.3.3 Propensity Score Methods versus Regression",
+          "status": "partial",
+          "cards": [
+            "m14-c04",
+            "m14-c05"
+          ]
+        },
+        {
+          "section": "3.4.1 Weighting Regression",
+          "status": "partial",
+          "cards": [
+            "m07-c02",
+            "m14-c04",
+            "m14-c05"
+          ]
+        },
+        {
+          "section": "3.4.2 Limited Dependent Variables and Marginal Effects",
+          "status": "substantive",
+          "cards": [
+            "m11-c01",
+            "m11-c02",
+            "m11-c03"
+          ]
+        },
+        {
+          "section": "3.4.3 Why Is Regression Called Regression, and What Does Regression to the Mean Mean?",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "3.5 Appendix: Derivation of the Average Derivative Weighting Function",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "4",
+      "title": "Instrumental Variables in Action: Sometimes You Get What You Need",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "4.1 IV and Causality; 4.1.1 2SLS; 4.1.2 Wald",
+          "status": "substantive",
+          "cards": [
+            "m15-c01",
+            "m15-c02",
+            "m15-c03"
+          ]
+        },
+        {
+          "section": "4.1.3 Grouped Data and 2SLS",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "4.2 Asymptotic 2SLS Inference",
+          "status": "partial",
+          "cards": [
+            "m15-c03",
+            "m15-c02"
+          ]
+        },
+        {
+          "section": "4.3 Two-Sample IV and Split-Sample IV",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "4.4.1–4.4.3 LATE, compliant subpopulation, randomized trials",
+          "status": "substantive",
+          "cards": [
+            "m15-c04",
+            "m13-c04"
+          ]
+        },
+        {
+          "section": "4.4.4 Counting and Characterizing Compliers",
+          "status": "mention",
+          "cards": [
+            "m15-c04"
+          ]
+        },
+        {
+          "section": "4.5.1 LATE with Multiple Instruments",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "4.5.2 Covariates in the Heterogeneous Effects Model",
+          "status": "mention",
+          "cards": [
+            "m15-c02",
+            "m15-c03"
+          ]
+        },
+        {
+          "section": "4.5.3 Average Causal Response with Variable Treatment Intensity",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "4.6.1 2SLS Mistakes",
+          "status": "partial",
+          "cards": [
+            "m15-c03"
+          ]
+        },
+        {
+          "section": "4.6.2 Peer Effects",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "4.6.3 Limited Dependent Variables Reprise",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "4.6.4 The Bias of 2SLS",
+          "status": "partial",
+          "cards": [
+            "m15-c05"
+          ]
+        },
+        {
+          "section": "4.7 Appendix",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "5",
+      "title": "Parallel Worlds: Fixed Effects, Differences-in-Differences, and Panel Data",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "5.1 Individual Fixed Effects",
+          "status": "substantive",
+          "cards": [
+            "m10-c02",
+            "m10-c03",
+            "m09-c05"
+          ]
+        },
+        {
+          "section": "5.2 Differences-in-Differences",
+          "status": "substantive",
+          "cards": [
+            "m16-c01",
+            "m16-c02",
+            "m16-c05"
+          ]
+        },
+        {
+          "section": "5.2.1 Regression DD",
+          "status": "partial",
+          "cards": [
+            "m16-c03"
+          ]
+        },
+        {
+          "section": "5.3 Fixed Effects versus Lagged Dependent Variables",
+          "status": "mention",
+          "cards": [
+            "m10-c03",
+            "m08-c05"
+          ]
+        },
+        {
+          "section": "5.4 Appendix: More on Fixed Effects and Lagged Dependent Variables",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "6",
+      "title": "Getting a Little Jumpy: Regression Discontinuity Designs",
+      "coverage": "substantive",
+      "sections": [
+        {
+          "section": "6.1 Sharp RD",
+          "status": "substantive",
+          "cards": [
+            "m17-c01",
+            "m17-c03",
+            "m17-c04",
+            "m17-c05"
+          ]
+        },
+        {
+          "section": "6.2 Fuzzy RD Is IV",
+          "status": "substantive",
+          "cards": [
+            "m17-c02",
+            "m17-c05"
+          ]
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "7",
+      "title": "Quantile Regression",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "7.1 The Quantile Regression Model",
+          "status": "substantive",
+          "cards": [
+            "m18-c01"
+          ]
+        },
+        {
+          "section": "7.1.1 Censored Quantile Regression",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "7.1.2 The Quantile Regression Approximation Property",
+          "status": "mention",
+          "cards": [
+            "m18-c01"
+          ]
+        },
+        {
+          "section": "7.1.3 Tricky Points",
+          "status": "partial",
+          "cards": [
+            "m18-c01",
+            "m18-c02"
+          ]
+        },
+        {
+          "section": "7.2 IV Estimation of Quantile Treatment Effects",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "7.2.1 The QTE Estimator",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    },
+    {
+      "book": "mhe-en",
+      "chapter": "8",
+      "title": "Nonstandard Standard Error Issues",
+      "coverage": "partial",
+      "sections": [
+        {
+          "section": "8.1 The Bias of Robust Standard Error Estimates",
+          "status": "partial",
+          "cards": [
+            "m07-c01",
+            "m07-c05",
+            "m18-c03"
+          ]
+        },
+        {
+          "section": "8.1 Time-Out for the Bootstrap",
+          "status": "missing",
+          "cards": []
+        },
+        {
+          "section": "8.2.1 Clustering and the Moulton Factor",
+          "status": "partial",
+          "cards": [
+            "m18-c03"
+          ]
+        },
+        {
+          "section": "8.2.2 Serial Correlation in Panels and Difference-in-Difference Models",
+          "status": "substantive",
+          "cards": [
+            "m16-c05",
+            "m10-c05"
+          ]
+        },
+        {
+          "section": "8.2.3 Fewer than 42 Clusters",
+          "status": "partial",
+          "cards": [
+            "m18-c04"
+          ]
+        },
+        {
+          "section": "8.3 Appendix: Derivation of the Simple Moulton Factor",
+          "status": "missing",
+          "cards": []
+        }
+      ]
+    }
+  ]
+}
